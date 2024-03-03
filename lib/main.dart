@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 
       ),
-      // home:  const HomeScreen(),
-      home:  const MainApp(),
+      home:  const HomeScreen(),
+      // home:  const MainApp(),
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,

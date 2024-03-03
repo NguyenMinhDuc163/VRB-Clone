@@ -32,4 +32,5 @@ class AssetPath{
   static const String logoBankVRB = '$imagePath/logo_bank_vrb.png';
   static const String rectangle = '$imagePath/rectangle.png';
   static const String avatar = '$imagePath/avatar.png';
+  static const String hv = '$imagePath/hvuong.png';
 }

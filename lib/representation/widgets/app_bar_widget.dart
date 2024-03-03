@@ -7,7 +7,11 @@ import 'package:vrb_client/representation/widgets/search_widget.dart';
 import '../../core/constants/assets_path.dart';
 
 class AppBarWidget extends StatelessWidget {
-  const AppBarWidget({super.key, required this.fullName, required this.avatar, required this.child});
+  const AppBarWidget(
+      {super.key,
+      required this.fullName,
+      required this.avatar,
+      required this.child});
   final String fullName;
   final Image avatar;
   final Widget child;
@@ -41,15 +45,17 @@ class AppBarWidget extends StatelessWidget {
                       child: Image.asset(AssetPath.icoBlockWhite,
                           color: Colors.grey.withOpacity(0.3)),
                     ),
-                    Positioned(
-                      bottom: size.height / 22,
-                      right: 0,
-                      left: 0,
+
+                    Align(
+                      alignment: Alignment.topCenter,
                       child: Image.asset(
-                        AssetPath.rectangle,
-                        fit: BoxFit.contain,
+                        AssetPath.hv,
+                        width: double
+                            .infinity, // Đặt chiều rộng của hình ảnh là đủ rộng để tràn hết container
+                        height: size.height / 3.2, fit: BoxFit.fill,
                       ),
                     ),
+
                     Positioned(
                       child: Row(
                         children: [
@@ -65,17 +71,27 @@ class AppBarWidget extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
-                    Positioned(
-                      left: 10,
-                      right:  10,
-                      // top: size.height / 12,
-                      bottom: size.height / 22 + 40,
+
+                    Align(
+                      alignment: Alignment.center,
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Chào buổi sáng", style: TextStyle(fontSize: 14, color: Colors.white),),
-                          Text(fullName, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),),
-                          SizedBox(height: 5,),
+                          const Text(
+                            "Chào buổi sáng",
+                            style: TextStyle(fontSize: 14, color: Colors.white),
+                          ),
+                          Text(
+                            fullName,
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
                           avatar
                         ],
                       ),
@@ -86,7 +102,7 @@ class AppBarWidget extends StatelessWidget {
             ),
           ),
           Container(
-            margin:  EdgeInsets.only(top: size.height / 3),
+            margin: EdgeInsets.only(top: size.height / 3),
             padding: const EdgeInsets.all(10),
             child: child,
           )
