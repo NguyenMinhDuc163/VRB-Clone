@@ -33,23 +33,24 @@ class _AccountBalanceWidgetState extends State<AccountBalanceWidget> {
       ),
 
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const SizedBox(
-            width: kDefaultPadding,
-          ),
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Tài khoản",
-                style: TextStyle(fontSize: 14, color: Colors.black),
-              ),
-              SelectItemWidget(selectedValue: '100068890')
-            ],
+          const Padding(
+            padding: EdgeInsets.only(left: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Tài khoản",
+                  style: TextStyle(fontSize: 14, color: Colors.black),
+                ),
+                SelectItemWidget(selectedValue: '100068890')
+              ],
+            ),
           ),
           // SizedBox(width: size.width / 5.5,),
-          Spacer(),
+          // Spacer(),
           Container(
             margin: EdgeInsets.all(15),
             decoration: BoxDecoration(

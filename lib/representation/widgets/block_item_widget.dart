@@ -34,8 +34,9 @@ class BlockItemWidget extends StatelessWidget {
           child: Text(
             description,
             style: const TextStyle(fontSize: 14),
-            // overflow: TextOverflow.ellipsis,
+            overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
+              softWrap: true,
               maxLines: 2
           ),
 

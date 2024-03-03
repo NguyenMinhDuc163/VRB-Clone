@@ -1,9 +1,6 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
-import 'package:vrb_client/representation/screens/payment_screen.dart';
 import 'package:vrb_client/routes.dart';
 
 void main()  {
@@ -22,8 +19,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 
       ),
-      home:  const HomeScreen(),
-      // home:  const MainApp(),
+      // home:  const HomeScreen(),
+      home:  const MainApp(),
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,
