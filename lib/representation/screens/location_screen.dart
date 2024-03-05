@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/representation/widgets/select_item_widget.dart';
 
@@ -17,8 +18,7 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-
-
+  static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -28,10 +28,31 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
       body: Stack(
         children: [
+          // Positioned.fill(
+          //     child: Image.asset(
+          //   AssetPath.map,
+          //   fit: BoxFit.cover,
+          // )),
           Positioned.fill(
-              child: Image.asset(
-            AssetPath.map,
-            fit: BoxFit.cover,
+              child: GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _pGooglePlex,
+              zoom: 5,
+            ),
+            markers: { // them danh sach merker
+              Marker(
+                  markerId: MarkerId("_currentLocation"),
+                  icon: BitmapDescriptor.defaultMarker,
+                  position: _pGooglePlex),
+              Marker(
+                  markerId: MarkerId("_currentLocation2"),
+                  icon: BitmapDescriptor.defaultMarker,
+                  position: LatLng(40.4223, -122.0848)),
+              Marker(
+                  markerId: MarkerId("_currentLocation2"),
+                  icon: BitmapDescriptor.defaultMarker,
+                  position: LatLng(45.4223, -122.0848)),
+            },
           )),
           Positioned(
             top: kMinPadding,
@@ -86,7 +107,11 @@ class _LocationScreenState extends State<LocationScreen> {
                         ),
                       ),
                     ),
-                    RoundedButtomWidget(isSelected: false, icon: Icons.macro_off, onPressed: () {  },),
+                    RoundedButtomWidget(
+                      isSelected: false,
+                      icon: Icons.macro_off,
+                      onPressed: () {},
+                    ),
                     Expanded(
                         child: ListView(
                       controller: scrollController,
@@ -94,17 +119,20 @@ class _LocationScreenState extends State<LocationScreen> {
                         AddressFormWidget(
                           icon: AssetPath.icoChiNhanh,
                           title: 'Chi nhánh VRB sở giao dich',
-                          description: 'Ngân hàng Liên doanh Việt - Nga - Chi nhánh Hồ Chí Minh, 107 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam',
+                          description:
+                              'Ngân hàng Liên doanh Việt - Nga - Chi nhánh Hồ Chí Minh, 107 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam',
                         ),
                         AddressFormWidget(
                           icon: AssetPath.icoSo,
                           title: 'CHI NHANH SO GIAO DICH ',
-                          description: 'Ngân hàng Liên doanh Việt - Nga - Chi nhánh Hồ Chí Minh, 107 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam',
+                          description:
+                              'Ngân hàng Liên doanh Việt - Nga - Chi nhánh Hồ Chí Minh, 107 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam',
                         ),
                         AddressFormWidget(
                           icon: AssetPath.icoChiNhanhSo,
                           title: 'CHI NHANH SO GIAO DICH',
-                          description: 'Ngân hàng Liên doanh Việt - Nga - Chi nhánh Hồ Chí Minh, 107 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam',
+                          description:
+                              'Ngân hàng Liên doanh Việt - Nga - Chi nhánh Hồ Chí Minh, 107 Nguyễn Đình Chiểu, Phường 6, Quận 3, Thành phố Hồ Chí Minh, Việt Nam',
                         ),
                       ],
                     ))
