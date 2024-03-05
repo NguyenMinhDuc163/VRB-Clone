@@ -26,6 +26,9 @@ class AssetPath{
   static const String icoQR = '$iconPath/ico_qr.png';
   static const String icoSetting = '$iconPath/ico_setting.png';
   static const String icoGift2 = '$iconPath/ico_gift_2.png';
+  static const String icoSo = '$iconPath/ico_so.png';
+  static const String icoChiNhanh = '$iconPath/ico_chi_nhanh.png';
+  static const String icoChiNhanhSo = '$iconPath/ico_chi_nhanh_so.png';
 
 
 
@@ -33,4 +36,5 @@ class AssetPath{
   static const String rectangle = '$imagePath/rectangle.png';
   static const String avatar = '$imagePath/avatar.png';
   static const String hv = '$imagePath/hvuong.png';
+  static const String map = '$imagePath/map.png';
 }

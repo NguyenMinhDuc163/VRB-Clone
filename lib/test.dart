@@ -1,65 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vrb_client/core/constants/assets_path.dart';
+import 'package:vrb_client/representation/widgets/select_item_widget.dart';
 
-class MyGridView extends StatefulWidget {
+import '../../core/constants/dimension_constants.dart';
+import '../widgets/select_local_widget.dart';
+
+class LocationScreen extends StatefulWidget {
+  const LocationScreen({Key? key});
+
   @override
-  _MyGridViewState createState() => _MyGridViewState();
+  State<LocationScreen> createState() => _LocationScreenState();
 }
 
-class _MyGridViewState extends State<MyGridView> {
-  bool _showMore = false; // Trạng thái hiển thị thêm phần tử
-  final List<Widget> _items = List.generate(
-    6, // Số lượng phần tử ban đầu
-        (index) => Container(
-      color: Colors.blue[100 * (index % 9)],
-      child: Center(
-        child: Text('Item $index'),
-      ),
-    ),
-  );
-
+class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('GridView Example'),
+        title: Center(child: Text('Vị trí ATM, chi nhánh')),
       ),
-      body: Column(
+      body: Stack(
         children: [
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3, // Số cột trong GridView ban đầu
-                crossAxisSpacing: 10, // Khoảng cách giữa các cột
-                mainAxisSpacing: 10, // Khoảng cách giữa các hàng
-              ),
-              itemCount: _showMore ? _items.length : 6, // Số lượng phần tử được hiển thị
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () {
-                    print("da an");
-                  },
-                  child: _items[index],
-                );
+          Positioned.fill(
+              child: Image.asset(AssetPath.map, fit: BoxFit.cover,)
+          ),
+          Positioned(
+            top: kMinPadding,
+            left: kMinPadding,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
               },
+              child: Container(
+                padding: EdgeInsets.all(kItemPadding),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(kDefaultPadding)),
+                  color: Colors.white,
+                ),
+                child: Icon(
+                  FontAwesomeIcons.arrowLeft,
+                  size: 18,
+                ),
+              ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              // Xử lý khi ấn nút "Show More"
-              setState(() {
-                _showMore = true; // Đặt trạng thái hiển thị thêm là true
-              });
-            },
-            child: Text('Show More'),
+          Positioned(
+            top: kMediumPadding,
+            left: kMinPadding,
+            child: Container(
+              width: size.width - (2 * kMinPadding), // Sử dụng chiều rộng của màn hình trừ đi khoảng cách mép trái và phải
+              child: SelectLocalWidget(
+                selectedValue: 'Tỉnh/ Thành Phố',
+                items: ['Tỉnh/ Thành Phố', 'Thai Binh', 'Ha Noi'],
+              ),
+            ),
+          ),
+          Positioned(
+            top: kMediumPadding * 2 + 40, // Đặt vị trí của SelectLocalWidget tiếp theo
+            left: kMinPadding,
+            width: size.width - (2 * kMinPadding), // Đặt chiều rộng cho SelectLocalWidget
+            child: SelectLocalWidget(
+              selectedValue: 'Quận huyện',
+              items: ['Tỉnh/ Thành Phố', 'Quận huyện', 'Thai Binh', 'Ha Noi'],
+            ),
           ),
         ],
       ),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: MyGridView(),
-  ));
 }
