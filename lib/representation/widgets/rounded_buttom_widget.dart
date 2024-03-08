@@ -28,20 +28,22 @@ class RoundedButtomWidget extends StatelessWidget {
         children: [
           Expanded(
             child: ElevatedButton(
-              onPressed: () {},
-              child: Text(
-                "Gần nhất",
-                style: TextStyle(fontSize: 14, color: Colors.white),
-              ),
+              onPressed: () {
+
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white70.withOpacity(0.2), // Đổi màu nền ở đây
-                padding: EdgeInsets.symmetric(
+                padding: const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 10), // Có thể thêm các thuộc tính khác nếu cần
                 shape: RoundedRectangleBorder(
                   // Tạo hình dạng chữ nhật
                   borderRadius: BorderRadius.circular(10),
                 ),
+              ),
+              child: const Text(
+                "Gần nhất",
+                style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
           ),

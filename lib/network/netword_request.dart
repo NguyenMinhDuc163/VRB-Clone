@@ -1,14 +1,19 @@
 import 'dart:convert';
+
 import 'package:dio/dio.dart';
+
 import 'package:vrb_client/models/district.dart';
 import 'package:vrb_client/models/province.dart';
 
-import '../models/province.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../models/point.dart';
+
 class DioTest{
   static const String baseURL = 'http://uat.seatechit.com.vn/retail-mobile/api';
+  static String longitude = '105.804706';
+  static String latitude = "21.001357";
+ static Future<List<Map<String, Point>>> postBranchATMTypeOne() async {
+   List<Map<String, Point>> address = [];
 
-  void postBranchATMTypeOne(String longitude, String latitude) async {
     try {
       var response = await Dio().post('$baseURL/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -18,19 +23,20 @@ class DioTest{
       // print(response.data);
       if(response.statusCode == 200){
         List<dynamic> obj = jsonDecode(response.data['object']);
-        obj.forEach((element) {
-          // print(element['contains'][0]['longitude']);
-          // print(element['contains'][0]['latitude']);
-          print(element['contains'][0]);
-        });
+
+        for(var element in obj) {
+          address.add({element['contains'][0]['address'] : Point(element['contains'][0]['longitude'], element['contains'][0]['latitude'])});
+        };
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
     }
+    return address;
   }
 
 
-   void postBranchATMTypeTwo(String longitude, String latitude, String regionCode1) async {
+  static Future<List<Map<String, Point>>> postBranchATMTypeTwo(String regionCode1) async {
+    List<Map<String, Point>> address = [];
     try {
       var response = await Dio().post('http://uat.seatechit.com.vn/retail-mobile/api/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -41,16 +47,18 @@ class DioTest{
       // print(response.data);
       if(response.statusCode == 200){
         List<dynamic> obj = jsonDecode(response.data['object']);
-        obj.forEach((element) {
-          print(element['contains'][2]);
-        });
+        for(var element in obj) {
+          address.add({element['contains'][0]['address'] : Point(element['contains'][0]['longitude'], element['contains'][0]['latitude'])});
+        }
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
     }
+    return address;
   }
 
-   void postBranchATMTypeThree(String longitude, String latitude, String regionCode1, String districtCode) async {
+   static Future<List<Map<String, Point>>> postBranchATMTypeThree(String regionCode1, String districtCode) async {
+     List<Map<String, Point>> address = [];
     try {
       var response = await Dio().post('http://uat.seatechit.com.vn/retail-mobile/api/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -62,13 +70,14 @@ class DioTest{
       // print(response.data);
       if(response.statusCode == 200){
         List<dynamic> obj = jsonDecode(response.data['object']);
-        obj.forEach((element) {
-          print(element['contains'][2]);
-        });
+        for(var element in obj) {
+          address.add({element['contains'][0]['address'] : Point(element['contains'][0]['longitude'], element['contains'][0]['latitude'])});
+        }
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
     }
+    return address;
   }
 
    static Future<Map<String, Province>> postProviceInfoList() async {
@@ -122,25 +131,10 @@ class DioTest{
     return districts;
   }
 
-  static Future<Map<Province, List<District>>> fetchLocation() async {
-    // List<Province> province = await postProviceInfoList();
-    // Map<Province, List<District>> locations = {};
-    // for(var x in province){
-    //   locations[x] = await postDistrict(x.regionCode1);
-    // }
-    // locations[Province('Tỉnh/ Thành Phố','9999')] = [District('Quận/ Huyện', '99999')];
-    // return locations;
-    return {};
-  }
-
-
 }
 
 void main() async {
-  // String longitude = '105.804706';
-  // String latitude = "21.001357";
-  // DioTest.postBranchATMTypeOne(longitude, latitude);
-  Map<String, Province> a =  await DioTest.postProviceInfoList();
-  print(a.length);
-  // print(a.length);
+  String longitude = '105.804706';
+  String latitude = "21.001357";
+  DioTest.postBranchATMTypeThree('717', '71712');
 }
