@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SelectLocalWidget extends StatefulWidget {
-  const SelectLocalWidget({Key? key, required this.selectedValue, required this.items}) : super(key: key);
-
+  const SelectLocalWidget({Key? key, required this.selectedValue, required this.items, required this.onChanged}) : super(key: key);
+  final ValueChanged<String> onChanged;
   final List<String> items;
   final String selectedValue;
 
@@ -57,6 +57,7 @@ class _SelectLocalWidgetState extends State<SelectLocalWidget> {
             setState(() {
               selectedValue = newValue;
             });
+            widget.onChanged(newValue);
           }
         },
       ),

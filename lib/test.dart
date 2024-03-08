@@ -1,72 +1,81 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vrb_client/core/constants/assets_path.dart';
-import 'package:vrb_client/representation/widgets/select_item_widget.dart';
 
-import '../../core/constants/dimension_constants.dart';
-import '../widgets/select_local_widget.dart';
-
-class LocationScreen extends StatefulWidget {
-  const LocationScreen({Key? key});
-
-  @override
-  State<LocationScreen> createState() => _LocationScreenState();
+void main() {
+  runApp(MyApp());
 }
 
-class _LocationScreenState extends State<LocationScreen> {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+    return MaterialApp(
+      home: DropdownExample(),
+    );
+  }
+}
+
+class DropdownExample extends StatefulWidget {
+  @override
+  _DropdownExampleState createState() => _DropdownExampleState();
+}
+
+class _DropdownExampleState extends State<DropdownExample> {
+  late String selectedProvince;
+  late String selectedDistrict;
+
+  List<String> provinces = ['Tỉnh A', 'Tỉnh B']; // Danh sách tỉnh
+  Map<String, List<String>> districts = { // Danh sách huyện theo từng tỉnh
+    'Tỉnh A': ['Huyện A1', 'Huyện A2'],
+    'Tỉnh B': ['Huyện B1', 'Huyện B2']
+  };
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Vị trí ATM, chi nhánh')),
+        title: Text('Dropdown Example'),
       ),
-      body: Stack(
-        children: [
-          Positioned.fill(
-              child: Image.asset(AssetPath.map, fit: BoxFit.cover,)
-          ),
-          Positioned(
-            top: kMinPadding,
-            left: kMinPadding,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            DropdownButton<String>(
+              hint: Text('Chọn tỉnh'),
+              value: selectedProvince,
+              onChanged: (String newValue) {
+                setState(() {
+                  selectedProvince = newValue;
+                  selectedDistrict = null; // Reset huyện khi chọn tỉnh mới
+                });
               },
-              child: Container(
-                padding: EdgeInsets.all(kItemPadding),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(kDefaultPadding)),
-                  color: Colors.white,
-                ),
-                child: Icon(
-                  FontAwesomeIcons.arrowLeft,
-                  size: 18,
-                ),
-              ),
+              items: provinces.map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
-          ),
-          Positioned(
-            top: kMediumPadding,
-            left: kMinPadding,
-            child: Container(
-              width: size.width - (2 * kMinPadding), // Sử dụng chiều rộng của màn hình trừ đi khoảng cách mép trái và phải
-              child: SelectLocalWidget(
-                selectedValue: 'Tỉnh/ Thành Phố',
-                items: ['Tỉnh/ Thành Phố', 'Thai Binh', 'Ha Noi'],
-              ),
+            SizedBox(height: 20),
+            DropdownButton<String>(
+              hint: Text('Chọn huyện'),
+              value: selectedDistrict,
+              onChanged: selectedProvince == null
+                  ? null
+                  : (String newValue) {
+                setState(() {
+                  selectedDistrict = newValue;
+                });
+              },
+              items: selectedProvince == null
+                  ? null
+                  : districts[selectedProvince].map((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
             ),
-          ),
-          Positioned(
-            top: kMediumPadding * 2 + 40, // Đặt vị trí của SelectLocalWidget tiếp theo
-            left: kMinPadding,
-            width: size.width - (2 * kMinPadding), // Đặt chiều rộng cho SelectLocalWidget
-            child: SelectLocalWidget(
-              selectedValue: 'Quận huyện',
-              items: ['Tỉnh/ Thành Phố', 'Quận huyện', 'Thai Binh', 'Ha Noi'],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

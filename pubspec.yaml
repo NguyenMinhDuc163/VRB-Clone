@@ -39,7 +39,8 @@ dependencies:
   curved_labeled_navigation_bar: ^2.0.2
   http: ^1.2.0
   google_maps_flutter: ^2.5.0
-  location: ^5.0.3
+  location: ^5.0.0
+  dio: ^5.4.1
 
 dev_dependencies:
   flutter_test:

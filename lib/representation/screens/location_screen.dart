@@ -5,10 +5,17 @@ import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/representation/widgets/select_item_widget.dart';
 
 import '../../core/constants/dimension_constants.dart';
+import '../../models/district.dart';
+import '../../models/province.dart';
+import '../../models/viet_nam_locaton.dart';
+import '../../network/netword_request.dart';
+import '../widgets/acount_balancea_widget.dart';
 import '../widgets/address_form_widget.dart';
-import '../widgets/location_branch_widget.dart';
+
+import '../widgets/button_demo_widget.dart';
 import '../widgets/rounded_buttom_widget.dart';
 import '../widgets/select_local_widget.dart';
+import 'package:location/location.dart';
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen({Key? key});
@@ -18,42 +25,60 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  static const LatLng _pGooglePlex = LatLng(37.4223, -122.0848);
+   Map<Province, List<District>> locations = {};
+   String provinceChose = 'Tỉnh/ Thành Phố';
+   String districtChose = 'Quận/ Huyện';
+  @override
+  void initState()  {
+    // TODO: implement initState
+    super.initState();
+    _fetchLocation();
+  }
+
+   Future<void> _fetchLocation() async {
+     locations = await DioTest.fetchLocation();
+     setState(() {}); // Cập nhật lại giao diện sau khi dữ liệu đã được tải
+   }
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Vị trí ATM, chi nhánh')),
       ),
       body: Stack(
         children: [
-          // Positioned.fill(
-          //     child: Image.asset(
-          //   AssetPath.map,
-          //   fit: BoxFit.cover,
-          // )),
+
           Positioned.fill(
               child: GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: _pGooglePlex,
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(21.005536, 105.8180681),
               zoom: 5,
             ),
             markers: { // them danh sach merker
-              Marker(
+              const Marker(
                   markerId: MarkerId("_currentLocation"),
                   icon: BitmapDescriptor.defaultMarker,
-                  position: _pGooglePlex),
-              Marker(
+                  position: LatLng(10.46425, 106.41252)),
+              const Marker(
+                  markerId: MarkerId("_currentLocation"),
+                  icon: BitmapDescriptor.defaultMarker,
+                  position: LatLng(21.02206, 105.84805)),
+              const Marker(
                   markerId: MarkerId("_currentLocation2"),
                   icon: BitmapDescriptor.defaultMarker,
-                  position: LatLng(40.4223, -122.0848)),
-              Marker(
+                  position: LatLng(16.06061, 108.21437)),
+              const Marker(
                   markerId: MarkerId("_currentLocation2"),
                   icon: BitmapDescriptor.defaultMarker,
-                  position: LatLng(45.4223, -122.0848)),
+                  position: LatLng(12.25141, 109.18795)),
             },
           )),
+
+
+
+
           Positioned(
             top: kMinPadding,
             left: kMinPadding,
@@ -62,8 +87,14 @@ class _LocationScreenState extends State<LocationScreen> {
                   (2 *
                       kMinPadding), // Sử dụng chiều rộng của màn hình trừ đi khoảng cách mép trái và phải
               child: SelectLocalWidget(
+                // selectedValue: 'Tỉnh/ Thành Phố',
                 selectedValue: 'Tỉnh/ Thành Phố',
-                items: ['Tỉnh/ Thành Phố', 'Thai Binh', 'Ha Noi'],
+                items: locations.keys.map((e) => e.regionName).toList(), onChanged: (String value) {
+                  setState(() {
+                    provinceChose = value;
+                  });
+                  print(provinceChose);
+              },
               ),
             ),
           ),
@@ -74,8 +105,15 @@ class _LocationScreenState extends State<LocationScreen> {
             width: size.width -
                 (2 * kMinPadding), // Đặt chiều rộng cho SelectLocalWidget
             child: SelectLocalWidget(
-              selectedValue: 'Quận huyện',
-              items: ['Tỉnh/ Thành Phố', 'Quận huyện', 'Thai Binh', 'Ha Noi'],
+              selectedValue: 'Quận/ Huyện',
+              // items: VietNamLocation.district,
+              items: locations[Province.withRegionName(provinceChose)]!.map((e) => e.districtName).toList(),
+              onChanged: (String newValue){
+                setState(() {
+                  districtChose = newValue;
+                  print(districtChose);
+                });
+              },
             ),
           ),
           DraggableScrollableSheet(
@@ -112,6 +150,8 @@ class _LocationScreenState extends State<LocationScreen> {
                       icon: Icons.macro_off,
                       onPressed: () {},
                     ),
+
+
                     Expanded(
                         child: ListView(
                       controller: scrollController,
@@ -145,4 +185,34 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
+  // Future<void> getLocationUpdate() async { // lay vi tri nguoi dung
+  //   bool _serviceEnabled;
+  //   PermissionStatus _permissionGranted;
+  //
+  //   _serviceEnabled = await _locationController.serviceEnabled();
+  //   if(_serviceEnabled){
+  //     _serviceEnabled = await _locationController.requestService();
+  //   }else{
+  //     return;
+  //   }
+  //
+  //   _permissionGranted = await _locationController.hasPermission();
+  //   if(_permissionGranted == PermissionStatus.denied){
+  //     _permissionGranted = await _locationController.requestPermission();
+  //     if(_permissionGranted != PermissionStatus.granted){
+  //       return;
+  //     }
+  //   }
+  //   _locationController.onLocationChanged.listen((LocationData currentLocation) {
+  //     if(currentLocation.longitude != null && currentLocation.latitude != null){
+  //       setState(() {
+  //         _currentP = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+  //         print(_currentP);
+  //       });
+  //
+  //     }
+  //   });
+  // }
+
+
 }

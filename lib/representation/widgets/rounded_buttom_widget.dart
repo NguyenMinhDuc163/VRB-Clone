@@ -69,7 +69,7 @@ class RoundedButtomWidget extends StatelessWidget {
               onPressed: () {},
               child: Text(
                 "Chi nhánh",
-                style: TextStyle(fontSize: 14, color: Colors.white),
+                style: TextStyle(fontSize: 13, color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white70.withOpacity(0.2), // Đổi màu nền ở đây
