@@ -17,6 +17,8 @@ import '../widgets/rounded_buttom_widget.dart';
 import '../widgets/select_local_widget.dart';
 import 'package:location/location.dart';
 
+import 'loading_screen.dart';
+
 class LocationScreen extends StatefulWidget {
   const LocationScreen({Key? key});
 
@@ -25,29 +27,41 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-   Map<Province, List<District>> locations = {};
+  Map<String, Province> locations = {};
    String provinceChose = 'Tỉnh/ Thành Phố';
    String districtChose = 'Quận/ Huyện';
+  bool _isLoading = false;
   @override
-  void initState()  {
-    // TODO: implement initState
+  void initState() {
     super.initState();
-    _fetchLocation();
+    fetchData(); // Gọi fetchData khi trang được khởi tạo
   }
 
-   Future<void> _fetchLocation() async {
-     locations = await DioTest.fetchLocation();
-     setState(() {}); // Cập nhật lại giao diện sau khi dữ liệu đã được tải
-   }
+  Future<void> fetchData() async {
+    setState(() {
+      _isLoading = true; // Kích hoạt màn hình chờ
+    });
+
+    try {
+      locations = await DioTest.postProviceInfoList();
+    } catch (error) {
+      // Xử lý lỗi ở đây
+    }
+
+    setState(() {
+      _isLoading = false; // Tắt màn hình chờ
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return Scaffold(
+    return  Scaffold(
       appBar: AppBar(
         title: Center(child: Text('Vị trí ATM, chi nhánh')),
       ),
-      body: Stack(
+      body:_isLoading == true ? LoadingScreen() : Stack(
         children: [
 
           Positioned.fill(
@@ -89,7 +103,7 @@ class _LocationScreenState extends State<LocationScreen> {
               child: SelectLocalWidget(
                 // selectedValue: 'Tỉnh/ Thành Phố',
                 selectedValue: 'Tỉnh/ Thành Phố',
-                items: locations.keys.map((e) => e.regionName).toList(), onChanged: (String value) {
+                items: locations.keys.toList(), onChanged: (String value) {
                   setState(() {
                     provinceChose = value;
                   });
@@ -107,7 +121,7 @@ class _LocationScreenState extends State<LocationScreen> {
             child: SelectLocalWidget(
               selectedValue: 'Quận/ Huyện',
               // items: VietNamLocation.district,
-              items: locations[Province.withRegionName(provinceChose)]!.map((e) => e.districtName).toList(),
+              items: locations[provinceChose]!.Ddistrict.keys.toList(),
               onChanged: (String newValue){
                 setState(() {
                   districtChose = newValue;

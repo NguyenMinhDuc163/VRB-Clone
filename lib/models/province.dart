@@ -1,11 +1,13 @@
+import 'district.dart';
+
 class Province{
   final String _regionName;
   final String _regionCode1;
+  final Map<String, District> Ddistrict;
+  Province(this._regionName, this._regionCode1, this.Ddistrict);
 
-  Province(this._regionName, this._regionCode1);
 
-
-  Province.withRegionName(this._regionName) : _regionCode1 = '';
+  Province.withRegionName(this._regionName, this.Ddistrict) : _regionCode1 = '';
 
   String get regionCode1 => _regionCode1;
 
