@@ -1,6 +1,9 @@
 
+
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 
 import '../../core/constants/dimension_constants.dart';
@@ -9,7 +12,7 @@ import '../../models/province.dart';
 import '../../network/netword_request.dart';
 import '../widgets/address_form_widget.dart';
 
-import '../widgets/rounded_buttom_widget.dart';
+
 import '../widgets/select_local_widget.dart';
 
 import 'loading_screen.dart';
@@ -24,14 +27,17 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   Map<String, Province> locations = {};
   List<Map<String, Point>> address = [];
-   String? provinceChose;
-   String? districtChose;
+  String? provinceChose;
+  String? districtChose;
   Set<Marker> markers = {};
   bool _isLoading = false;
+  final Location _locationController = Location();
+  LatLng? _currentLocation;
   @override
   void initState() {
     super.initState();
     fetchData(); // Gọi fetchData khi trang được khởi tạo
+    getLocationUpdate();
   }
 
   Future<void> fetchData() async {
@@ -60,7 +66,7 @@ class _LocationScreenState extends State<LocationScreen> {
         String markerId = 'marker_$markerIdCounter'; // Tạo markerId tự tăng
 
         markerIdCounter++; // Tăng biến đếm cho lần tạo marker tiếp theo
-        print('${data.values.first.latitude}  ${data.values.first.longitude}');
+
         return Marker(
           markerId: MarkerId(markerId),
           icon: BitmapDescriptor.defaultMarker,
@@ -244,4 +250,31 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 
+  Future<void> getLocationUpdate() async {
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+
+    _serviceEnabled = await _locationController.serviceEnabled();
+    if(_serviceEnabled){
+      _serviceEnabled = await _locationController.requestService();
+    }else{
+      return;
+    }
+    _permissionGranted = await _locationController.hasPermission();
+    if(_permissionGranted == PermissionStatus.denied){
+      _permissionGranted = await _locationController.requestPermission();
+      if(_permissionGranted != PermissionStatus.granted){
+        return;
+      }
+    }
+    _locationController.onLocationChanged.listen((LocationData currentLocation) {
+      if(currentLocation.latitude != null && currentLocation.longitude != null){
+        setState(() {
+          _currentLocation = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          print('toa ho hien tai la $_currentLocation');
+        });
+      }
+    }
+    );
+  }
 }

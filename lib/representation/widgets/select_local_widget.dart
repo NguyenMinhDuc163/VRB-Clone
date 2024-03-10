@@ -53,7 +53,6 @@ class _SelectLocalWidgetState extends State<SelectLocalWidget> {
         },
         items: widget.items.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
-
             value: value,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
