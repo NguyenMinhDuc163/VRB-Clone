@@ -170,6 +170,8 @@ class _LocationScreenState extends State<LocationScreen> {
                       )),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+
                       children: [
                         Expanded(child: _buildButton('Gần Nhất', () async{
                           List<Map<String, Point>> newAddresses = await DioTest.postBranchATMTypeOne();
@@ -228,7 +230,10 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
       child: Text(
         title,
-        style: TextStyle(fontSize: 14, color: Colors.white),
+        style: TextStyle(fontSize: 12, color: Colors.white,),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        textAlign: TextAlign.center,
       ),
     );
   }
