@@ -24,8 +24,8 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   Map<String, Province> locations = {};
   List<Map<String, Point>> address = [];
-   String provinceChose = 'Tỉnh/ Thành Phố';
-   String districtChose = 'Quận/ Huyện';
+   String? provinceChose;
+   String? districtChose;
   Set<Marker> markers = {};
   bool _isLoading = false;
   @override
@@ -96,15 +96,21 @@ class _LocationScreenState extends State<LocationScreen> {
                   (2 *
                       kMinPadding), // Sử dụng chiều rộng của màn hình trừ đi khoảng cách mép trái và phải
               child: SelectLocalWidget(
-                // selectedValue: 'Tỉnh/ Thành Phố',
-                selectedValue: 'Tỉnh/ Thành Phố',
-                items: locations.keys.toList(), onChanged: (String value) {
+                defaultHint: "Tỉnh/ Thành Phố",
+                selectedValue: provinceChose,
+                items: locations.keys.toList(),
+                onChanged: (value) {
                   setState(() {
                     provinceChose = value;
                   });
-                  print(provinceChose);
-              },
+                },
+                onValueChanged: (value) {
+                  setState(() {
+                    districtChose = null; // Reset giá trị của dropdown thứ hai khi dropdown thứ nhất thay đổi
+                  });
+                },
               ),
+
             ),
           ),
           Positioned(
@@ -114,13 +120,13 @@ class _LocationScreenState extends State<LocationScreen> {
             width: size.width -
                 (2 * kMinPadding), // Đặt chiều rộng cho SelectLocalWidget
             child: SelectLocalWidget(
-              selectedValue: 'Quận/ Huyện',
+              defaultHint: "Quận/ Huyện",
+              selectedValue: districtChose,
               // items: VietNamLocation.district,
-              items: locations[provinceChose]!.Ddistrict.keys.toList(),
-              onChanged: (String newValue){
+              items: provinceChose != null ? locations[provinceChose]!.Ddistrict.keys.toList() : [],
+              onChanged: (value) {
                 setState(() {
-                  districtChose = newValue;
-                  print(districtChose);
+                  districtChose = value;
                 });
               },
             ),

@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class SelectLocalWidget extends StatefulWidget {
-  const SelectLocalWidget({Key? key, required this.selectedValue, required this.items, required this.onChanged}) : super(key: key);
-  final ValueChanged<String> onChanged;
+  const SelectLocalWidget({Key? key, required this.selectedValue, required this.items, required this.onChanged, this.onValueChanged, this.defaultHint}) : super(key: key);
+  final ValueChanged<String?> onChanged;
+  final ValueChanged<String?>? onValueChanged;
   final List<String> items;
-  final String selectedValue;
+  final String? selectedValue;
+  final String? defaultHint;
 
   @override
-  State<SelectLocalWidget> createState() => _SelectLocalWidgetState(selectedValue);
+  State<SelectLocalWidget> createState() => _SelectLocalWidgetState();
 }
 
 class _SelectLocalWidgetState extends State<SelectLocalWidget> {
-  late String selectedValue;
 
-  _SelectLocalWidgetState(this.selectedValue);
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +35,22 @@ class _SelectLocalWidgetState extends State<SelectLocalWidget> {
       child: DropdownButton<String>(
         underline: Container(),
         isExpanded: true,
-        value: selectedValue,
+        value: widget.selectedValue,
+        hint: widget.selectedValue == null
+            ? Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(widget.defaultHint ?? 'Select an option'),
+            )
+            : null,
         style: const TextStyle(
           fontSize: 16, // Kích thước chữ
           color: Colors.black, // Màu chữ
           fontWeight: FontWeight.bold
         ),
+        onChanged: (newValue) {
+          widget.onChanged(newValue); // Gọi onChanged để cập nhật giá trị được chọn
+          widget.onValueChanged?.call(newValue); // Gọi callback để chuyển giá trị cho dropdown thứ hai
+        },
         items: widget.items.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
 
@@ -51,15 +61,7 @@ class _SelectLocalWidgetState extends State<SelectLocalWidget> {
             ),
           );
         }).toList(),
-        onChanged: (String? newValue) {
-          if (newValue != null) {
-            // Cập nhật giá trị đã chọn
-            setState(() {
-              selectedValue = newValue;
-            });
-            widget.onChanged(newValue);
-          }
-        },
+
       ),
     );
   }
