@@ -11,9 +11,9 @@ class DioTest{
   static const String baseURL = 'http://uat.seatechit.com.vn/retail-mobile/api';
   static String longitude = '105.804706';
   static String latitude = "21.001357";
- static Future<List<Map<String, Point>>> postBranchATMTypeOne() async {
-   List<Map<String, Point>> address = [];
-
+ static Future<Map<String, Point>> postBranchATMTypeOne() async {
+   // List<Map<String, Point>> address = [];
+   Map<String, Point> address = {};
     try {
       var response = await Dio().post('$baseURL/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -25,11 +25,12 @@ class DioTest{
         List<dynamic> obj = jsonDecode(response.data['object']);
 
         for(var element in obj) {
+          int j = 0;
           for(int i = 0; i < element['contains'].length; i++){
-            address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
+            // print(element['contains'][i]);
+            // address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
+            address[element['contains'][i]['address']] = Point(element['contains'][i]['longitude'], element['contains'][i]['latitude']);
           }
-
-          // print(element['contains'].length);
         }
       }
     } catch (e) {
@@ -39,8 +40,8 @@ class DioTest{
   }
 
 
-  static Future<List<Map<String, Point>>> postBranchATMTypeTwo(String regionCode1) async {
-    List<Map<String, Point>> address = [];
+  static Future<Map<String, Point>> postBranchATMTypeTwo(String regionCode1) async {
+    Map<String, Point> address = {};
     try {
       var response = await Dio().post('http://uat.seatechit.com.vn/retail-mobile/api/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -53,9 +54,11 @@ class DioTest{
         List<dynamic> obj = jsonDecode(response.data['object']);
         for(var element in obj) {
           for(int i = 0; i < element['contains'].length; i++){
-            address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
+            address[element['contains'][i]['address']] = Point(element['contains'][i]['longitude'], element['contains'][i]['latitude']);
           }
         }
+
+
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
@@ -63,8 +66,8 @@ class DioTest{
     return address;
   }
 
-   static Future<List<Map<String, Point>>> postBranchATMTypeThree(String regionCode1, String districtCode) async {
-     List<Map<String, Point>> address = [];
+   static Future<Map<String, Point>> postBranchATMTypeThree(String regionCode1, String districtCode) async {
+     Map<String, Point> address = {};
     try {
       var response = await Dio().post('http://uat.seatechit.com.vn/retail-mobile/api/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -78,7 +81,7 @@ class DioTest{
         List<dynamic> obj = jsonDecode(response.data['object']);
         for(var element in obj) {
           for(int i = 0; i < element['contains'].lenth; i++){
-            address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
+            address[element['contains'][i]['address']] = Point(element['contains'][i]['longitude'], element['contains'][i]['latitude']);
           }
         }
       }
@@ -139,8 +142,8 @@ class DioTest{
 void main() async {
   String longitude = '105.804706';
   String latitude = "21.001357";
-  List<Map<String, Province>> a = await DioTest.postProvinceInfoList();
-  List<Map<String, District>> b = await DioTest.postDistrict('701');
-  List<Map<String, Point>> c = await DioTest.postBranchATMTypeTwo('805');
-  // print(a.first.keys);
+  // List<Map<String, Province>> a = await DioTest.postProvinceInfoList();
+  // List<Map<String, District>> b = await DioTest.postDistrict('701');
+  Map<String, Point> c = await DioTest.postBranchATMTypeOne();
+  print(c);
 }

@@ -27,7 +27,7 @@ class LocationScreen extends StatefulWidget {
 class _LocationScreenState extends State<LocationScreen> {
   List<Map<String, Province>> locations = [];
   List<Map<String, District>> districts = [];
-  List<Map<String, Point>> address = [];
+  Map<String, Point> address = {};
   String? provinceChose;
   String? districtChose;
   Set<Marker> markers = {};
@@ -62,21 +62,27 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    int markerIdCounter = 0;
-    Set<Marker> _setMarkers(){
-      return address.map((data) {
+    Set<Marker> _setMarkers() {
+      Set<Marker> markers = Set();
+      int markerIdCounter = 0;
 
-        String markerId = 'marker_$markerIdCounter'; // Tạo markerId tự tăng
+      address.forEach((key, value) {
+        double latitude = double.parse(value.latitude);
+        double longitude = double.parse(value.longitude);
 
-        markerIdCounter++; // Tăng biến đếm cho lần tạo marker tiếp theo
-
-        return Marker(
-          markerId: MarkerId(markerId),
-          icon: BitmapDescriptor.defaultMarker,
-          position: LatLng(double.parse(data.values.first.latitude), double.parse(data.values.first.longitude)),
+        Marker marker = Marker(
+          markerId: MarkerId("location$markerIdCounter"),
+          position: LatLng(latitude, longitude),
         );
-      }).toSet();
+
+        markers.add(marker);
+        markerIdCounter++;
+      });
+
+      return markers;
     }
+
+
 
     return  Scaffold(
       appBar: AppBar(
@@ -151,8 +157,8 @@ class _LocationScreenState extends State<LocationScreen> {
           ),
           DraggableScrollableSheet(
             initialChildSize: 0.3,
-            maxChildSize: 0.8,
-            minChildSize: 0.3,
+            maxChildSize: 0.7,
+            minChildSize: 0.2,
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: kMediumPadding),
@@ -198,7 +204,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
                       children: [
                         Expanded(child: _buildButton('Gần Nhất', () async{
-                          List<Map<String, Point>> newAddresses = await DioTest.postBranchATMTypeOne();
+                          Map<String, Point> newAddresses = await DioTest.postBranchATMTypeOne();
                           setState(() {
                             address = newAddresses;
                             markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
@@ -212,7 +218,7 @@ class _LocationScreenState extends State<LocationScreen> {
                               break;
                             }
                           }
-                          List<Map<String, Point>> newAddresses = await DioTest.postBranchATMTypeTwo(regionCode1);
+                          Map<String, Point>  newAddresses = await DioTest.postBranchATMTypeTwo(regionCode1);
                           setState(() {
                             address = newAddresses;
                             markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
@@ -232,8 +238,7 @@ class _LocationScreenState extends State<LocationScreen> {
                               districtCode = x.values.first.districtCode;
                             }
                           }
-                          print('$regionCode1 vs $districtCode');
-                          List<Map<String, Point>> newAddresses = await DioTest.postBranchATMTypeThree(regionCode1, districtCode);
+                          Map<String, Point> newAddresses = await DioTest.postBranchATMTypeThree(regionCode1, districtCode);
                           setState(() {
                             address = newAddresses;
                             markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
@@ -246,7 +251,12 @@ class _LocationScreenState extends State<LocationScreen> {
                     Expanded(
                         child: ListView(
                       controller: scrollController,
-                  children: address.map((e) => AddressFormWidget(icon: AssetPath.icoSo, title: 'Chi nhánh VRB sở giao dich', description: e.keys.toString())).toList(),
+                  // children: address.map((e) => AddressFormWidget(icon: AssetPath.icoSo, title: 'Chi nhánh VRB sở giao dich', description: e.keys.toString())).toList(),
+                  children:  address.entries.map((e) => AddressFormWidget(
+                    icon: AssetPath.icoSo,
+                    title: 'Chi nhánh VRB sở giao dịch',
+                    description: e.key.toString(), // Sử dụng e.value để lấy giá trị từ map
+                  )).toList(),
 
                     ))
                   ],
@@ -273,7 +283,7 @@ class _LocationScreenState extends State<LocationScreen> {
       },
       // onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor:index == selectedButtonIndex ? Colors.grey.withOpacity(0.2) : Colors.transparent, // Đổi màu nền ở đây
+        backgroundColor:index == selectedButtonIndex ? Colors.grey.withOpacity(0.3) : Colors.transparent, // Đổi màu nền ở đây
         padding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 10), // Có thể thêm các thuộc tính khác nếu cần
@@ -319,8 +329,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 Marker(
                   markerId: MarkerId("current01"),
                   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-                  // position: _currentLocation ?? LatLng(21.005536, 105.8180681),
-                  position: LatLng(21.005536, 106.8180681),
+                  position: _currentLocation ?? LatLng(21.005536, 105.8180681),
+                  // position: LatLng(21.005536, 106.8180681),
                 )
             );
           });
