@@ -34,7 +34,7 @@ class _LocationScreenState extends State<LocationScreen> {
   bool _isLoading = false;
   final Location _locationController = Location();
   LatLng? _currentLocation;
-
+  int selectedButtonIndex = 0;
 
   @override
   void initState() {
@@ -203,7 +203,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             address = newAddresses;
                             markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
                           });
-                        })),
+                        }, 0)),
                         Expanded(child: _buildButton('ATM', () async {
                           String regionCode1 = "";
                           for(var x in locations){
@@ -217,7 +217,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             address = newAddresses;
                             markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
                           });
-                        })),
+                        }, 1)),
                         Expanded(child: _buildButton('Chi Nhánh', () async {
                           String regionCode1 = "";
                           String districtCode = "";
@@ -238,7 +238,7 @@ class _LocationScreenState extends State<LocationScreen> {
                             address = newAddresses;
                             markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
                           });
-                        })),
+                        }, 2)),
                       ],
                     ),
                 ),
@@ -261,11 +261,19 @@ class _LocationScreenState extends State<LocationScreen> {
   }
 
   //TODO
-  Widget _buildButton(String title, VoidCallback onPressed){
+  Widget _buildButton(String title, VoidCallback onPressed, int index){
+
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: (){
+        setState(() {
+          selectedButtonIndex = index; // Cập nhật nút được chọn
+        });
+        print(selectedButtonIndex);
+        onPressed();
+      },
+      // onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white70.withOpacity(0.2), // Đổi màu nền ở đây
+        backgroundColor:index == selectedButtonIndex ? Colors.grey.withOpacity(0.2) : Colors.transparent, // Đổi màu nền ở đây
         padding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 10), // Có thể thêm các thuộc tính khác nếu cần
@@ -276,7 +284,7 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
       child: Text(
         title,
-        style: TextStyle(fontSize: 12, color: Colors.white,),
+        style: TextStyle(fontSize: 12,color: Colors.white,),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
