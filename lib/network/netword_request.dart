@@ -25,8 +25,12 @@ class DioTest{
         List<dynamic> obj = jsonDecode(response.data['object']);
 
         for(var element in obj) {
-          address.add({element['contains'][0]['address'] : Point(element['contains'][0]['longitude'], element['contains'][0]['latitude'])});
-        };
+          for(int i = 0; i < element['contains'].length; i++){
+            address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
+          }
+
+          // print(element['contains'].length);
+        }
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
@@ -48,7 +52,9 @@ class DioTest{
       if(response.statusCode == 200){
         List<dynamic> obj = jsonDecode(response.data['object']);
         for(var element in obj) {
-          address.add({element['contains'][0]['address'] : Point(element['contains'][0]['longitude'], element['contains'][0]['latitude'])});
+          for(int i = 0; i < element['contains'].length; i++){
+            address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
+          }
         }
       }
     } catch (e) {
@@ -71,7 +77,9 @@ class DioTest{
       if(response.statusCode == 200){
         List<dynamic> obj = jsonDecode(response.data['object']);
         for(var element in obj) {
-          address.add({element['contains'][0]['address'] : Point(element['contains'][0]['longitude'], element['contains'][0]['latitude'])});
+          for(int i = 0; i < element['contains'].lenth; i++){
+            address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
+          }
         }
       }
     } catch (e) {
@@ -80,61 +88,59 @@ class DioTest{
     return address;
   }
 
-   static Future<Map<String, Province>> postProviceInfoList() async {
-     Map<String, Province> province = {};
-     try {
-      var response = await Dio().post('$baseURL/inquiryProviceInfoList', data: {
+  static Future<List<Map<String, Province>>> postProvinceInfoList() async {
+    List<Map<String, Province>> provinceLists = [];
+    try {
+      var response = await Dio().post('$baseURL/inquiryProviceInfoList', data: {});
 
-      });
-      // Xử lý dữ liệu nhận được từ yêu cầu ở đây
-      // print(response.data);
-      if(response.statusCode == 200){
-        // print(response.data['object']);
+      if (response.statusCode == 200) {
         List<dynamic> obj = jsonDecode(response.data['object']);
-        for(var element in obj) {
-          // province.add(Province(element['regionName'], element['regionCode1']));
-          province[element['regionName']] = Province(element['regionName'],element['regionCode1'], await postDistrict(element['regionCode1']));
-        };
+        for (var element in obj) {
+          Map<String, Province> province = {}; // Tạo một Map mới cho mỗi phần tử
+          province[element['regionName']] = Province(element['regionName'], element['regionCode1']);
+          provinceLists.add(province);
+        }
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
+      // Có thể xử lý lỗi ở đây nếu cần thiết
     }
-    province['Tỉnh/ Thành Phố'] = Province('Quận/ Huyện', '99999', {'Quận/ Huyện': District('Quận/ Huyện', '99999')});
-    // province['Tỉnh/ Thành Phố'] = Province('Quận/ Huyện', '99999', {});
 
-  return province;
-
+    return provinceLists;
   }
 
-  static Future<Map<String, District>> postDistrict(String regionCode1) async {
-    // List<District> districts = [];
-    final Map<String, District> districts = {};
+
+  static Future<List<Map<String, District>>> postDistrict(String regionCode1) async {
+    List<Map<String, District>> districtLists = [];
     try {
       var response = await Dio().post('$baseURL/inquiryProviceInfoList/district', data: {
         'regionCode1': regionCode1
       });
-      // Xử lý dữ liệu nhận được từ yêu cầu ở đây
-      // print(response.data);
 
       if(response.statusCode == 200){
         List<dynamic> obj = jsonDecode(response.data['object']);
         obj.forEach((element) {
-          // districts.add(District(element['districtName'], element['districtCode']));
+          Map<String, District> districts = {}; // Tạo một Map mới cho mỗi phần tử
           districts[element['districtName']] = District(element['districtName'], element['districtCode']);
+          districtLists.add(districts);
         });
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
+      // Có thể xử lý lỗi ở đây nếu cần thiết
     }
-    districts['Quận/ Huyện'] = District('Quận/ Huyện', '99999');
 
-    return districts;
+    return districtLists;
   }
+
 
 }
 
 void main() async {
   String longitude = '105.804706';
   String latitude = "21.001357";
-  DioTest.postBranchATMTypeThree('717', '71712');
+  List<Map<String, Province>> a = await DioTest.postProvinceInfoList();
+  List<Map<String, District>> b = await DioTest.postDistrict('701');
+  List<Map<String, Point>> c = await DioTest.postBranchATMTypeTwo('805');
+  // print(a.first.keys);
 }

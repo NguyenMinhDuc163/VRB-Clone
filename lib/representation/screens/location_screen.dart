@@ -1,12 +1,12 @@
 
 
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 
 import '../../core/constants/dimension_constants.dart';
+import '../../models/district.dart';
 import '../../models/point.dart';
 import '../../models/province.dart';
 import '../../network/netword_request.dart';
@@ -25,7 +25,8 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  Map<String, Province> locations = {};
+  List<Map<String, Province>> locations = [];
+  List<Map<String, District>> districts = [];
   List<Map<String, Point>> address = [];
   String? provinceChose;
   String? districtChose;
@@ -33,6 +34,8 @@ class _LocationScreenState extends State<LocationScreen> {
   bool _isLoading = false;
   final Location _locationController = Location();
   LatLng? _currentLocation;
+
+
   @override
   void initState() {
     super.initState();
@@ -46,7 +49,7 @@ class _LocationScreenState extends State<LocationScreen> {
     });
 
     try {
-      locations = await DioTest.postProviceInfoList();
+      locations = await DioTest.postProvinceInfoList();
     } catch (error) {
       // Xử lý lỗi ở đây
     }
@@ -104,15 +107,24 @@ class _LocationScreenState extends State<LocationScreen> {
               child: SelectLocalWidget(
                 defaultHint: "Tỉnh/ Thành Phố",
                 selectedValue: provinceChose,
-                items: locations.keys.toList(),
-                onChanged: (value) {
-                  setState(() {
+                items: locations.expand((e) => e.keys).toList(),
+                onChanged: (value) async {
+                  List<Map<String, District>> newDistricts = [];
+                  for(var x in locations){
+                    if(x.keys.first == value){
+                      newDistricts = await DioTest.postDistrict(x.values.first.regionCode1 ?? "Hà Nội");
+                    }
+                  }
+
+                  setState(()  {
                     provinceChose = value;
+                    districts = newDistricts;
                   });
+
                 },
                 onValueChanged: (value) {
                   setState(() {
-                    districtChose = null; // Reset giá trị của dropdown thứ hai khi dropdown thứ nhất thay đổi
+                    districtChose = null; // Reset giá trị của dopdown thứ hai khi dropdown thứ nhất thay đổi
                   });
                 },
               ),
@@ -128,12 +140,12 @@ class _LocationScreenState extends State<LocationScreen> {
             child: SelectLocalWidget(
               defaultHint: "Quận/ Huyện",
               selectedValue: districtChose,
-              // items: VietNamLocation.district,
-              items: provinceChose != null ? locations[provinceChose]!.Ddistrict.keys.toList() : [],
+              items: districts.expand((e) => e.keys).toList(),
               onChanged: (value) {
                 setState(() {
                   districtChose = value;
                 });
+                print(districtChose);
               },
             ),
           ),
@@ -193,15 +205,35 @@ class _LocationScreenState extends State<LocationScreen> {
                           });
                         })),
                         Expanded(child: _buildButton('ATM', () async {
-                          List<Map<String, Point>> newAddresses = await DioTest.postBranchATMTypeTwo(locations[provinceChose]!.regionCode1);
+                          String regionCode1 = "";
+                          for(var x in locations){
+                            if(x.keys.first == provinceChose){
+                              regionCode1 = x.values.first.regionCode1;
+                              break;
+                            }
+                          }
+                          List<Map<String, Point>> newAddresses = await DioTest.postBranchATMTypeTwo(regionCode1);
                           setState(() {
                             address = newAddresses;
                             markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
                           });
                         })),
                         Expanded(child: _buildButton('Chi Nhánh', () async {
-                          List<Map<String, Point>> newAddresses = await DioTest.postBranchATMTypeThree(locations[provinceChose]!.regionCode1,
-                              locations[provinceChose]!.Ddistrict.values.first.districtCode);
+                          String regionCode1 = "";
+                          String districtCode = "";
+                          for(var x in locations){
+                            if(x.keys.first == provinceChose){
+                              regionCode1 = x.values.first.regionCode1;
+                              break;
+                            }
+                          }
+                          for(var x in districts){
+                            if(x.keys.first == districtChose){
+                              districtCode = x.values.first.districtCode;
+                            }
+                          }
+                          print('$regionCode1 vs $districtCode');
+                          List<Map<String, Point>> newAddresses = await DioTest.postBranchATMTypeThree(regionCode1, districtCode);
                           setState(() {
                             address = newAddresses;
                             markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
@@ -227,6 +259,8 @@ class _LocationScreenState extends State<LocationScreen> {
       ),
     );
   }
+
+  //TODO
   Widget _buildButton(String title, VoidCallback onPressed){
     return ElevatedButton(
       onPressed: onPressed,
@@ -272,6 +306,16 @@ class _LocationScreenState extends State<LocationScreen> {
         setState(() {
           _currentLocation = LatLng(currentLocation.latitude!, currentLocation.longitude!);
           print('toa ho hien tai la $_currentLocation');
+          setState(() {
+            markers.add(
+                Marker(
+                  markerId: MarkerId("current01"),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+                  // position: _currentLocation ?? LatLng(21.005536, 105.8180681),
+                  position: LatLng(21.005536, 106.8180681),
+                )
+            );
+          });
         });
       }
     }
