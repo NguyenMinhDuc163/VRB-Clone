@@ -1,22 +1,22 @@
 
 
 import 'dart:convert';
-import 'dart:math';
-
 import 'package:dio/dio.dart';
+
 import 'package:vrb_client/models/district.dart';
 import 'package:vrb_client/models/province.dart';
 
 import '../models/bank_location.dart';
-import '../models/point.dart';
 
 class DioTest{
   static const String baseURL = 'http://uat.seatechit.com.vn/retail-mobile/api';
   // static String longitude = '105.804706';
   // static String latitude = "21.001357";
- static Future<Map<String, BankLocation>> postBranchATMTypeOne(String longitude, String latitude) async {
+ static Future<List<Map<String, BankLocation>>> postBranchATMTypeOne(String longitude, String latitude) async {
    // List<Map<String, Point>> address = [];
-   Map<String, BankLocation> address = {};
+   List<Map<String, BankLocation>> addressList = [];
+   Map<String, BankLocation> atmMap = {};
+   Map<String, BankLocation> branchMap = {};
     try {
       var response = await Dio().post('$baseURL/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -28,24 +28,30 @@ class DioTest{
         List<dynamic> obj = jsonDecode(response.data['object']);
 
         for(var element in obj) {
-          int j = 0;
+
           for(int i = 0; i < element['contains'].length; i++){
-            // print(element['contains'][i]);
-            // address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
-            address[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
-                element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            if(element['contains'][i]['type'] == 'ATM'){
+              atmMap[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
+                  element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            }
+            else{
+              branchMap[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
+                  element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            }
           }
         }
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
     }
-    return address;
+    return [atmMap, branchMap];
   }
 
 
-  static Future<Map<String, BankLocation>> postBranchATMTypeTwo(String longitude, String latitude, String regionCode1) async {
-    Map<String, BankLocation> address = {};
+  static Future<List<Map<String, BankLocation>>> postBranchATMTypeTwo(String longitude, String latitude, String regionCode1) async {
+    // Map<String, BankLocation> address = {};
+    Map<String, BankLocation> atmMap = {};
+    Map<String, BankLocation> branchMap = {};
     try {
       var response = await Dio().post('http://uat.seatechit.com.vn/retail-mobile/api/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -58,8 +64,14 @@ class DioTest{
         List<dynamic> obj = jsonDecode(response.data['object']);
         for(var element in obj) {
           for(int i = 0; i < element['contains'].length; i++){
-            address[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
-                element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            if(element['contains'][i]['type'] == 'ATM'){
+              atmMap[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
+                  element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            }
+            else{
+              branchMap[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
+                  element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            }
           }
         }
 
@@ -68,11 +80,13 @@ class DioTest{
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
     }
-    return address;
+    return [atmMap, branchMap];
   }
 
-   static Future<Map<String, BankLocation>> postBranchATMTypeThree(String longitude, String latitude, String regionCode1, String districtCode) async {
-     Map<String, BankLocation> address = {};
+   static Future<List<Map<String, BankLocation>>> postBranchATMTypeThree(String longitude, String latitude, String regionCode1, String districtCode) async {
+     // Map<String, BankLocation> address = {};
+     Map<String, BankLocation> atmMap = {};
+     Map<String, BankLocation> branchMap = {};
     try {
       var response = await Dio().post('http://uat.seatechit.com.vn/retail-mobile/api/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -86,15 +100,21 @@ class DioTest{
         List<dynamic> obj = jsonDecode(response.data['object']);
         for(var element in obj) {
           for(int i = 0; i < element['contains'].length; i++){
-            address[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
-                element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            if(element['contains'][i]['type'] == 'ATM'){
+              atmMap[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
+                  element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            }
+            else{
+              branchMap[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
+                  element['contains'][i]['shotName'], element['contains'][i]['idImage'], element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            }
           }
         }
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
     }
-    return address;
+    return [atmMap, branchMap];
   }
 
   static Future<Map<String, Province>> postProvinceInfoList() async {
@@ -141,23 +161,14 @@ class DioTest{
 
 
 }
-double calculateDistance(double startLat, double startLng, double endLat, double endLng) {
-  const double radius = 6371.0; // Độ lớn của bán kính trái đất trong km
-  double latDistance = (endLat - startLat) * (3.141592653589793 / 180);
-  double lngDistance = (endLng - startLng) * (3.141592653589793 / 180);
-  double a = sin(latDistance / 2) * sin(latDistance / 2) +
-      cos(startLat * (3.141592653589793 / 180)) *
-          cos(endLat * (3.141592653589793 / 180)) *
-          sin(lngDistance / 2) *
-          sin(lngDistance / 2);
-  double c = 2 * atan2(sqrt(a), sqrt(1 - a));
-  double distance = radius * c;
-  return distance;
-}
+
 void main() async {
   String longitude = '105.804706';
   String latitude = "21.001357";
-  // Map<String, Province> a = await DioTest.postProvinceInfoList();
-  // Map<String, District> b = await DioTest.postDistrict('805');
-  print(calculateDistance(21.001357, 105.804706, 22.001357, 105.804706));
+  var a = await DioTest.postBranchATMTypeOne(longitude, latitude);
+
+  a.forEach((element) {
+    print(element);
+    print("-----------------");
+  });
 }

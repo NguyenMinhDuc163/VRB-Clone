@@ -1,3 +1,5 @@
+
+
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,7 +28,7 @@ class _LocationScreenState extends State<LocationScreen> {
   GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
   Map<String, Province> locations = {};
   Map<String, District> districts = {};
-  Map<String, BankLocation>address = {};
+  List<Map<String, BankLocation>> address = [];
   String? provinceChose;
   String? districtChose;
   Set<Marker> markers = {};
@@ -34,7 +36,7 @@ class _LocationScreenState extends State<LocationScreen> {
   final Location _locationController = Location();
   LatLng _currentLocation = LatLng(21.0014109, 105.8046842);
   int selectedButtonIndex = 0;
-
+  int index = 0;
 
   void initState() {
     super.initState();
@@ -63,11 +65,11 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     ScrollController scrollController = ScrollController();
-    Set<Marker> setMarkers() {
+    Set<Marker> setMarkers(int index) {
       Set<Marker> markers = {};
       int markerIdCounter = 0;
 
-      address.forEach((key, value) {
+      address[index].forEach((key, value) {
         double latitude = double.parse(value.latitude);
         double longitude = double.parse(value.longitude);
         print('${value.latitude}  ${value.longitude}');
@@ -83,7 +85,10 @@ class _LocationScreenState extends State<LocationScreen> {
       return markers;
     }
 
-
+    double distanceBetween(String latitude, String longitude){
+      return Geolocator.distanceBetween
+        (_currentLocation.latitude, _currentLocation.longitude, double.parse(latitude), double.parse(longitude));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -108,15 +113,11 @@ class _LocationScreenState extends State<LocationScreen> {
                     target: LatLng(21.005536, 105.8180681),
                     zoom: 13,
                   ),
-                  markers: {
-                    Marker(
-                      markerId: MarkerId('1'),
-                      position: LatLng(21.005536, 105.8180681),
-                      infoWindow: InfoWindow(title: 'ATM Techcombank'),
-                    ),
-
-                  },
-                )),
+                  markers: markers,
+                    myLocationButtonEnabled: true,
+                    myLocationEnabled: true
+                )
+            ),
             Positioned(
               top: kMinPadding,
               left: kMinPadding,
@@ -185,29 +186,66 @@ class _LocationScreenState extends State<LocationScreen> {
 
             children: [
               Expanded(child: _buildButton('Gần Nhất', () async{
-                Map<String, BankLocation> newAddresses = await DioTest.postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
+                List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
+                for(int i = 0; i < newAddresses.length; i++){
+                  // Map<String, BankLocation> map = newAddresses[i];
+                  // List<String> keys = map.keys.toList();
+                  // if(keys.length > 5){
+                  //   List<String> newKeys = keys.sublist(0, 5);
+                  //   Map<String, BankLocation> newMap = {};
+                  //   for (String key in newKeys) {
+                  //     newMap[key] = map[key]!;
+                  //   }
+                  //   newAddresses[i] = newMap;
+                  // }
+
+                  List<MapEntry<String, BankLocation>> entries = newAddresses[i].entries.toList();
+                  entries.sort((a, b) => distanceBetween(a.value.latitude, a.value.longitude).compareTo(distanceBetween(b.value.latitude, b.value.longitude)));
+                  Map<String, BankLocation> sortedMap = Map.fromEntries(entries);
+                  newAddresses[i] = sortedMap;
+                }
                 setState(() {
+                  index = 0;
                   address = newAddresses;
-                  markers = setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
+                  markers = setMarkers(0); // Cập nhật lại markers khi danh sách address được cập nhật
                 });
               }, 0)),
               Expanded(child: _buildButton('ATM', () async {
-                String regionCode1 = locations[provinceChose]?.regionCode1 ?? "805";
-                Map<String, BankLocation>  newAddresses = await DioTest.postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),regionCode1);
-                setState(() {
-                  address = newAddresses;
-                  markers = setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
-                });
+                if(provinceChose != null){
+                  String regionCode1 = locations[provinceChose]?.regionCode1 ?? "805";
+                  List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),regionCode1);
+                  setState(() {
+                    index = 0;
+                    address = newAddresses;
+                    markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
+                  });
+                }else{
+                  setState(() {
+                    // address = newAddresses;
+                    markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
+                  });
+                }
+
               }, 1)),
               Expanded(child: _buildButton('Chi Nhánh', () async {
-                String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
-                String districtCode = districts[districtChose]?.districtCode ?? '10111';
+                if(districtChose != null){
+                  String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
+                  String districtCode = districts[districtChose]?.districtCode ?? '10111';
 
-                Map<String, BankLocation> newAddresses = await DioTest.postBranchATMTypeThree(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(), regionCode1, districtCode);
-                setState(() {
-                  address = newAddresses;
-                  markers = setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
-                });
+                  List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(), regionCode1, districtCode);
+                  setState(() {
+                    index = 1;
+                    address = newAddresses;
+                    markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
+                  });
+                }else{
+                  setState(() {
+                    index = 1;
+                    // address = newAddresses;
+                    markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
+                  });
+                }
+
               }, 2)),
             ],
           ),
@@ -218,7 +256,7 @@ class _LocationScreenState extends State<LocationScreen> {
               color: Colors.white,),
             child: ListView(
               controller: scrollController,
-              children:  address.entries.map((e)  => AddressFormWidget(
+              children:  address[index].entries.map((e)  => AddressFormWidget(
                 icon: (e.value.idImage == 'atm00') ? AssetPath.icoChiNhanhSo : AssetPath.icoSo,
                 title: e.value.shotName,
                 // LatLng(21.005536, 105.8180681)
@@ -300,5 +338,8 @@ class _LocationScreenState extends State<LocationScreen> {
       }
     }
     );
+
   }
+
+
 }
