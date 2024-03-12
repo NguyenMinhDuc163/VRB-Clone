@@ -98,9 +98,10 @@ class _LocationScreenState extends State<LocationScreen> {
 
           Positioned.fill(
               child: GoogleMap(
+                mapType: MapType.normal,
             initialCameraPosition: const CameraPosition(
               target: LatLng(21.005536, 105.8180681),
-              zoom: 5,
+              zoom: 13,
             ),
                 markers: markers,
           )),
