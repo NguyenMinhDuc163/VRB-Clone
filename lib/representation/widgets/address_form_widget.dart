@@ -7,12 +7,12 @@ class AddressFormWidget extends StatelessWidget {
       required this.icon,
       required this.title,
       required this.description,
-      this.linkMap});
+      this.linkMap, required this.distance});
   final String icon;
   final String title;
   final String description;
   final String? linkMap;
-
+  final double distance;
 
 
 
@@ -27,7 +27,7 @@ class AddressFormWidget extends StatelessWidget {
         Expanded(
           flex:5,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
@@ -45,9 +45,14 @@ class AddressFormWidget extends StatelessWidget {
         ),
         Expanded(
           flex: 2,
-          child: InkWell(
-            child: Text('Chỉ đường', style: TextStyle(fontSize: 14, color: Colors.blue.shade900),),
-            onTap: () {},
+          child: Column(
+            children: [
+              InkWell(
+                child: Text('Chỉ đường', style: TextStyle(fontSize: 14, color: Colors.blue.shade900),),
+                onTap: () {},
+              ),
+              Text('${(distance / 1000).toStringAsFixed(2)} Km')
+            ],
           ),
         )
       ],

@@ -1,13 +1,16 @@
 
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 
 import '../../core/constants/dimension_constants.dart';
+import '../../models/bank_location.dart';
 import '../../models/district.dart';
-import '../../models/point.dart';
 import '../../models/province.dart';
 import '../../network/netword_request.dart';
 import '../widgets/address_form_widget.dart';
@@ -25,15 +28,15 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  List<Map<String, Province>> locations = [];
-  List<Map<String, District>> districts = [];
-  Map<String, Point> address = {};
+  Map<String, Province> locations = {};
+  Map<String, District> districts = {};
+  Map<String, BankLocation>address = {};
   String? provinceChose;
   String? districtChose;
   Set<Marker> markers = {};
   bool _isLoading = false;
   final Location _locationController = Location();
-  LatLng? _currentLocation;
+  LatLng _currentLocation = LatLng(21.0014109, 105.8046842);
   int selectedButtonIndex = 0;
 
   @override
@@ -50,6 +53,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
     try {
       locations = await DioTest.postProvinceInfoList();
+      address = await DioTest.postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
     } catch (error) {
       // Xử lý lỗi ở đây
     }
@@ -62,14 +66,14 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    Set<Marker> _setMarkers() {
-      Set<Marker> markers = Set();
+    Set<Marker> setMarkers() {
+      Set<Marker> markers = {};
       int markerIdCounter = 0;
 
       address.forEach((key, value) {
         double latitude = double.parse(value.latitude);
         double longitude = double.parse(value.longitude);
-
+        print('${value.latitude}  ${value.longitude}');
         Marker marker = Marker(
           markerId: MarkerId("location$markerIdCounter"),
           position: LatLng(latitude, longitude),
@@ -113,15 +117,9 @@ class _LocationScreenState extends State<LocationScreen> {
               child: SelectLocalWidget(
                 defaultHint: "Tỉnh/ Thành Phố",
                 selectedValue: provinceChose,
-                items: locations.expand((e) => e.keys).toList(),
+                items: locations.keys.toList(),
                 onChanged: (value) async {
-                  List<Map<String, District>> newDistricts = [];
-                  for(var x in locations){
-                    if(x.keys.first == value){
-                      newDistricts = await DioTest.postDistrict(x.values.first.regionCode1 ?? "Hà Nội");
-                    }
-                  }
-
+                  Map<String, District> newDistricts = await DioTest.postDistrict(locations[value]?.regionCode1 ?? "Hà Nội");
                   setState(()  {
                     provinceChose = value;
                     districts = newDistricts;
@@ -146,7 +144,7 @@ class _LocationScreenState extends State<LocationScreen> {
             child: SelectLocalWidget(
               defaultHint: "Quận/ Huyện",
               selectedValue: districtChose,
-              items: districts.expand((e) => e.keys).toList(),
+              items: districts.keys.toList(),
               onChanged: (value) {
                 setState(() {
                   districtChose = value;
@@ -204,44 +202,28 @@ class _LocationScreenState extends State<LocationScreen> {
 
                       children: [
                         Expanded(child: _buildButton('Gần Nhất', () async{
-                          Map<String, Point> newAddresses = await DioTest.postBranchATMTypeOne();
+                          Map<String, BankLocation> newAddresses = await DioTest.postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
                           setState(() {
                             address = newAddresses;
-                            markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
+                            markers = setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
                           });
                         }, 0)),
                         Expanded(child: _buildButton('ATM', () async {
-                          String regionCode1 = "";
-                          for(var x in locations){
-                            if(x.keys.first == provinceChose){
-                              regionCode1 = x.values.first.regionCode1;
-                              break;
-                            }
-                          }
-                          Map<String, Point>  newAddresses = await DioTest.postBranchATMTypeTwo(regionCode1);
+                          String regionCode1 = locations[provinceChose]?.regionCode1 ?? "805";
+                          Map<String, BankLocation>  newAddresses = await DioTest.postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),regionCode1);
                           setState(() {
                             address = newAddresses;
-                            markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
+                            markers = setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
                           });
                         }, 1)),
                         Expanded(child: _buildButton('Chi Nhánh', () async {
-                          String regionCode1 = "";
-                          String districtCode = "";
-                          for(var x in locations){
-                            if(x.keys.first == provinceChose){
-                              regionCode1 = x.values.first.regionCode1;
-                              break;
-                            }
-                          }
-                          for(var x in districts){
-                            if(x.keys.first == districtChose){
-                              districtCode = x.values.first.districtCode;
-                            }
-                          }
-                          Map<String, Point> newAddresses = await DioTest.postBranchATMTypeThree(regionCode1, districtCode);
+                          String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
+                          String districtCode = districts[districtChose]?.districtCode ?? '10111';
+
+                          Map<String, BankLocation> newAddresses = await DioTest.postBranchATMTypeThree(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(), regionCode1, districtCode);
                           setState(() {
                             address = newAddresses;
-                            markers = _setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
+                            markers = setMarkers(); // Cập nhật lại markers khi danh sách address được cập nhật
                           });
                         }, 2)),
                       ],
@@ -251,12 +233,14 @@ class _LocationScreenState extends State<LocationScreen> {
                     Expanded(
                         child: ListView(
                       controller: scrollController,
-                  children:  address.entries.map((e) => AddressFormWidget(
-                    icon: AssetPath.icoSo,
-                    title: 'Chi nhánh VRB sở giao dịch',
-                    description: e.key.toString(), // Sử dụng e.value để lấy giá trị từ map
-                  )).toList(),
-
+                  children:  address.entries.map((e)  => AddressFormWidget(
+                    icon: (e.value.idImage == 'atm00') ? AssetPath.icoChiNhanhSo : AssetPath.icoSo,
+                    title: e.value.shotName,
+                      // LatLng(21.005536, 105.8180681)
+                    description: e.key.toString(), distance: Geolocator.distanceBetween
+                    (_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)), // Sử dụng e.value để lấy giá trị từ map
+                  ),
+                  ).toList(),
                     ))
                   ],
 
@@ -267,6 +251,7 @@ class _LocationScreenState extends State<LocationScreen> {
         ],
       ),
     );
+    
   }
 
   //TODO
@@ -318,10 +303,10 @@ class _LocationScreenState extends State<LocationScreen> {
         return;
       }
     }
-    _locationController.onLocationChanged.listen((LocationData currentLocation) {
-      if(currentLocation.latitude != null && currentLocation.longitude != null){
+    _locationController.onLocationChanged.listen((LocationData currentLocationData) {
+      if(currentLocationData.latitude != null && currentLocationData.longitude != null){
         setState(() {
-          _currentLocation = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+          _currentLocation = LatLng(currentLocationData.latitude!, currentLocationData.longitude!);
           print('toa ho hien tai la $_currentLocation');
           setState(() {
             markers.add(
@@ -338,4 +323,5 @@ class _LocationScreenState extends State<LocationScreen> {
     }
     );
   }
+  
 }
