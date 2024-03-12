@@ -15,15 +15,17 @@ import '../widgets/address_form_widget.dart';
 import '../widgets/select_local_widget.dart';
 import 'loading_screen.dart';
 
-class LocationScreen extends StatefulWidget {
-  const LocationScreen({super.key});
+class LocationScreenTest extends StatefulWidget {
+  const LocationScreenTest({super.key});
 
   @override
-  State<LocationScreen> createState() => _LocationScreenState();
+  State<LocationScreenTest> createState() => _LocationScreenTestState();
 }
 
-class _LocationScreenState extends State<LocationScreen> {
+class _LocationScreenTestState extends State<LocationScreenTest> {
   GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
+  int _contentAmount = 0;
+  ExpansionStatus _expansionStatus = ExpansionStatus.contracted;
   Map<String, Province> locations = {};
   Map<String, District> districts = {};
   Map<String, BankLocation>address = {};
@@ -98,7 +100,6 @@ class _LocationScreenState extends State<LocationScreen> {
         animationCurveExpand: Curves.bounceOut,
         animationCurveContract: Curves.ease,
         persistentContentHeight: 0, // do rong khi keo xuong
-
         background: Stack(
           children: [
             Positioned.fill(
@@ -114,7 +115,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       position: LatLng(21.005536, 105.8180681),
                       infoWindow: InfoWindow(title: 'ATM Techcombank'),
                     ),
-
+                    
                   },
                 )),
             Positioned(
@@ -213,22 +214,22 @@ class _LocationScreenState extends State<LocationScreen> {
           ),
         ),
         expandableContent: Container(
-            constraints: BoxConstraints.expand(height: 400), // do rong khi keo len
+        constraints: BoxConstraints.expand(height: 400), // do rong khi keo len
             decoration: BoxDecoration(
-              color: Colors.white,),
-            child: ListView(
-              controller: scrollController,
-              children:  address.entries.map((e)  => AddressFormWidget(
-                icon: (e.value.idImage == 'atm00') ? AssetPath.icoChiNhanhSo : AssetPath.icoSo,
-                title: e.value.shotName,
-                // LatLng(21.005536, 105.8180681)
-                description: e.key.toString(), distance: Geolocator.distanceBetween
-                (_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)),
-                distancePoint: DistancePoint(_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)), // Sử dụng e.value để lấy giá trị từ map
-              ),
-              ).toList(),
-            )
-        ),
+                color: Colors.white,),
+        child: ListView(
+          controller: scrollController,
+          children:  address.entries.map((e)  => AddressFormWidget(
+            icon: (e.value.idImage == 'atm00') ? AssetPath.icoChiNhanhSo : AssetPath.icoSo,
+            title: e.value.shotName,
+            // LatLng(21.005536, 105.8180681)
+            description: e.key.toString(), distance: Geolocator.distanceBetween
+            (_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)),
+            distancePoint: DistancePoint(_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)), // Sử dụng e.value để lấy giá trị từ map
+          ),
+          ).toList(),
+        )
+      ),
       ),
     );
   }

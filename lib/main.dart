@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:vrb_client/representation/screens/location_screen.dart';
+import 'package:vrb_client/representation/screens/location_screen_test.dart';
 import 'package:vrb_client/routes.dart';
+import 'package:vrb_client/test.dart';
 
 void main()  {
 
@@ -19,8 +21,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 
       ),
-      // home:  const HomeScreen(),
-      // home:  const MainApp(),
+      // home:  const LocationScreenTest(),
+      // home:  ExampleExpert(),
       home:  const LocationScreen(),
       routes: routes,
       debugShowCheckedModeBanner: false,

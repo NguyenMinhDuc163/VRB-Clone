@@ -1,57 +1,133 @@
+// import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
+// import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 //
-// class YourMapWidget extends StatelessWidget {
-//   final List<Map<String, Point>> address;
+// class ExampleExpert extends StatefulWidget {
+//   @override
+//   _ExampleExpertState createState() => _ExampleExpertState();
+// }
 //
-//   const YourMapWidget({Key? key, required this.address}) : super(key: key);
+// class _ExampleExpertState extends State<ExampleExpert> {
+//   GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
+//   int _contentAmount = 0;
+//   ExpansionStatus _expansionStatus = ExpansionStatus.contracted;
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     int markerIdCounter = 0; // Biến đếm để tạo markerId tự tăng
+//     return MaterialApp(
+//       home: Scaffold(
+//         appBar: AppBar(
+//           title: Text(_expansionStatus.toString()),
+//         ),
+//         body: ExpandableBottomSheet(
+//           //use the key to get access to expand(), contract() and expansionStatus
+//           key: key,
 //
-//     // Tạo danh sách các Marker từ address
-//     Set<Marker> markers = address.map((data) {
-//       Point point = data['point'] ?? Point(0, 0);
-//       String markerId = 'marker_$markerIdCounter'; // Tạo markerId tự tăng
+//           //optional
+//           //callbacks (use it for example for an animation in your header)
+//           onIsContractedCallback: () => print('contracted'),
+//           onIsExtendedCallback: () => print('extended'),
 //
-//       markerIdCounter++; // Tăng biến đếm cho lần tạo marker tiếp theo
-//       return Marker(
-//         markerId: MarkerId(markerId),
-//         icon: BitmapDescriptor.defaultMarker,
-//         position: LatLng(point.latitude, point.longitude),
-//       );
-//     }).toSet();
+//           //optional; default: Duration(milliseconds: 250)
+//           //The durations of the animations.
+//           animationDurationExtend: Duration(milliseconds: 500),
+//           animationDurationContract: Duration(milliseconds: 250),
 //
-//     return GoogleMap(
-//       initialCameraPosition: const CameraPosition(
-//         target: LatLng(21.005536, 105.8180681),
-//         zoom: 5,
+//           //optional; default: Curves.ease
+//           //The curves of the animations.
+//           animationCurveExpand: Curves.bounceOut,
+//           animationCurveContract: Curves.ease,
+//
+//           //optional
+//           //The content extend will be at least this height. If the content
+//           //height is smaller than the persistentContentHeight it will be
+//           //animated on a height change.
+//           //You can use it for example if you have no header.
+//           persistentContentHeight: 50,
+//
+//           //required
+//           //This is the widget which will be overlapped by the bottom sheet.
+//           background: Container(
+//             color: Colors.blue[800],
+//           ),
+//
+//           //optional
+//           //This widget is sticking above the content and will never be contracted.
+//           persistentHeader: Container(
+//             color: Colors.orange,
+//             constraints: BoxConstraints.expand(height: 40),
+//             child: Center(
+//               child: Container(
+//                 height: 8.0,
+//                 width: 50.0,
+//                 color: Color.fromARGB((0.25 * 255).round(), 0, 0, 0),
+//               ),
+//             ),
+//           ),
+//
+//           //required
+//           //This is the content of the bottom sheet which will be extendable by dragging.
+//           expandableContent: Container(
+//             constraints: BoxConstraints(maxHeight: 400),
+//             child: SingleChildScrollView(
+//               child: Column(
+//                 mainAxisSize: MainAxisSize.min,
+//                 children: <Widget>[
+//                   for (int i = 0; i < _contentAmount; i++)
+//                     Container(
+//                       height: 50,
+//                       color: Colors.red[((i % 8) + 1) * 100],
+//                     ),
+//                 ],
+//               ),
+//             ),
+//           ),
+//
+//           //optional
+//           //This is a widget aligned to the bottom of the screen and stays there.
+//           //You can use this for example for navigation.
+//           persistentFooter: Container(
+//             color: Colors.green,
+//             height: 100,
+//             child: Row(
+//               mainAxisSize: MainAxisSize.max,
+//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//               children: <Widget>[
+//                 IconButton(
+//                   icon: Icon(Icons.add),
+//                   onPressed: () => setState(() {
+//                     _contentAmount++;
+//                   }),
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.arrow_upward),
+//                   onPressed: () => setState(() {
+//                     key.currentState!.expand();
+//                   }),
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.cloud),
+//                   onPressed: () => setState(() {
+//                     _expansionStatus = key.currentState!.expansionStatus;
+//                   }),
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.arrow_downward),
+//                   onPressed: () => setState(() {
+//                     key.currentState!.contract();
+//                   }),
+//                 ),
+//                 IconButton(
+//                   icon: Icon(Icons.remove),
+//                   onPressed: () => setState(() {
+//                     if (_contentAmount > 0) _contentAmount--;
+//                   }),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
 //       ),
-//       markers: markers,
 //     );
 //   }
-// }
-//
-// // Point class for demonstration purpose
-// class Point {
-//   final double latitude;
-//   final double longitude;
-//
-//   Point(this.latitude, this.longitude);
-// }
-//
-// void main() {
-//   List<Map<String, Point>> address = [
-//     {'point': Point(10.46425, 106.41252)},
-//     {'point': Point(21.02206, 105.84805)},
-//     {'point': Point(16.06061, 108.21437)},
-//     {'point': Point(12.25141, 109.18795)},
-//   ];
-//
-//   runApp(MaterialApp(
-//     home: Scaffold(
-//       body: YourMapWidget(address: address),
-//     ),
-//   ));
 // }
