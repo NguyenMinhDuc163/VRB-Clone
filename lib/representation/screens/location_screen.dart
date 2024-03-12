@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
+import 'package:vrb_client/models/distance_point.dart';
 
 import '../../core/constants/dimension_constants.dart';
 import '../../models/bank_location.dart';
@@ -238,7 +239,8 @@ class _LocationScreenState extends State<LocationScreen> {
                     title: e.value.shotName,
                       // LatLng(21.005536, 105.8180681)
                     description: e.key.toString(), distance: Geolocator.distanceBetween
-                    (_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)), // Sử dụng e.value để lấy giá trị từ map
+                    (_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)),
+                    distancePoint: DistancePoint(_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)), // Sử dụng e.value để lấy giá trị từ map
                   ),
                   ).toList(),
                     ))
