@@ -30,6 +30,7 @@ class DioTest{
             // print(element['contains'][i]);
             // address.add({element['contains'][i]['address'] : Point(element['contains'][i]['longitude'], element['contains'][i]['latitude'])});
             address[element['contains'][i]['address']] = Point(element['contains'][i]['longitude'], element['contains'][i]['latitude']);
+            print('${element['contains'][i]['type']} --- ${element['contains'][i]['shotName']} ${element['contains'][i]['idImage']}');
           }
         }
       }
@@ -80,7 +81,7 @@ class DioTest{
       if(response.statusCode == 200){
         List<dynamic> obj = jsonDecode(response.data['object']);
         for(var element in obj) {
-          for(int i = 0; i < element['contains'].lenth; i++){
+          for(int i = 0; i < element['contains'].length; i++){
             address[element['contains'][i]['address']] = Point(element['contains'][i]['longitude'], element['contains'][i]['latitude']);
           }
         }
@@ -142,8 +143,10 @@ class DioTest{
 void main() async {
   String longitude = '105.804706';
   String latitude = "21.001357";
-  // List<Map<String, Province>> a = await DioTest.postProvinceInfoList();
-  // List<Map<String, District>> b = await DioTest.postDistrict('701');
-  Map<String, Point> c = await DioTest.postBranchATMTypeOne();
-  print(c);
+  Map<String, Point> a = await DioTest.postBranchATMTypeOne();
+
+  // List<Map<String, District>> b = await DioTest.postDistrict('101');
+  // Map<String, Point> c = await DioTest.postBranchATMTypeThree('101', '10111');
+  // print(c);
+  // print(b);
 }

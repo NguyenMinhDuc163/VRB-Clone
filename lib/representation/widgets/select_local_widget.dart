@@ -38,14 +38,14 @@ class _SelectLocalWidgetState extends State<SelectLocalWidget> {
         value: widget.selectedValue,
         hint: widget.selectedValue == null
             ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(widget.defaultHint ?? 'Select an option'),
-            )
+          padding: const EdgeInsets.all(8.0),
+          child: Text(widget.defaultHint ?? 'Select an option'),
+        )
             : null,
         style: const TextStyle(
-          fontSize: 16, // Kích thước chữ
-          color: Colors.black, // Màu chữ
-          fontWeight: FontWeight.bold
+            fontSize: 16, // Kích thước chữ
+            color: Colors.black, // Màu chữ
+            fontWeight: FontWeight.bold
         ),
         onChanged: (newValue) {
           widget.onChanged(newValue); // Gọi onChanged để cập nhật giá trị được chọn

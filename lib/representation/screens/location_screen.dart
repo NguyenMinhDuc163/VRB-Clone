@@ -158,7 +158,7 @@ class _LocationScreenState extends State<LocationScreen> {
           DraggableScrollableSheet(
             initialChildSize: 0.3,
             maxChildSize: 0.7,
-            minChildSize: 0.2,
+            minChildSize: 0.3,
             builder: (BuildContext context, ScrollController scrollController) {
               return Container(
                 padding: const EdgeInsets.symmetric(horizontal: kMediumPadding),
@@ -251,7 +251,6 @@ class _LocationScreenState extends State<LocationScreen> {
                     Expanded(
                         child: ListView(
                       controller: scrollController,
-                  // children: address.map((e) => AddressFormWidget(icon: AssetPath.icoSo, title: 'Chi nhánh VRB sở giao dich', description: e.keys.toString())).toList(),
                   children:  address.entries.map((e) => AddressFormWidget(
                     icon: AssetPath.icoSo,
                     title: 'Chi nhánh VRB sở giao dịch',
@@ -289,8 +288,8 @@ class _LocationScreenState extends State<LocationScreen> {
             vertical: 10), // Có thể thêm các thuộc tính khác nếu cần
         shape: RoundedRectangleBorder(
           // Tạo hình dạng chữ nhật
-          borderRadius: BorderRadius.circular(10),
-        ),
+          borderRadius: BorderRadius.circular(8),
+        )
       ),
       child: Text(
         title,
@@ -329,8 +328,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 Marker(
                   markerId: MarkerId("current01"),
                   icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-                  position: _currentLocation ?? LatLng(21.005536, 105.8180681),
-                  // position: LatLng(21.005536, 106.8180681),
+                  // position: _currentLocation ?? LatLng(21.005536, 105.8180681),
+                  position: LatLng(21.005536, 105.8180681),
                 )
             );
           });
