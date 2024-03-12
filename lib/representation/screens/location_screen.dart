@@ -37,6 +37,7 @@ class _LocationScreenState extends State<LocationScreen> {
   LatLng _currentLocation = LatLng(21.0014109, 105.8046842);
   int selectedButtonIndex = 0;
   int index = 0;
+  GoogleMapController? mapController;
 
   void initState() {
     super.initState();
@@ -68,6 +69,8 @@ class _LocationScreenState extends State<LocationScreen> {
     Set<Marker> setMarkers(int index) {
       Set<Marker> markers = {};
       int markerIdCounter = 0;
+
+
 
       address[index].forEach((key, value) {
         double latitude = double.parse(value.latitude);
@@ -114,9 +117,25 @@ class _LocationScreenState extends State<LocationScreen> {
                     zoom: 13,
                   ),
                   markers: markers,
-                    myLocationButtonEnabled: true,
-                    myLocationEnabled: true
+                   onMapCreated: (controller) {
+                     setState(() {
+                       mapController = controller;
+                     });
+                   },
                 )
+            ),
+
+            Positioned(
+              top: 200,
+              right: 16.0,
+              child: FloatingActionButton(
+                onPressed: () {
+                  if (mapController != null) {
+                    mapController!.animateCamera(CameraUpdate.newLatLng(LatLng(21.005536, 105.8180681)));
+                  }
+                },
+                child: Icon(Icons.location_searching),
+              ),
             ),
             Positioned(
               top: kMinPadding,
@@ -188,17 +207,6 @@ class _LocationScreenState extends State<LocationScreen> {
               Expanded(child: _buildButton('Gần Nhất', () async{
                 List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
                 for(int i = 0; i < newAddresses.length; i++){
-                  // Map<String, BankLocation> map = newAddresses[i];
-                  // List<String> keys = map.keys.toList();
-                  // if(keys.length > 5){
-                  //   List<String> newKeys = keys.sublist(0, 5);
-                  //   Map<String, BankLocation> newMap = {};
-                  //   for (String key in newKeys) {
-                  //     newMap[key] = map[key]!;
-                  //   }
-                  //   newAddresses[i] = newMap;
-                  // }
-
                   List<MapEntry<String, BankLocation>> entries = newAddresses[i].entries.toList();
                   entries.sort((a, b) => distanceBetween(a.value.latitude, a.value.longitude).compareTo(distanceBetween(b.value.latitude, b.value.longitude)));
                   Map<String, BankLocation> sortedMap = Map.fromEntries(entries);
