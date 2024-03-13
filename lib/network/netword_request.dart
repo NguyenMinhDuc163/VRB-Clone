@@ -17,6 +17,7 @@ class DioTest{
    List<Map<String, BankLocation>> addressList = [];
    Map<String, BankLocation> atmMap = {};
    Map<String, BankLocation> branchMap = {};
+   print(longitude);
     try {
       var response = await Dio().post('$baseURL/inquiryProviceInfoList/branhATM', data: {
         "longitude" :  longitude,
@@ -26,9 +27,7 @@ class DioTest{
       // print(response.data);
       if(response.statusCode == 200){
         List<dynamic> obj = jsonDecode(response.data['object']);
-
         for(var element in obj) {
-
           for(int i = 0; i < element['contains'].length; i++){
             if(element['contains'][i]['type'] == 'ATM'){
               atmMap[element['contains'][i]['address']] = BankLocation(element['contains'][i]['address'], element['contains'][i]['type'],
@@ -42,7 +41,7 @@ class DioTest{
         }
       }
     } catch (e) {
-      print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
+      print('Đã xảy ra lỗi khi thực hiện yêu cầu 1: $e');
     }
     return [atmMap, branchMap];
   }
@@ -78,7 +77,7 @@ class DioTest{
 
       }
     } catch (e) {
-      print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
+      print('Đã xảy ra lỗi khi thực hiện yêu cầu 3: $e');
     }
     return [atmMap, branchMap];
   }
@@ -112,7 +111,7 @@ class DioTest{
         }
       }
     } catch (e) {
-      print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
+      print('Đã xảy ra lỗi khi thực hiện yêu cầu 4: $e');
     }
     return [atmMap, branchMap];
   }
@@ -129,7 +128,7 @@ class DioTest{
         }
       }
     } catch (e) {
-      print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
+      print('Đã xảy ra lỗi khi thực hiện yêu cầu 5: $e');
       // Có thể xử lý lỗi ở đây nếu cần thiết
     }
 
@@ -152,7 +151,7 @@ class DioTest{
         });
       }
     } catch (e) {
-      print('Đã xảy ra lỗi khi thực hiện yêu cầu: $e');
+      print('Đã xảy ra lỗi khi thực hiện yêu cầu 6: $e');
       // Có thể xử lý lỗi ở đây nếu cần thiết
     }
 
@@ -165,7 +164,7 @@ class DioTest{
 void main() async {
   String longitude = '105.804706';
   String latitude = "21.001357";
-  var a = await DioTest.postBranchATMTypeOne(longitude, latitude);
+  var a = await DioTest.postBranchATMTypeTwo(longitude, latitude, '805');
 
   a.forEach((element) {
     print(element);

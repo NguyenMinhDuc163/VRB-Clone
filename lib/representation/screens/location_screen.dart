@@ -39,10 +39,12 @@ class _LocationScreenState extends State<LocationScreen> {
   int index = 0;
   GoogleMapController? mapController;
 
+
   void initState() {
     super.initState();
     fetchData(); // Gọi fetchData khi trang được khởi tạo
-    // getLocationUpdate();
+    getLocationUpdate();
+    // print(_currentLocation);
   }
 
   Future<void> fetchData() async {
@@ -137,6 +139,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Icon(Icons.location_searching),
               ),
             ),
+
             Positioned(
               top: kMinPadding,
               left: kMinPadding,
@@ -264,15 +267,22 @@ class _LocationScreenState extends State<LocationScreen> {
               color: Colors.white,),
             child: ListView(
               controller: scrollController,
-              children:  address[index].entries.map((e)  => AddressFormWidget(
-                icon: (e.value.idImage == 'atm00') ? AssetPath.icoChiNhanhSo : AssetPath.icoSo,
-                title: e.value.shotName,
-                // LatLng(21.005536, 105.8180681)
-                description: e.key.toString(), distance: Geolocator.distanceBetween
-                (_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)),
-                distancePoint: DistancePoint(_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)), // Sử dụng e.value để lấy giá trị từ map
-              ),
-              ).toList(),
+              children:   address[index].entries.map((e) {
+                return GestureDetector(
+                  onTap: () {
+                    // Thực hiện hành động khi người dùng chọn một phần tử
+                    print('Selected item: ${e.key}');
+                    // Thực hiện hành động khác tại đây
+                  },
+                  child: AddressFormWidget(
+                    icon: (e.value.idImage == 'atm00') ? AssetPath.icoChiNhanhSo : AssetPath.icoSo,
+                    title: e.value.shotName,
+                    description: e.key.toString(),
+                    distance: Geolocator.distanceBetween(_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)),
+                    distancePoint: DistancePoint(_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)),
+                  ),
+                );
+              }).toList(),
             )
         ),
       ),
@@ -281,31 +291,6 @@ class _LocationScreenState extends State<LocationScreen> {
 
   Widget _buildButton(String title, VoidCallback onPressed, int index){
 
-    // return Container(
-    //   padding: const EdgeInsets.symmetric(
-    //     horizontal: 20,
-    //     vertical: 10),
-    // decoration: BoxDecoration(
-    //     color: index == selectedButtonIndex ? Colors.grey.withOpacity(0.3) : Colors.transparent,
-    //   borderRadius: BorderRadius.only(
-    //     topLeft: index == 0 ? Radius.circular(20) : Radius.zero,
-    //     topRight: index == 2 ? Radius.circular(20) :Radius.zero
-    //   )
-    //   ),
-    //   child: InkWell(onTap: (){
-    //     setState(() {
-    //       selectedButtonIndex = index; // Cập nhật nút được chọn
-    //     });
-    //     print(selectedButtonIndex);
-    //     onPressed();
-    //   },child: Text(
-    //     title,
-    //     style: TextStyle(fontSize: 12,color:index == selectedButtonIndex ? Colors.white : Colors.white60,),
-    //     maxLines: 1,
-    //     overflow: TextOverflow.ellipsis,
-    //     textAlign: TextAlign.center,
-    //   ),),
-    // );
     return GestureDetector(
       onTap: () {
         setState(() {
