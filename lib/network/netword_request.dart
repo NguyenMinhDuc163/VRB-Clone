@@ -164,7 +164,7 @@ class DioTest{
 void main() async {
   String longitude = '105.804706';
   String latitude = "21.001357";
-  var a = await DioTest.postBranchATMTypeTwo(longitude, latitude, '805');
+  var a = await DioTest.postBranchATMTypeTwo(longitude, latitude, '101');
 
   a.forEach((element) {
     print(element);

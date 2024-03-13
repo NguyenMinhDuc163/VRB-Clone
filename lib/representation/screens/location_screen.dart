@@ -1,5 +1,7 @@
 
 
+import 'dart:async';
+
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -38,8 +40,24 @@ class _LocationScreenState extends State<LocationScreen> {
   int selectedButtonIndex = 0;
   int index = 0;
   GoogleMapController? mapController;
+  Completer<GoogleMapController> _controller = Completer();
+   Set<Polyline> _polylines = {};
 
 
+  void _createPolylines(LatLng start, LatLng end) {
+    setState(() {
+      _polylines.clear(); // Xóa đường đi hiện tại
+      List<LatLng> polylinePoints = [start, end];
+      _polylines.add(
+        Polyline(
+          polylineId: PolylineId('route'),
+          color: Colors.red.shade600,
+          points: polylinePoints,
+          width: 5,
+        ),
+      );
+    });
+  }
   void initState() {
     super.initState();
     fetchData(); // Gọi fetchData khi trang được khởi tạo
@@ -73,14 +91,13 @@ class _LocationScreenState extends State<LocationScreen> {
       int markerIdCounter = 0;
 
 
-
       address[index].forEach((key, value) {
         double latitude = double.parse(value.latitude);
         double longitude = double.parse(value.longitude);
-        print('${value.latitude}  ${value.longitude}');
         Marker marker = Marker(
           markerId: MarkerId("location$markerIdCounter"),
           position: LatLng(latitude, longitude),
+          infoWindow: InfoWindow(title: value.shotName, snippet: value.address)
         );
 
         markers.add(marker);
@@ -116,10 +133,12 @@ class _LocationScreenState extends State<LocationScreen> {
                   mapType: MapType.normal,
                   initialCameraPosition: const CameraPosition(
                     target: LatLng(21.005536, 105.8180681),
-                    zoom: 13,
+                    zoom: 8,
                   ),
+                  polylines: _polylines,
                   markers: markers,
-                   onMapCreated: (controller) {
+                   onMapCreated: (GoogleMapController controller) {
+                     _controller.complete(controller);
                      setState(() {
                        mapController = controller;
                      });
@@ -153,9 +172,15 @@ class _LocationScreenState extends State<LocationScreen> {
                   items: locations.keys.toList(),
                   onChanged: (value) async {
                     Map<String, District> newDistricts = await DioTest.postDistrict(locations[value]?.regionCode1 ?? "Hà Nội");
+                    List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
+                      (_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),locations[value]?.regionCode1 ?? "Hà Nội");
+
                     setState(()  {
                       provinceChose = value;
                       districts = newDistricts;
+
+                      address = newAddresses;
+                      markers = setMarkers(0);
                     });
 
                   },
@@ -178,11 +203,16 @@ class _LocationScreenState extends State<LocationScreen> {
                 defaultHint: "Quận/ Huyện",
                 selectedValue: districtChose,
                 items: districts.keys.toList(),
-                onChanged: (value) {
+                onChanged: (value) async {
+                  List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
+                    (_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),
+                      locations[provinceChose]?.regionCode1 ?? "101", districts[value]?.districtCode ?? "10111");
                   setState(() {
                     districtChose = value;
+                    index = 1;
+                    address = newAddresses;
+                    markers = setMarkers(index);
                   });
-                  print(districtChose);
                 },
               ),
             ),
@@ -223,7 +253,7 @@ class _LocationScreenState extends State<LocationScreen> {
               }, 0)),
               Expanded(child: _buildButton('ATM', () async {
                 if(provinceChose != null){
-                  String regionCode1 = locations[provinceChose]?.regionCode1 ?? "805";
+                  String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
                   List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),regionCode1);
                   setState(() {
                     index = 0;
@@ -262,17 +292,17 @@ class _LocationScreenState extends State<LocationScreen> {
           ),
         ),
         expandableContent: Container(
-            constraints: BoxConstraints.expand(height: 400), // do rong khi keo len
-            decoration: BoxDecoration(
+            constraints: const BoxConstraints.expand(height: 400), // do rong khi keo len
+            decoration: const BoxDecoration(
               color: Colors.white,),
             child: ListView(
               controller: scrollController,
-              children:   address[index].entries.map((e) {
+              children:   address[(index != 0 || index
+               != 1) ? index : 0].entries.map((e) {
                 return GestureDetector(
                   onTap: () {
-                    // Thực hiện hành động khi người dùng chọn một phần tử
-                    print('Selected item: ${e.key}');
-                    // Thực hiện hành động khác tại đây
+                    //TODO dang lay gt default
+                        _createPolylines(LatLng(21.0014109, 105.8046842), LatLng(double.parse(e.value.latitude), double.parse(e.value.longitude)));
                   },
                   child: AddressFormWidget(
                     icon: (e.value.idImage == 'atm00') ? AssetPath.icoChiNhanhSo : AssetPath.icoSo,
