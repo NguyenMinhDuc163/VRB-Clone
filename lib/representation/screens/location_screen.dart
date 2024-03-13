@@ -42,7 +42,7 @@ class _LocationScreenState extends State<LocationScreen> {
   void initState() {
     super.initState();
     fetchData(); // Gọi fetchData khi trang được khởi tạo
-    getLocationUpdate();
+    // getLocationUpdate();
   }
 
   Future<void> fetchData() async {
@@ -187,7 +187,7 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
 
         persistentHeader: Container(
-          margin: EdgeInsets.only(top: 10),
+          // margin: EdgeInsets.only(top: 10),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
               gradient: LinearGradient(
@@ -281,31 +281,55 @@ class _LocationScreenState extends State<LocationScreen> {
 
   Widget _buildButton(String title, VoidCallback onPressed, int index){
 
-    return ElevatedButton(
-      onPressed: (){
+    // return Container(
+    //   padding: const EdgeInsets.symmetric(
+    //     horizontal: 20,
+    //     vertical: 10),
+    // decoration: BoxDecoration(
+    //     color: index == selectedButtonIndex ? Colors.grey.withOpacity(0.3) : Colors.transparent,
+    //   borderRadius: BorderRadius.only(
+    //     topLeft: index == 0 ? Radius.circular(20) : Radius.zero,
+    //     topRight: index == 2 ? Radius.circular(20) :Radius.zero
+    //   )
+    //   ),
+    //   child: InkWell(onTap: (){
+    //     setState(() {
+    //       selectedButtonIndex = index; // Cập nhật nút được chọn
+    //     });
+    //     print(selectedButtonIndex);
+    //     onPressed();
+    //   },child: Text(
+    //     title,
+    //     style: TextStyle(fontSize: 12,color:index == selectedButtonIndex ? Colors.white : Colors.white60,),
+    //     maxLines: 1,
+    //     overflow: TextOverflow.ellipsis,
+    //     textAlign: TextAlign.center,
+    //   ),),
+    // );
+    return GestureDetector(
+      onTap: () {
         setState(() {
           selectedButtonIndex = index; // Cập nhật nút được chọn
         });
-        print(selectedButtonIndex);
         onPressed();
       },
-      // onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-          backgroundColor:index == selectedButtonIndex ? Colors.grey.withOpacity(0.3) : Colors.transparent, // Đổi màu nền ở đây
-          padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10), // Có thể thêm các thuộc tính khác nếu cần
-          shape: RoundedRectangleBorder(
-            // Tạo hình dạng chữ nhật
-            borderRadius: BorderRadius.circular(8),
-          )
-      ),
-      child: Text(
-        title,
-        style: TextStyle(fontSize: 12,color:index == selectedButtonIndex ? Colors.white : Colors.white60,),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        textAlign: TextAlign.center,
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300), // Thời gian chuyển đổi
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        decoration: BoxDecoration(
+          color: index == selectedButtonIndex ? Colors.grey.withOpacity(0.3) : Colors.transparent,
+          borderRadius: BorderRadius.only(
+            topLeft: index == 0 ? Radius.circular(20) : Radius.zero,
+            topRight: index == 2 ? Radius.circular(20) : Radius.zero,
+          ),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(fontSize: 12, color: index == selectedButtonIndex ? Colors.white : Colors.white60),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
