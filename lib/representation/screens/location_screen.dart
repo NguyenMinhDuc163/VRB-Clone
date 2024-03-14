@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -174,19 +175,6 @@ class _LocationScreenState extends State<LocationScreen> {
             ),
 
             Positioned(
-              top: 200,
-              right: 16.0,
-              child: FloatingActionButton(
-                onPressed: () {
-                  if (mapController != null) {
-                    mapController!.animateCamera(CameraUpdate.newLatLng(LatLng(21.005536, 105.8180681)));
-                  }
-                },
-                child: Icon(Icons.location_searching),
-              ),
-            ),
-
-            Positioned(
               top: kMinPadding,
               left: kMinPadding,
               child: Container(
@@ -201,7 +189,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     Map<String, District> newDistricts = await DioTest.postDistrict(locations[value]?.regionCode1 ?? "Hà Nội");
                     List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
                       (_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),locations[value]?.regionCode1 ?? "Hà Nội");
-
+                    _polylines.clear();
                     setState(()  {
                       provinceChose = value;
                       districts = newDistricts;
@@ -246,85 +234,112 @@ class _LocationScreenState extends State<LocationScreen> {
           ],
         ),
 
-        persistentHeader: Container(
-          // margin: EdgeInsets.only(top: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  const Color(0xFF19226D).withOpacity(0.9),
-                  const Color(0xFFED1C24).withOpacity(0.8),
+        persistentHeader: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(5),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: FloatingActionButton(
+                    backgroundColor: Colors.white60,
+                  mini: true,
+                  foregroundColor: Colors.black,
+                    elevation: 4,
+                  onPressed: () {
+                    if (mapController != null) {
+                      mapController!.animateCamera(CameraUpdate.newLatLng(LatLng(21.005536, 105.8180681)));
+                    }
+                  },
+                  child: Icon(FontAwesomeIcons.locationArrow),
+                ),
+              ),
+            ),
+            Container(
+              // margin: EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color(0xFF19226D),
+                      const Color(0xFFED1C24),
+                    ],
+                    stops: [0.5, 1],
+                  )),
+              child: Column(
+                children: [
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    children: [
+                      Expanded(child: _buildButton('Gần Nhất', () async{
+                        //TODO tam thoi fix call
+                        try{
+                          List<Map<String, BankLocation>> newAddresses = await DioTest.
+                          postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
+                          createCustomMarker();
+                          setState(() {
+                            index = 0;
+                            address = address = sortMap(newAddresses);;
+                            markers = setMarkers(0); // Cập nhật lại markers khi danh sách address được cập nhật
+                          });
+                        }catch(e){
+                          index = 0;
+                          print("Loi duoc goi $e");
+                        }
+
+                        // print(address[0].isEmpty && address[1].isEmpty);
+                      }, 0)),
+                      Expanded(child: _buildButton('ATM', () async {
+                        if(provinceChose != null){
+                          String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
+                          List<Map<String, BankLocation>>  newAddresses = await DioTest.
+                          postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),regionCode1);
+                          createCustomMarker();
+                          setState(() {
+                            index = 0;
+                            address = sortMap(newAddresses);
+                            markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
+                          });
+                        }else{
+                          setState(() {
+                            index = 0;
+                            markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
+                          });
+                        }
+
+                      }, 1)),
+                      Expanded(child: _buildButton('Chi Nhánh', () async {
+                        if(districtChose != null){
+                          String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
+                          String districtCode = districts[districtChose]?.districtCode ?? '10111';
+                          List<Map<String, BankLocation>> newAddresses =
+                          await DioTest.postBranchATMTypeThree(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),
+                              regionCode1, districtCode) ;
+                          createCustomMarker();
+                          setState(() {
+                            index = 1;
+                            address = address = sortMap(newAddresses);
+                            markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
+                          });
+                        }else{
+                          setState(() {
+                            index = 1;
+                            markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
+                          });
+                        }
+
+                      }, 2)),
+                    ],
+                  ),
                 ],
-                stops: [0.5, 1],
-              )),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-
-            children: [
-              Expanded(child: _buildButton('Gần Nhất', () async{
-                //TODO tam thoi fix call
-                try{
-                  List<Map<String, BankLocation>> newAddresses = await DioTest.
-                  postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
-                  createCustomMarker();
-                  setState(() {
-                    index = 0;
-                    address = address = sortMap(newAddresses);;
-                    markers = setMarkers(0); // Cập nhật lại markers khi danh sách address được cập nhật
-                  });
-                }catch(e){
-                  index = 0;
-                  print("Loi duoc goi $e");
-                }
-
-
-                // print(address[0].isEmpty && address[1].isEmpty);
-              }, 0)),
-              Expanded(child: _buildButton('ATM', () async {
-                if(provinceChose != null){
-                  String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
-                  List<Map<String, BankLocation>>  newAddresses = await DioTest.
-                  postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),regionCode1);
-                  createCustomMarker();
-                  setState(() {
-                    index = 0;
-                    address = sortMap(newAddresses);
-                    markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
-                  });
-                }else{
-                  setState(() {
-                    index = 0;
-                    markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
-                  });
-                }
-
-              }, 1)),
-              Expanded(child: _buildButton('Chi Nhánh', () async {
-                if(districtChose != null){
-                  String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
-                  String districtCode = districts[districtChose]?.districtCode ?? '10111';
-                  List<Map<String, BankLocation>> newAddresses =
-                  await DioTest.postBranchATMTypeThree(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),
-                      regionCode1, districtCode) ;
-                  createCustomMarker();
-                  setState(() {
-                    index = 1;
-                    address = address = sortMap(newAddresses);
-                    markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
-                  });
-                }else{
-                  setState(() {
-                    index = 1;
-                    markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
-                  });
-                }
-
-              }, 2)),
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
         expandableContent: Container(
             constraints: const BoxConstraints.expand(height: 400), // do rong khi keo len
