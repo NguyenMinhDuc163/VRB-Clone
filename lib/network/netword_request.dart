@@ -48,7 +48,6 @@ class DioTest{
 
 
   static Future<List<Map<String, BankLocation>>> postBranchATMTypeTwo(String longitude, String latitude, String regionCode1) async {
-    // Map<String, BankLocation> address = {};
     Map<String, BankLocation> atmMap = {};
     Map<String, BankLocation> branchMap = {};
     try {
@@ -164,10 +163,21 @@ class DioTest{
 void main() async {
   String longitude = '105.804706';
   String latitude = "21.001357";
-  var a = await DioTest.postBranchATMTypeTwo(longitude, latitude, '101');
+  // var a = await DioTest.postBranchATMTypeTwo(longitude, latitude, '805');
+  var a = await DioTest.postProvinceInfoList();
+  a.forEach((key, value) async {
+    var b = await DioTest.postBranchATMTypeTwo(longitude, latitude, value.regionCode1);
+    for(var x in b){
+      if(x.length != 0)
+      print('${x.length} + ${value.regionCode1} + ${value.regionName}');
+      // var c = await DioTest.postDistrict(value.regionCode1);
+      // c.forEach((key, value2) async {
+      //   var d = await DioTest.postBranchATMTypeThree(longitude, latitude, value.regionCode1, value2.districtCode);
+      //   for(var y in d){
+      //     print(y.length);
+      //   }
+      // });
+    }
 
-  a.forEach((element) {
-    print(element);
-    print("-----------------");
   });
 }

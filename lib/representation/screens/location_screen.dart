@@ -42,7 +42,7 @@ class _LocationScreenState extends State<LocationScreen> {
   GoogleMapController? mapController;
   Completer<GoogleMapController> _controller = Completer();
    Set<Polyline> _polylines = {};
-
+  late BitmapDescriptor customMarker;
 
   void _createPolylines(LatLng start, LatLng end) {
     setState(() {
@@ -62,7 +62,7 @@ class _LocationScreenState extends State<LocationScreen> {
     super.initState();
     fetchData(); // Gọi fetchData khi trang được khởi tạo
     getLocationUpdate();
-    // print(_currentLocation);
+    createCustomMarker();
   }
 
   Future<void> fetchData() async {
@@ -72,7 +72,10 @@ class _LocationScreenState extends State<LocationScreen> {
 
     try {
       locations = await DioTest.postProvinceInfoList();
-      address = await DioTest.postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
+      // address = await DioTest.postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
+      // TODO tam thoi goi type2 do 1 loi api
+      address = await DioTest.postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(), "101");
+
     } catch (error) {
       // Xử lý lỗi ở đây
     }
@@ -82,34 +85,56 @@ class _LocationScreenState extends State<LocationScreen> {
     });
   }
 
+  void createCustomMarker() {
+    // Tạo biểu tượng từ hình ảnh tùy chỉnh
+    BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(size: Size(100, 100)), AssetPath.logoBankVRB)
+        .then((descriptor) {
+      setState(() {
+        customMarker = descriptor;
+      });
+    });
+  }
+
+  Set<Marker> setMarkers(int index) {
+    Set<Marker> markers = {};
+    int markerIdCounter = 0;
+
+    address[index].forEach((key, value) {
+      double latitude = double.parse(value.latitude);
+      double longitude = double.parse(value.longitude);
+      Marker marker = Marker(
+          markerId: MarkerId("location$markerIdCounter"),
+          position: LatLng(latitude, longitude),
+          infoWindow: InfoWindow(title: value.shotName, snippet: value.address),
+          icon: customMarker
+      );
+
+      markers.add(marker);
+      markerIdCounter++;
+    });
+    return markers;
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     ScrollController scrollController = ScrollController();
-    Set<Marker> setMarkers(int index) {
-      Set<Marker> markers = {};
-      int markerIdCounter = 0;
 
-
-      address[index].forEach((key, value) {
-        double latitude = double.parse(value.latitude);
-        double longitude = double.parse(value.longitude);
-        Marker marker = Marker(
-          markerId: MarkerId("location$markerIdCounter"),
-          position: LatLng(latitude, longitude),
-          infoWindow: InfoWindow(title: value.shotName, snippet: value.address)
-        );
-
-        markers.add(marker);
-        markerIdCounter++;
-      });
-
-      return markers;
-    }
 
     double distanceBetween(String latitude, String longitude){
       return Geolocator.distanceBetween
         (_currentLocation.latitude, _currentLocation.longitude, double.parse(latitude), double.parse(longitude));
+    }
+
+    List<Map<String, BankLocation>> sortMap(List<Map<String, BankLocation>> newAddresses)  {
+      for(int i = 0; i < newAddresses.length; i++){
+        List<MapEntry<String, BankLocation>> entries = newAddresses[i].entries.toList();
+        entries.sort((a, b) => distanceBetween(a.value.latitude, a.value.longitude).compareTo(distanceBetween(b.value.latitude, b.value.longitude)));
+        Map<String, BankLocation> sortedMap = Map.fromEntries(entries);
+        newAddresses[i] = sortedMap;
+      }
+      return newAddresses;
     }
 
     return Scaffold(
@@ -132,8 +157,9 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: GoogleMap(
                   mapType: MapType.normal,
                   initialCameraPosition: const CameraPosition(
+                    // target: LatLng(21.005536, 105.8180681),
                     target: LatLng(21.005536, 105.8180681),
-                    zoom: 8,
+                    zoom: 12,
                   ),
                   polylines: _polylines,
                   markers: markers,
@@ -238,26 +264,24 @@ class _LocationScreenState extends State<LocationScreen> {
 
             children: [
               Expanded(child: _buildButton('Gần Nhất', () async{
-                List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
-                for(int i = 0; i < newAddresses.length; i++){
-                  List<MapEntry<String, BankLocation>> entries = newAddresses[i].entries.toList();
-                  entries.sort((a, b) => distanceBetween(a.value.latitude, a.value.longitude).compareTo(distanceBetween(b.value.latitude, b.value.longitude)));
-                  Map<String, BankLocation> sortedMap = Map.fromEntries(entries);
-                  newAddresses[i] = sortedMap;
-                }
+                List<Map<String, BankLocation>> newAddresses = await DioTest.
+                postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
+                createCustomMarker();
                 setState(() {
                   index = 0;
-                  address = newAddresses;
+                  address = address = sortMap(newAddresses);;
                   markers = setMarkers(0); // Cập nhật lại markers khi danh sách address được cập nhật
                 });
               }, 0)),
               Expanded(child: _buildButton('ATM', () async {
                 if(provinceChose != null){
                   String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
-                  List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),regionCode1);
+                  List<Map<String, BankLocation>>  newAddresses = await DioTest.
+                  postBranchATMTypeTwo(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),regionCode1);
+                  createCustomMarker();
                   setState(() {
                     index = 0;
-                    address = newAddresses;
+                    address = sortMap(newAddresses);
                     markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
                   });
                 }else{
@@ -272,11 +296,11 @@ class _LocationScreenState extends State<LocationScreen> {
                 if(districtChose != null){
                   String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
                   String districtCode = districts[districtChose]?.districtCode ?? '10111';
-
                   List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(), regionCode1, districtCode);
+                  createCustomMarker();
                   setState(() {
                     index = 1;
-                    address = newAddresses;
+                    address = address = sortMap(newAddresses);
                     markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
                   });
                 }else{
@@ -302,7 +326,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 return GestureDetector(
                   onTap: () {
                     //TODO dang lay gt default
-                        _createPolylines(LatLng(21.0014109, 105.8046842), LatLng(double.parse(e.value.latitude), double.parse(e.value.longitude)));
+                    //     _createPolylines(LatLng(21.005536, 105.8180681), LatLng(double.parse(e.value.latitude), double.parse(e.value.longitude)));
+                        _createPolylines(_currentLocation, LatLng(double.parse(e.value.latitude), double.parse(e.value.longitude)));
                   },
                   child: AddressFormWidget(
                     icon: (e.value.idImage == 'atm00') ? AssetPath.icoChiNhanhSo : AssetPath.icoSo,
@@ -375,9 +400,9 @@ class _LocationScreenState extends State<LocationScreen> {
             markers.add(
                 Marker(
                   markerId: MarkerId("current01"),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
-                  // position: _currentLocation ?? LatLng(21.005536, 105.8180681),
-                  position: LatLng(21.005536, 105.8180681),
+                  // icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+                  icon: BitmapDescriptor.defaultMarker,
+                  position: _currentLocation ?? LatLng(21.005536, 105.8180681),
                 )
             );
           });
@@ -385,7 +410,6 @@ class _LocationScreenState extends State<LocationScreen> {
       }
     }
     );
-
   }
 
 
