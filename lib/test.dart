@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 //
 // void main() {
 //   runApp(MyApp());
@@ -9,65 +9,83 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return MaterialApp(
-//       home: MapScreen(),
+//       home: Scaffold(
+//         body: BottomSheetExample(),
+//       ),
 //     );
 //   }
 // }
 //
-// class MapScreen extends StatefulWidget {
+// class BottomSheetExample extends StatefulWidget {
 //   @override
-//   _MapScreenState createState() => _MapScreenState();
+//   _BottomSheetExampleState createState() => _BottomSheetExampleState();
 // }
 //
-// class _MapScreenState extends State<MapScreen> {
-//   GoogleMapController mapController;
-//   BitmapDescriptor customMarker;
+// class _BottomSheetExampleState extends State<BottomSheetExample> {
+//   final ScrollController _scrollController = ScrollController();
+//   double _expandedHeight = 500.0;
+//   double _bottomSheetOffset = 0.0;
 //
 //   @override
 //   void initState() {
 //     super.initState();
-//     // Tạo biểu tượng tùy chỉnh cho marker
-//     createCustomMarker();
+//     _scrollController.addListener(_scrollListener);
 //   }
 //
-//   void createCustomMarker() {
-//     // Tạo biểu tượng từ hình ảnh tùy chỉnh
-//     BitmapDescriptor.fromAssetImage(
-//         ImageConfiguration(size: Size(48, 48)), 'assets/custom_marker.png')
-//         .then((descriptor) {
-//       setState(() {
-//         customMarker = descriptor;
-//       });
+//   @override
+//   void dispose() {
+//     _scrollController.removeListener(_scrollListener);
+//     _scrollController.dispose();
+//     super.dispose();
+//   }
+//
+//   void _scrollListener() {
+//     setState(() {
+//       _bottomSheetOffset = _scrollController.offset;
 //     });
 //   }
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Custom Marker Example'),
+//     return ExpandableBottomSheet(
+//       background: Container(
+//         color: Colors.blue,
 //       ),
-//       body: GoogleMap(
-//         onMapCreated: (controller) {
-//           setState(() {
-//             mapController = controller;
-//           });
+//       persistentHeaderHeight: 50,
+//       expandedHeight: _expandedHeight,
+//       persistentHeader: InkWell(
+//         onTap: () {
+//           ExpandableBottomSheet.of(context).controller.toggle();
 //         },
-//         initialCameraPosition: CameraPosition(
-//           target: LatLng(37.42796133580664, -122.085749655962),
-//           zoom: 15,
-//         ),
-//         markers: {
-//           Marker(
-//             markerId: MarkerId('marker_1'),
-//             position: LatLng(37.42796133580664, -122.085749655962),
-//             icon: customMarker, // Sử dụng biểu tượng tùy chỉnh ở đây
-//             onTap: () {
-//               // Xử lý sự kiện khi marker được chạm vào
-//             },
+//         child: Container(
+//           color: Colors.grey,
+//           child: Center(
+//             child: Text(
+//               'Tap Here',
+//               style: TextStyle(color: Colors.white),
+//             ),
 //           ),
+//         ),
+//       ),
+//       expandableContent: ListView.builder(
+//         controller: _scrollController,
+//         itemCount: 50,
+//         itemBuilder: (context, index) {
+//           return ListTile(
+//             title: Text('Item $index'),
+//           );
 //         },
 //       ),
+//       anchorColor: Colors.white,
+//       backgroundCornerRadius: 50,
+//       persistentFooter: Container(
+//         color: Colors.white,
+//         height: 50,
+//         child: Center(
+//           child: Text('Footer'),
+//         ),
+//       ),
+//       bottomOffset: _bottomSheetOffset,
 //     );
 //   }
 // }

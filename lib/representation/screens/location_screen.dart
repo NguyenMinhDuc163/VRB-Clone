@@ -155,6 +155,7 @@ class _LocationScreenState extends State<LocationScreen> {
           children: [
             Positioned.fill(
                 child: GoogleMap(
+                  zoomControlsEnabled: false, // tat ban do
                   mapType: MapType.normal,
                   initialCameraPosition: const CameraPosition(
                     // target: LatLng(21.005536, 105.8180681),
@@ -264,14 +265,23 @@ class _LocationScreenState extends State<LocationScreen> {
 
             children: [
               Expanded(child: _buildButton('Gần Nhất', () async{
-                List<Map<String, BankLocation>> newAddresses = await DioTest.
-                postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
-                createCustomMarker();
-                setState(() {
+                //TODO tam thoi fix call
+                try{
+                  List<Map<String, BankLocation>> newAddresses = await DioTest.
+                  postBranchATMTypeOne(_currentLocation.longitude.toString(), _currentLocation.latitude.toString());
+                  createCustomMarker();
+                  setState(() {
+                    index = 0;
+                    address = address = sortMap(newAddresses);;
+                    markers = setMarkers(0); // Cập nhật lại markers khi danh sách address được cập nhật
+                  });
+                }catch(e){
                   index = 0;
-                  address = address = sortMap(newAddresses);;
-                  markers = setMarkers(0); // Cập nhật lại markers khi danh sách address được cập nhật
-                });
+                  print("Loi duoc goi $e");
+                }
+
+
+                // print(address[0].isEmpty && address[1].isEmpty);
               }, 0)),
               Expanded(child: _buildButton('ATM', () async {
                 if(provinceChose != null){
@@ -286,7 +296,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   });
                 }else{
                   setState(() {
-                    // address = newAddresses;
+                    index = 0;
                     markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
                   });
                 }
@@ -296,7 +306,9 @@ class _LocationScreenState extends State<LocationScreen> {
                 if(districtChose != null){
                   String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
                   String districtCode = districts[districtChose]?.districtCode ?? '10111';
-                  List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(), regionCode1, districtCode);
+                  List<Map<String, BankLocation>> newAddresses =
+                  await DioTest.postBranchATMTypeThree(_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),
+                      regionCode1, districtCode) ;
                   createCustomMarker();
                   setState(() {
                     index = 1;
@@ -306,7 +318,6 @@ class _LocationScreenState extends State<LocationScreen> {
                 }else{
                   setState(() {
                     index = 1;
-                    // address = newAddresses;
                     markers = setMarkers(index); // Cập nhật lại markers khi danh sách address được cập nhật
                   });
                 }
@@ -321,8 +332,9 @@ class _LocationScreenState extends State<LocationScreen> {
               color: Colors.white,),
             child: ListView(
               controller: scrollController,
-              children:   address[(index != 0 || index
+              children:  (!address[index].isEmpty) ? address[(index != 0 || index
                != 1) ? index : 0].entries.map((e) {
+                 print(address.isEmpty);
                 return GestureDetector(
                   onTap: () {
                     //TODO dang lay gt default
@@ -337,7 +349,10 @@ class _LocationScreenState extends State<LocationScreen> {
                     distancePoint: DistancePoint(_currentLocation.latitude, _currentLocation.longitude, double.parse(e.value.latitude), double.parse(e.value.longitude)),
                   ),
                 );
-              }).toList(),
+              }).toList() : [Center(child:Container(
+                padding: EdgeInsets.symmetric(vertical: 30),
+                child: Text("Không có ATM/ Chi nhánh tại khu vực này", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+              ),)],
             )
         ),
       ),

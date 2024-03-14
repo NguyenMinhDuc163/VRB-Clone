@@ -42,6 +42,7 @@ class DioTest{
       }
     } catch (e) {
       print('Đã xảy ra lỗi khi thực hiện yêu cầu 1: $e');
+      rethrow;
     }
     return [atmMap, branchMap];
   }
