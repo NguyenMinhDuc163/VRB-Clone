@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -64,6 +65,7 @@ class _LocationScreenState extends State<LocationScreen> {
     fetchData(); // Gọi fetchData khi trang được khởi tạo
     getLocationUpdate();
     createCustomMarker();
+    _requestPermission();
   }
 
   Future<void> fetchData() async {
@@ -116,6 +118,32 @@ class _LocationScreenState extends State<LocationScreen> {
     });
     return markers;
   }
+  //TODO test truong hop user khong cho phep truy cap local
+  Future<void> _requestPermission() async {
+    final hasPermission = await _locationController.hasPermission();
+    if (hasPermission == PermissionStatus.denied) {
+      // Hiển thị hướng dẫn hoặc thông báo
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Quyền truy cập bị từ chối"),
+            content: Text("Ứng dụng cần quyền truy cập để hiển thị bản đồ."),
+            actions: <Widget>[
+              FloatingActionButton  (
+                child: Text("Đóng"),
+                onPressed: () {
+                  // chuyen huong nguoi
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
