@@ -46,6 +46,8 @@ dependencies:
   expandable_bottom_sheet: ^1.1.1+1
   flutter_animated_button: ^2.0.3
   permission_handler: ^11.3.0
+  image_picker: ^1.0.7
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

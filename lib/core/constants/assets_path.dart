@@ -29,6 +29,12 @@ class AssetPath{
   static const String icoSo = '$iconPath/ico_so.png';
   static const String icoChiNhanh = '$iconPath/ico_chi_nhanh.png';
   static const String icoChiNhanhSo = '$iconPath/ico_chi_nhanh_so.png';
+  static const String calendar = '$iconPath/calendar.png';
+
+  static const String headPhone = '$iconPath/head_phone.png';
+  static const String laiSuat = '$iconPath/lai_suat.png';
+  static const String tiGia = '$iconPath/ti_gia.png';
+  static const String notificationBing = '$iconPath/notification_bing.png';
 
 
 
@@ -46,6 +52,7 @@ class AssetPath{
   static const String buttonLanguage = '$imagePath/button_language.png';
   static const String fingerprintButton = '$imagePath/fingerprint_button.png';
   static const String logo_1x = '$imagePath/logo_1x.png';
+  static const String button = '$imagePath/Button.png';
 
 
 }

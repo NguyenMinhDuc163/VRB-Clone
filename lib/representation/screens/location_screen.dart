@@ -23,7 +23,7 @@ import 'loading_screen.dart';
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen({super.key});
-
+  static String routeName = '/location_screen';
   @override
   State<LocationScreen> createState() => _LocationScreenState();
 }

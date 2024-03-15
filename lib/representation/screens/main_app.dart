@@ -8,7 +8,7 @@ import 'package:vrb_client/representation/screens/payment_screen.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
-
+  static String routeName = '/main_app';
   @override
   State<MainApp> createState() => _MainAppState();
 }

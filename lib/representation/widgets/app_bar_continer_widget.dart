@@ -14,13 +14,17 @@ class AppBarContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 30.0),
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(child: IconButton(onPressed: (){}, icon: Image.asset(AssetPath.icoBack)),),
-          SizedBox(width: kDefaultPadding * 2,),
-          Expanded(child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),), flex: 3,),
-          SizedBox(width: kDefaultPadding * 2,),
-          Expanded(child: IconButton(onPressed: (){}, icon: Image.asset(AssetPath.icoHome)), ),
+          Container(child: IconButton(onPressed: (){
+            Navigator.pop(context);
+          }, icon: Image.asset(AssetPath.icoBack)),),
+          // SizedBox(width: kDefaultPadding * 2,),
+          Align(child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),),
+          // SizedBox(width: kDefaultPadding * 2,),
+          Container(child: IconButton(onPressed: (){}, icon: Image.asset(AssetPath.icoHome)),),
         ],
       ),
     );
