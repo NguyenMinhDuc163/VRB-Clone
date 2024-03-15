@@ -41,13 +41,13 @@ class _MapScreenState extends State<MapScreen> {
           title: Text("Quyền truy cập bị từ chối"),
           content: Text("Ứng dụng cần quyền truy cập vị trí để hiển thị bản đồ."),
           actions: <Widget>[
-            FlatButton(
+            FloatingActionButton(
               child: Text("Đóng"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            FloatingActionButton(
               child: Text("Cài đặt"),
               onPressed: () {
                 openAppSettings(); // Mở màn hình cài đặt vị trí của thiết bị

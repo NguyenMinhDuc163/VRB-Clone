@@ -37,4 +37,15 @@ class AssetPath{
   static const String avatar = '$imagePath/avatar.png';
   static const String hv = '$imagePath/hvuong.png';
   static const String map = '$imagePath/map.png';
+  static const String blockDown = '$imagePath/block_down.png';
+  static const String blockUp = '$imagePath/block_up.png';
+  static const String logoBank = '$imagePath/logo_bank.png';
+
+  static const String backgroundBottom = '$imagePath/background_bottom.png';
+  static const String blockWhite = '$imagePath/block_white.png';
+  static const String buttonLanguage = '$imagePath/button_language.png';
+  static const String fingerprintButton = '$imagePath/fingerprint_button.png';
+  static const String logo_1x = '$imagePath/logo_1x.png';
+
+
 }

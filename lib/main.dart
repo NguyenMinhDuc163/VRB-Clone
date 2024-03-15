@@ -1,9 +1,9 @@
-
 import 'package:flutter/material.dart';
-import 'package:vrb_client/representation/screens/location_screen.dart';
-import 'package:vrb_client/representation/screens/location_screen_test.dart';
+import 'package:vrb_client/representation/screens/home_screen.dart';
+import 'package:vrb_client/representation/screens/login_screen.dart';
+import 'package:vrb_client/representation/screens/main_app.dart';
+import 'package:vrb_client/representation/screens/splash_screen.dart';
 import 'package:vrb_client/routes.dart';
-import 'package:vrb_client/test.dart';
 
 void main()  {
 
@@ -21,10 +21,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
 
       ),
-      // home:  const LocationScreenTest(),
-      // home:  ExampleExpert(),
-      home:  const LocationScreen(),
-      // home:  MapScreen(),
+      // home:  const LocationScreen(),
+      // home:  const HomeScreen(),
+      home:  const LoginScreen(),
+      // home:  const MainApp(),
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,

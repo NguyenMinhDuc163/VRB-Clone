@@ -45,7 +45,7 @@ dependencies:
   url_launcher: ^6.2.5
   expandable_bottom_sheet: ^1.1.1+1
   flutter_animated_button: ^2.0.3
-
+  permission_handler: ^11.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

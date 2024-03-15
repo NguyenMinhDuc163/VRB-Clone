@@ -95,11 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
 
-            // ElevatedButton(onPressed: (){
-            //   setState(() {
-            //     _showMore = !_showMore; // Đặt trạng thái hiển thị thêm là true
-            //   });
-            // }, child: _showMore == false ? Text("Xem tất cả dịch vụ") :Text("Thu g") )
+            ElevatedButton(onPressed: (){
+              setState(() {
+                _showMore = !_showMore; // Đặt trạng thái hiển thị thêm là true
+              });
+            }, child: _showMore == false ? Text("Xem tất cả dịch vụ") :Text("Thu gon") )
           ],
         ),
       ),
