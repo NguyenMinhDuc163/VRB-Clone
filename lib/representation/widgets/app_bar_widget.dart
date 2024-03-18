@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:vrb_client/representation/widgets/search_widget.dart';
 
 import '../../core/constants/assets_path.dart';
+import '../../models/user_model.dart';
 
 class AppBarWidget extends StatelessWidget {
   const AppBarWidget(
@@ -14,8 +16,9 @@ class AppBarWidget extends StatelessWidget {
       required this.avatar,
       required this.child});
   final String fullName;
-  final Image avatar;
+  final String avatar;
   final Widget child;
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -94,12 +97,23 @@ class AppBarWidget extends StatelessWidget {
                           const SizedBox(
                             height: 5,
                           ),
-                          InkWell(
-                            onTap: (){
-                              print("123");
-                            },
-                            child: avatar,
+                          Container(
+                            width: 80, // Đảm bảo kích thước của ảnh bằng nhau
+                            height: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white, // Màu nền của hình tròn
+                            ),
+                            child: ClipOval(
+                              child: InkWell(
+                                onTap: (){
+                                  Provider.of<UserModel>(context, listen: false).pickAndSetAvatar(context);
+                                },
+                                child: (avatar == AssetPath.avatar) ? Image.asset(avatar) : Image.file(File(avatar)),
+                              ),
+                            ),
                           )
+
                         ],
                       ),
                     )

@@ -12,6 +12,8 @@ import 'package:vrb_client/representation/screens/location_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
 import 'package:vrb_client/representation/screens/qr_code_screen.dart';
 
+import '../widgets/bottom_bar_widget.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
   static String routeName = '/splash_screen';
@@ -55,6 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
             right: 0,
             child: Image.asset(AssetPath.backgroundBottom),
           ),
+          Positioned(bottom: 0, child: BottomBarWidget()),
           Positioned(
             top: 50, // Đặt giá trị top cho Row
             left: 0, // Đặt giá trị left cho Row
@@ -237,7 +240,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           InkWell(
                             onTap: () {
                               //TODO van tay
-                              Navigator.of(context).pushNamed(ExchangeRateScreen.routeName);
+                              Navigator.of(context)
+                                  .pushNamed(ExchangeRateScreen.routeName);
                             },
                             child: Image.asset(AssetPath.fingerprintButton),
                           )
@@ -268,69 +272,68 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: CurvedNavigationBar(
-        key: _bottomNavigationKey,
-        index: 0,
-        items: [
-          CurvedNavigationBarItem(
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(ExchangeRateScreen.routeName);
-              },
-              child: Image.asset(AssetPath.tiGia),
-            ),
-            label: 'Tỉ giá',
-          ),
-          CurvedNavigationBarItem(
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(InterestScreen.routeName);
-              },
-              child: Image.asset(AssetPath.laiSuat),
-            ),
-            label: 'Lãi xuất',
-          ),
-          CurvedNavigationBarItem(
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(QRCodeScreen.routeName);
-              },
-              child: Image.asset(AssetPath.icoQR),
-            ),
-            label: 'QR',
-          ),
-          CurvedNavigationBarItem(
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(LocationScreen.routeName);
-              },
-              child: Image.asset(AssetPath.notificationBing),
-            ),
-            label: 'Thông báo',
-          ),
-          CurvedNavigationBarItem(
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(ContactHelper.routeName);
-              },
-              child: Image.asset(AssetPath.headPhone),
-            ),
-            label: 'Liên hệ',
-          ),
-        ],
-        color: Colors.white,
-        buttonBackgroundColor: Colors.white,
-        backgroundColor: Colors.red.shade200,
-        animationCurve: Curves.easeInOut,
-        animationDuration: Duration(milliseconds: 600),
-        onTap: (index) {
-          setState(() {
-            _page = index;
-          });
-        },
-        letIndexChange: (index) => true,
-      ),
+      // bottomNavigationBar: CurvedNavigationBar(
+      //   key: _bottomNavigationKey,
+      //   index: 0,
+      //   items: [
+      //     CurvedNavigationBarItem(
+      //       child: InkWell(
+      //         onTap: () {
+      //           Navigator.of(context).pushNamed(ExchangeRateScreen.routeName);
+      //         },
+      //         child: Image.asset(AssetPath.tiGia),
+      //       ),
+      //       label: 'Tỉ giá',
+      //     ),
+      //     CurvedNavigationBarItem(
+      //       child: InkWell(
+      //         onTap: () {
+      //           Navigator.of(context).pushNamed(InterestScreen.routeName);
+      //         },
+      //         child: Image.asset(AssetPath.laiSuat),
+      //       ),
+      //       label: 'Lãi xuất',
+      //     ),
+      //     CurvedNavigationBarItem(
+      //       child: InkWell(
+      //         onTap: () {
+      //           Navigator.of(context).pushNamed(QRCodeScreen.routeName);
+      //         },
+      //         child: Image.asset(AssetPath.icoQR),
+      //       ),
+      //       label: 'QR',
+      //     ),
+      //     CurvedNavigationBarItem(
+      //       child: InkWell(
+      //         onTap: () {
+      //           Navigator.of(context).pushNamed(LocationScreen.routeName);
+      //         },
+      //         child: Image.asset(AssetPath.notificationBing),
+      //       ),
+      //       label: 'Thông báo',
+      //     ),
+      //     CurvedNavigationBarItem(
+      //       child: InkWell(
+      //         onTap: () {
+      //           Navigator.of(context).pushNamed(ContactHelper.routeName);
+      //         },
+      //         child: Image.asset(AssetPath.headPhone),
+      //       ),
+      //       label: 'Liên hệ',
+      //     ),
+      //   ],
+      //   color: Colors.white,
+      //   buttonBackgroundColor: Colors.white,
+      //   backgroundColor: Colors.red.shade200,
+      //   animationCurve: Curves.easeInOut,
+      //   animationDuration: Duration(milliseconds: 600),
+      //   onTap: (index) {
+      //     setState(() {
+      //       _page = index;
+      //     });
+      //   },
+      //   letIndexChange: (index) => true,
+      // ),
     );
   }
-
 }

@@ -30,12 +30,11 @@ class AssetPath{
   static const String icoChiNhanh = '$iconPath/ico_chi_nhanh.png';
   static const String icoChiNhanhSo = '$iconPath/ico_chi_nhanh_so.png';
   static const String calendar = '$iconPath/calendar.png';
-
   static const String headPhone = '$iconPath/head_phone.png';
   static const String laiSuat = '$iconPath/lai_suat.png';
   static const String tiGia = '$iconPath/ti_gia.png';
   static const String notificationBing = '$iconPath/notification_bing.png';
-
+  static const String icoMap = '$iconPath/ico_map.png';
 
 
   static const String logoBankVRB = '$imagePath/logo_bank_vrb.png';
@@ -46,13 +45,11 @@ class AssetPath{
   static const String blockDown = '$imagePath/block_down.png';
   static const String blockUp = '$imagePath/block_up.png';
   static const String logoBank = '$imagePath/logo_bank.png';
-
   static const String backgroundBottom = '$imagePath/background_bottom.png';
   static const String blockWhite = '$imagePath/block_white.png';
   static const String buttonLanguage = '$imagePath/button_language.png';
   static const String fingerprintButton = '$imagePath/fingerprint_button.png';
   static const String logo_1x = '$imagePath/logo_1x.png';
   static const String button = '$imagePath/Button.png';
-
-
+  static const String buttomMenu = '$imagePath/bottom_menu.png';
 }

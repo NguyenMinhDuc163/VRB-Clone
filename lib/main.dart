@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/login_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
 import 'package:vrb_client/representation/screens/splash_screen.dart';
 import 'package:vrb_client/routes.dart';
 
-void main()  {
+import 'models/user_model.dart';
 
-  runApp(const MyApp());
+void main() {
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => UserModel()),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -18,12 +25,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "VRB",
-      theme: ThemeData(
-
-      ),
+      theme: ThemeData(),
       // home:  const LocationScreen(),
       // home:  const HomeScreen(),
-      home:  const LoginScreen(),
+      home: const LoginScreen(),
       // home:  const MainApp(),
       routes: routes,
       debugShowCheckedModeBanner: false,
