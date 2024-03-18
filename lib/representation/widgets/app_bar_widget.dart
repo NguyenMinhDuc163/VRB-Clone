@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:vrb_client/core/constants/dimension_constants.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:vrb_client/representation/widgets/search_widget.dart';
 
 import '../../core/constants/assets_path.dart';
@@ -18,6 +19,7 @@ class AppBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
       extendBodyBehindAppBar: false,
       body: Stack(
@@ -92,7 +94,12 @@ class AppBarWidget extends StatelessWidget {
                           const SizedBox(
                             height: 5,
                           ),
-                          avatar
+                          InkWell(
+                            onTap: (){
+                              print("123");
+                            },
+                            child: avatar,
+                          )
                         ],
                       ),
                     )
