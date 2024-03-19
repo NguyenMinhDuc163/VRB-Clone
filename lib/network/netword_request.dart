@@ -7,6 +7,7 @@ import 'package:vrb_client/models/district.dart';
 import 'package:vrb_client/models/province.dart';
 
 import '../models/bank_location.dart';
+import '../provider/exchange_rate_provider.dart';
 
 class DioTest{
   static const String baseURL = 'http://uat.seatechit.com.vn/retail-mobile/api';

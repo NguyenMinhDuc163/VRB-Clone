@@ -1,22 +1,20 @@
+import 'dart:io';
+
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
-import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
-import 'package:vrb_client/representation/screens/contact_helper.dart';
 import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
-import 'package:vrb_client/representation/screens/home_screen.dart';
-import 'package:vrb_client/representation/screens/interest_screen.dart';
-import 'package:vrb_client/representation/screens/location_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
-import 'package:vrb_client/representation/screens/qr_code_screen.dart';
 
+import '../../models/user_model.dart';
 import '../widgets/bottom_bar_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
-  static String routeName = '/splash_screen';
+  static String routeName = '/login_screen';
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
@@ -94,12 +92,18 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(
                               height: 15,
                             ),
-                            Image.asset(AssetPath.avatar),
+                            // Image.asset(AssetPath.avatar),
+                            Consumer<UserModel>(
+                                builder: (context, user, child) {
+                              return (user.avatar == AssetPath.avatar)
+                                  ? Image.asset(user.avatar)
+                                  : Image.file(File(user.avatar));
+                            }),
                             const SizedBox(
                               height: 5,
                             ),
-                            const Text(
-                              "Nguyen Van A",
+                            Text(
+                              context.watch<UserModel>().userName.toString(),
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,

@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 
 class UserModel extends ChangeNotifier {
-  String _userName = 'Nguyen Van A';
+  String _userName = 'Nguyen Van Hai';
   String _accountNumber = "0123456789";
   String _avatar = AssetPath.avatar; // Đường dẫn ảnh mặc định
 

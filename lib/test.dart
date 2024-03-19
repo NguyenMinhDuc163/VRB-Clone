@@ -1,43 +1,60 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-void main() {
-  runApp(MyApp());
+import 'package:dio/dio.dart';
+
+class RateRequest {
+  static const String baseURL = 'http://uat.seatechit.com.vn/corp-mobile/api/';
+
+  static void postName() async {
+    try {
+      var response = await Dio().post('$baseURL/getCategogyName', data: {"language": "vi_VN"});
+      // Xử lý dữ liệu nhận được từ yêu cầu ở đây
+      // print(response.data);
+      if(response.statusCode == 200){
+        Map<String, dynamic> obj = jsonDecode(response.data['object']);
+        obj.forEach((key, value) {
+          var x = jsonDecode(value);
+          print('$key --- $x');
+        });
+      }
+    } catch (e) {
+      print('Đã xảy ra lỗi khi thực hiện yêu cầu 1: $e');
+    }
+  }
+
+
+  static void postInterestRate() async {
+    try {
+      var response = await Dio().post('$baseURL/getInterestRate', data:
+      {"userId": "", "currencyCode": "VND", "category": "FS", "language": "vi_VN", "dataHTLL": "LINH_LAI_CUOI_KY"});
+      if(response.statusCode == 200){
+        List<dynamic> obj = jsonDecode(response.data['data']);
+        obj.forEach((element) {
+          print(element);
+        });
+      }
+    } catch (e) {
+      print('Đã xảy ra lỗi khi thực hiện yêu cầu 2: $e');
+    }
+  }
+
+
+  static void postForeignExchangeRates() async {
+    try {
+      var response = await Dio().post('$baseURL/lookUpForeignExchangeRatesAPI', data:
+      {"exchange_dateStr": "14/03/2024"});
+      if(response.statusCode == 200){
+        List<dynamic> obj = jsonDecode(response.data['object']);
+        obj.forEach((element) {
+          print(element);
+        });
+      }
+    } catch (e) {
+      print('Đã xảy ra lỗi khi thực hiện yêu cầu 2: $e');
+    }
+  }
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Table Example'),
-        ),
-        body: Center(
-          child: DataTable(
-            columns: <DataColumn>[
-              DataColumn(label: Text('Column 1')),
-              DataColumn(label: Text('Column 2')),
-              DataColumn(label: Text('Column 3')),
-              DataColumn(label: Text('Column 4')),
-            ],
-            rows: <DataRow>[
-              DataRow(cells: <DataCell>[
-                DataCell(Text('Data 1')),
-                DataCell(Text('Data 2')),
-                DataCell(Text('Data 3')),
-                DataCell(Text('Data 4')),
-              ]),
-              DataRow(cells: <DataCell>[
-                DataCell(Text('Data 5')),
-                DataCell(Text('Data 6')),
-                DataCell(Text('Data 7')),
-                DataCell(Text('Data 8')),
-              ]),
-              // Thêm các DataRow khác tại đây cho dữ liệu khác
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+void main() {
+  RateRequest.postInterestRate();
 }
