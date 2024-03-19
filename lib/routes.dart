@@ -5,6 +5,7 @@ import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
 import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/interest_screen.dart';
 import 'package:vrb_client/representation/screens/location_screen.dart';
+import 'package:vrb_client/representation/screens/login_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
 import 'package:vrb_client/representation/screens/payment_screen.dart';
 import 'package:vrb_client/representation/screens/qr_code_screen.dart';
@@ -21,6 +22,7 @@ final Map<String, WidgetBuilder> routes = {
   QRCodeScreen.routeName: (context) => const QRCodeScreen(),
   LocationScreen.routeName: (context) => const LocationScreen(),
   MainApp.routeName: (context) => const MainApp(),
+  LoginScreen.routeName: (context) => const LoginScreen(),
 
 
   // noi tong hop ca routes

@@ -10,6 +10,7 @@ import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
 
 import '../../models/user_model.dart';
+import '../../test.dart';
 import '../widgets/bottom_bar_widget.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -23,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isPressed = false;
   bool _obscureText = true;
   bool _islogin = false;
-  int _page = 2;
+  bool _ischecklogin = false;
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
 
   void _toggleImage() {
@@ -95,9 +96,24 @@ class _LoginScreenState extends State<LoginScreen> {
                             // Image.asset(AssetPath.avatar),
                             Consumer<UserModel>(
                                 builder: (context, user, child) {
-                              return (user.avatar == AssetPath.avatar)
-                                  ? Image.asset(user.avatar)
-                                  : Image.file(File(user.avatar));
+                                  return Container(
+                                    width: 80, // Đảm bảo kích thước của ảnh bằng nhau
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white, // Màu nền của hình tròn
+                                    ),
+                                    child: ClipOval(
+                                      child: InkWell(
+                                        onTap: (){
+                                          Provider.of<UserModel>(context, listen: false).pickAndSetAvatar(context);
+                                        },
+                                        child: (user.avatar == AssetPath.avatar)
+                                          ? Image.asset(user.avatar)
+                                          : Image.file(File(user.avatar)),
+                                      ),
+                                    ),
+                                  );
                             }),
                             const SizedBox(
                               height: 5,
@@ -229,16 +245,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                 setState(() {
                                   _islogin = true;
                                 });
+                                checkLogin();
                                 Navigator.of(context)
                                     .pushNamed(MainApp.routeName);
                               },
-                              child: const Align(
-                                  child: Text(
-                                "Đăng nhập",
-                                style: TextStyle(
+                              child: Align(
+                                  child: _ischecklogin
+                                      ? CircularProgressIndicator(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              )),
+                                  ) :Text(
+                                          "Đăng nhập",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                       ),
                             ),
                           ),
                           InkWell(
@@ -276,68 +297,15 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ],
       ),
-      // bottomNavigationBar: CurvedNavigationBar(
-      //   key: _bottomNavigationKey,
-      //   index: 0,
-      //   items: [
-      //     CurvedNavigationBarItem(
-      //       child: InkWell(
-      //         onTap: () {
-      //           Navigator.of(context).pushNamed(ExchangeRateScreen.routeName);
-      //         },
-      //         child: Image.asset(AssetPath.tiGia),
-      //       ),
-      //       label: 'Tỉ giá',
-      //     ),
-      //     CurvedNavigationBarItem(
-      //       child: InkWell(
-      //         onTap: () {
-      //           Navigator.of(context).pushNamed(InterestScreen.routeName);
-      //         },
-      //         child: Image.asset(AssetPath.laiSuat),
-      //       ),
-      //       label: 'Lãi xuất',
-      //     ),
-      //     CurvedNavigationBarItem(
-      //       child: InkWell(
-      //         onTap: () {
-      //           Navigator.of(context).pushNamed(QRCodeScreen.routeName);
-      //         },
-      //         child: Image.asset(AssetPath.icoQR),
-      //       ),
-      //       label: 'QR',
-      //     ),
-      //     CurvedNavigationBarItem(
-      //       child: InkWell(
-      //         onTap: () {
-      //           Navigator.of(context).pushNamed(LocationScreen.routeName);
-      //         },
-      //         child: Image.asset(AssetPath.notificationBing),
-      //       ),
-      //       label: 'Thông báo',
-      //     ),
-      //     CurvedNavigationBarItem(
-      //       child: InkWell(
-      //         onTap: () {
-      //           Navigator.of(context).pushNamed(ContactHelper.routeName);
-      //         },
-      //         child: Image.asset(AssetPath.headPhone),
-      //       ),
-      //       label: 'Liên hệ',
-      //     ),
-      //   ],
-      //   color: Colors.white,
-      //   buttonBackgroundColor: Colors.white,
-      //   backgroundColor: Colors.red.shade200,
-      //   animationCurve: Curves.easeInOut,
-      //   animationDuration: Duration(milliseconds: 600),
-      //   onTap: (index) {
-      //     setState(() {
-      //       _page = index;
-      //     });
-      //   },
-      //   letIndexChange: (index) => true,
-      // ),
     );
+  }
+  Future<void> checkLogin() async {
+    setState(() {
+      _ischecklogin = true;
+    });
+    await Future.delayed(const Duration(milliseconds: 2000));
+    setState(() {
+      _ischecklogin = false;
+    });
   }
 }

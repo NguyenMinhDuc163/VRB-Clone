@@ -85,42 +85,58 @@ class _InterestScreenState extends State<InterestScreen> {
               ),
               SizedBox(height: kDefaultPadding,),
               Consumer<InterestProvider>(builder: (context, rate, child){
-                return Table(
-                  border: TableBorder(
-                    // Đặt border cho tất cả các phần của bảng
-                    top: BorderSide(width: 1.0, color: Colors.black),
-                    bottom: BorderSide(width: 1.0, color: Colors.black),
-                    left: BorderSide(width: 1.0, color: Colors.black),
-                    right: BorderSide(width: 1.0, color: Colors.black),
-                    horizontalInside: BorderSide(width: 1.0, color: Colors.black),
-                    // verticalInside: BorderSide(width: 1.0, color: Colors.black),
-                    borderRadius: BorderRadius.circular(10.0), // Đặt bo tròn cho góc của bảng
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                        10.0), // Đặt bo tròn cho góc của bảng
+                    border: Border.all(
+                        width: 1.0,
+                        color: Colors
+                            .grey.shade400), // Đặt border cho bảng
                   ),
-                  children: [
-                    TableRow(
-                      decoration: BoxDecoration(color: Colors.grey.shade300,
-                      ),
-                      children: [
-                        TableCell(
-                          child: Center(child: Text('Kì hạn')),
-                        ),
-                        TableCell(
-                          child: Center(child: Text('Lãi xuất')),
-                        ),
-                      ],
+                  child: Table(
+                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                    textBaseline: TextBaseline.alphabetic,
+                    border: TableBorder(
+                      // top: BorderSide(width: 1.0, color: Colors.black),
+                      // bottom: BorderSide(width: 1.0, color: Colors.black),
+                      // left: BorderSide(width: 1.0, color: Colors.black),
+                      // right: BorderSide(width: 1.0, color: Colors.black),
+                      horizontalInside: BorderSide(width: 1.0, color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    ...rate.interestRates.map((rate) => TableRow(
-                      children: [
-                        TableCell(
-                          child: Center(child: Text('${rate.termSTR} Tháng')),
-                        ),
-                        TableCell(
-                          child: Center(child: Text(rate.rate)),
-                        ),
-                      ],
-                    ))
-                  ],
+                    children: [
+                      TableRow(
+                        decoration: BoxDecoration(color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(
+                            10.0),),
+                        children: [
+                          Container(
+                            height: 50,
+                            child: Center(child: Text('Kì hạn')),
+                          ),
+                          Container(
+                            height: 50,
+                            child: Center(child: Text('Lãi xuất')),
+                          ),
+                        ],
+                      ),
+                      ...rate.interestRates.map((rate) => TableRow(
+                        children: [
+                          Container(
+                            height: 50,
+                            child: Center(child: Text('${rate.termSTR} Tháng')),
+                          ),
+                          Container(
+                            height: 50,
+                            child: Center(child: Text(rate.rate)),
+                          ),
+                        ],
+                      )),
+                    ],
+                  ),
                 );
+
               }),
               SizedBox(height: kDefaultPadding,),
             ],

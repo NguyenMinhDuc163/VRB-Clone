@@ -52,4 +52,5 @@ class AssetPath{
   static const String logo_1x = '$imagePath/logo_1x.png';
   static const String button = '$imagePath/Button.png';
   static const String buttomMenu = '$imagePath/bottom_menu.png';
+  static const String helper = '$imagePath/helper.png';
 }

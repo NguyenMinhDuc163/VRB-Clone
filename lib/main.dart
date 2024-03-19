@@ -7,6 +7,7 @@ import 'package:vrb_client/representation/screens/login_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
 import 'package:vrb_client/representation/screens/splash_screen.dart';
 import 'package:vrb_client/routes.dart';
+import 'package:vrb_client/test.dart';
 
 import 'models/user_model.dart';
 
@@ -30,10 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: "VRB",
       theme: ThemeData(),
-      // home:  const LocationScreen(),
-      // home:  const HomeScreen(),
-      home: const LoginScreen(),
-      // home:  const MainApp(),
+      home: const SplashScreen(),
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,

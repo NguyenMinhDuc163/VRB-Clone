@@ -1,60 +1,38 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
-
-class RateRequest {
-  static const String baseURL = 'http://uat.seatechit.com.vn/corp-mobile/api/';
-
-  static void postName() async {
-    try {
-      var response = await Dio().post('$baseURL/getCategogyName', data: {"language": "vi_VN"});
-      // Xử lý dữ liệu nhận được từ yêu cầu ở đây
-      // print(response.data);
-      if(response.statusCode == 200){
-        Map<String, dynamic> obj = jsonDecode(response.data['object']);
-        obj.forEach((key, value) {
-          var x = jsonDecode(value);
-          print('$key --- $x');
-        });
-      }
-    } catch (e) {
-      print('Đã xảy ra lỗi khi thực hiện yêu cầu 1: $e');
-    }
-  }
-
-
-  static void postInterestRate() async {
-    try {
-      var response = await Dio().post('$baseURL/getInterestRate', data:
-      {"userId": "", "currencyCode": "VND", "category": "FS", "language": "vi_VN", "dataHTLL": "LINH_LAI_CUOI_KY"});
-      if(response.statusCode == 200){
-        List<dynamic> obj = jsonDecode(response.data['data']);
-        obj.forEach((element) {
-          print(element);
-        });
-      }
-    } catch (e) {
-      print('Đã xảy ra lỗi khi thực hiện yêu cầu 2: $e');
-    }
-  }
-
-
-  static void postForeignExchangeRates() async {
-    try {
-      var response = await Dio().post('$baseURL/lookUpForeignExchangeRatesAPI', data:
-      {"exchange_dateStr": "14/03/2024"});
-      if(response.statusCode == 200){
-        List<dynamic> obj = jsonDecode(response.data['object']);
-        obj.forEach((element) {
-          print(element);
-        });
-      }
-    } catch (e) {
-      print('Đã xảy ra lỗi khi thực hiện yêu cầu 2: $e');
-    }
-  }
-}
-
-void main() {
-  RateRequest.postInterestRate();
-}
+// Table(
+// border: TableBorder.symmetric(inside: BorderSide.none),
+// children: [
+// TableRow(
+// decoration: BoxDecoration(color: Colors.grey.shade300),
+// children: const [
+// TableCell(
+// child: Center(child: Text('Ngoại tệ')),
+// ),
+// TableCell(
+// child: Center(child: Text('Mua tiền mặt')),
+// ),
+// TableCell(
+// child: Center(child: Text('Mua chuyển khoản')),
+// ),
+// TableCell(
+// child: Center(child: Text('Bán')),
+// )
+// ],
+// ),
+// ...rate.exchangeRates.map((rate) => TableRow(
+// children: [
+// TableCell(
+// child: Center(child: Text(rate.currencyCode)),
+// ),
+// TableCell(
+// child: Center(child: Text(rate.amount)),
+// ),
+// TableCell(
+// child: Center(child: Text(rate.amountSell)),
+// ),
+// TableCell(
+// child: Center(child: Text(rate.amounTranfer)),
+// ),
+// ].map((widget) => Expanded(child: widget)).toList(), // Sử dụng Expanded để mở rộng kích thước của ô
+// ))
+// ],
+// )

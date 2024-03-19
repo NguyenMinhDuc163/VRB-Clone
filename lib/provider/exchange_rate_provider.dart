@@ -1,21 +1,21 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import '../models/exchange_rate_model.dart';
 
 class ExchangeRateProvider extends ChangeNotifier{
   static const String baseURL = 'http://uat.seatechit.com.vn/corp-mobile/api/';
   List<ExchangeRateModel> _exchangeRates = [];
-
   List<ExchangeRateModel> get exchangeRates{
     return _exchangeRates;
   }
-   Future<List<ExchangeRateModel>> postForeignExchangeRates() async {
+   Future<List<ExchangeRateModel>> postForeignExchangeRates(String date) async {
 
     try {
       var response = await Dio().post(
           '$baseURL/lookUpForeignExchangeRatesAPI', data:
-      {"exchange_dateStr": "18/03/2024"});
+      {"exchange_dateStr": date});
       List<ExchangeRateModel> loadExchangeRates = [];
       if (response.statusCode == 200) {
         List<dynamic> obj = jsonDecode(response.data['object']);
@@ -36,8 +36,8 @@ class ExchangeRateProvider extends ChangeNotifier{
 }
 
 void main() async{
-  List<ExchangeRateModel> list = await ExchangeRateProvider().postForeignExchangeRates();
-  list.forEach((element) {
-    print(element);
-  });
+  // List<ExchangeRateModel> list = await ExchangeRateProvider().postForeignExchangeRates();
+  // list.forEach((element) {
+  //   print(element);
+  // });
 }
