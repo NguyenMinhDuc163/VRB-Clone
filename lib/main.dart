@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:vrb_client/provider/date_provider.dart';
 import 'package:vrb_client/provider/exchange_rate_provider.dart';
 import 'package:vrb_client/provider/interest_provider.dart';
 import 'package:vrb_client/representation/screens/home_screen.dart';
@@ -16,7 +17,9 @@ void main() {
     providers: [
       ChangeNotifierProvider(create: (_) => UserModel()),
       ChangeNotifierProvider(create: (_) => ExchangeRateProvider()),
-      ChangeNotifierProvider(create: (_) => InterestProvider())
+      ChangeNotifierProvider(create: (_) => InterestProvider()),
+      ChangeNotifierProvider(create: (_) => DateProvider()),
+
     ],
     child: MyApp(),
   ));

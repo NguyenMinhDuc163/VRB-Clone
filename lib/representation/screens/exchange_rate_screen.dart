@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
 import 'package:vrb_client/models/exchange_rate_model.dart';
+import 'package:vrb_client/provider/date_provider.dart';
 import 'package:vrb_client/provider/exchange_rate_provider.dart';
 import 'package:vrb_client/representation/widgets/app_bar_continer_widget.dart';
 import 'package:vrb_client/representation/widgets/app_bar_widget.dart';
@@ -19,15 +20,16 @@ class ExchangeRateScreen extends StatefulWidget {
 
 class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
   bool _isLoading = false;
-  DateTime selectedDate = DateTime.now();
-  String date = DateFormat('dd/MM/yyyy').format(DateTime.now());
+  // DateTime selectedDate = DateTime.now();
+  // String date = DateFormat('dd/MM/yyyy').format(DateTime.now());
   @override
   void initState() {
     setState(() {
       _isLoading = true;
     });
     Provider.of<ExchangeRateProvider>(context, listen: false)
-        .postForeignExchangeRates(date)
+        .postForeignExchangeRates(
+            DateFormat('dd/MM/yyyy').format(DateTime.now()))
         .then((_) {
       setState(() {
         _isLoading = false;
@@ -92,19 +94,21 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                               Container(
                                 padding: EdgeInsets.all(10),
                                 //TODO time
-                                child: InkWell(
-                                  child: Text(
-                                    date,
-                                    style: TextStyle(color: Colors.blue),
-                                  ),
-                                  onTap: () {
-                                    _selectDate(context);
-                                    String dateChose = DateFormat('dd/MM/yyyy')
-                                        .format(selectedDate);
-                                    rate.postForeignExchangeRates(dateChose);
-                                    setState(() {
-                                      date = dateChose;
-                                    });
+                                child: Consumer<DateProvider>(
+                                  builder: (context, date, child) {
+                                    return InkWell(
+                                      child: Text(
+                                        DateFormat('dd/MM/yyyy')
+                                            .format(date.selectedDate),
+                                        style: TextStyle(color: Colors.blue),
+                                      ),
+                                      onTap: () {
+                                        date.selectDate(context);
+                                        rate.postForeignExchangeRates(
+                                            DateFormat('dd/MM/yyyy')
+                                                .format(date.selectedDate));
+                                      },
+                                    );
                                   },
                                 ),
                               ),
@@ -122,26 +126,30 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                             ),
                             child: Table(
                               border: TableBorder(
-                                horizontalInside: BorderSide(width: 1.0, color: Colors.grey.shade300),
+                                horizontalInside: BorderSide(
+                                    width: 1.0, color: Colors.grey.shade300),
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               children: [
                                 TableRow(
-                                  decoration: BoxDecoration(color: Colors.grey.shade300,
-                                    borderRadius: BorderRadius.circular(
-                                        10.0),),
-                                  children:  [
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade300,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  children: [
                                     Container(
                                       height: 50,
                                       child: Center(child: Text('Ngoại tệ')),
                                     ),
                                     Container(
                                       height: 50,
-                                      child: Center(child: Text('Mua tiền mặt')),
+                                      child:
+                                          Center(child: Text('Mua tiền mặt')),
                                     ),
                                     Container(
                                       height: 50,
-                                      child: Center(child: Text('Mua chuyển khoản')),
+                                      child: Center(
+                                          child: Text('Mua chuyển khoản')),
                                     ),
                                     Container(
                                       height: 50,
@@ -150,28 +158,31 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                   ],
                                 ),
                                 ...rate.exchangeRates.map((rate) => TableRow(
-                                  children: [
-                                    Container(
-                                      height: 50,
-                                      child: Center(child: Text(rate.currencyCode)),
-                                    ),
-                                    Container(
-                                      height: 50,
-                                      child: Center(child: Text(rate.amount)),
-                                    ),
-                                    Container(
-                                      height: 50,
-                                      child: Center(child: Text(rate.amountSell)),
-                                    ),
-                                    Container(
-                                      height: 50,
-                                      child: Center(child: Text(rate.amounTranfer)),
-                                    ),
-                                  ],
-                                )),
+                                      children: [
+                                        Container(
+                                          height: 50,
+                                          child: Center(
+                                              child: Text(rate.currencyCode)),
+                                        ),
+                                        Container(
+                                          height: 50,
+                                          child:
+                                              Center(child: Text(rate.amount)),
+                                        ),
+                                        Container(
+                                          height: 50,
+                                          child: Center(
+                                              child: Text(rate.amountSell)),
+                                        ),
+                                        Container(
+                                          height: 50,
+                                          child: Center(
+                                              child: Text(rate.amounTranfer)),
+                                        ),
+                                      ],
+                                    )),
                               ],
                             ),
-
                           ),
                           SizedBox(
                             height: kDefaultPadding,
@@ -184,16 +195,16 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
     );
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null)
-      setState(() {
-        selectedDate = picked;
-      });
-  }
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     firstDate: DateTime(2015, 8),
+  //     lastDate: DateTime(2101),
+  //   );
+  //   if (picked != null)
+  //     setState(() {
+  //       selectedDate = picked;
+  //     });
+  // }
 }

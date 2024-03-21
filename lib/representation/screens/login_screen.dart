@@ -141,11 +141,19 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             Row(
                               children: [
-                                const Expanded(
-                                  child: TextField(
-                                    decoration: InputDecoration(
-                                        hintText: 'Tên truy Cập ',
-                                        border: InputBorder.none),
+                                 Expanded(
+                                   //TODO an ra ngoai => thoat
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent, // Cho phép GestureDetector bắt sự kiện trên toàn bộ khu vực widget
+                                    onTap: () {
+                                      // Ẩn bàn phím khi người dùng chạm ra ngoài màn hình
+                                      FocusScope.of(context).requestFocus(FocusNode());
+                                    },
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                          hintText: 'Tên truy Cập ',
+                                          border: InputBorder.none),
+                                    ),
                                   ),
                                 ),
                                 IconButton(

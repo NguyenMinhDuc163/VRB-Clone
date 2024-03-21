@@ -98,10 +98,6 @@ class _InterestScreenState extends State<InterestScreen> {
                     defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                     textBaseline: TextBaseline.alphabetic,
                     border: TableBorder(
-                      // top: BorderSide(width: 1.0, color: Colors.black),
-                      // bottom: BorderSide(width: 1.0, color: Colors.black),
-                      // left: BorderSide(width: 1.0, color: Colors.black),
-                      // right: BorderSide(width: 1.0, color: Colors.black),
                       horizontalInside: BorderSide(width: 1.0, color: Colors.grey.shade300),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
