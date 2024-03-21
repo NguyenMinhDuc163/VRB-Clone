@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:vrb_client/provider/date_provider.dart';
 import 'package:vrb_client/provider/exchange_rate_provider.dart';
 import 'package:vrb_client/provider/interest_provider.dart';
+import 'package:vrb_client/provider/selection_provider.dart';
 import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/login_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
@@ -19,6 +20,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => ExchangeRateProvider()),
       ChangeNotifierProvider(create: (_) => InterestProvider()),
       ChangeNotifierProvider(create: (_) => DateProvider()),
+      ChangeNotifierProvider(create: (_) => SelectionProvider()),
 
     ],
     child: MyApp(),

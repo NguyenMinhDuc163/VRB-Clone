@@ -1,38 +1,69 @@
-// Table(
-// border: TableBorder.symmetric(inside: BorderSide.none),
-// children: [
-// TableRow(
-// decoration: BoxDecoration(color: Colors.grey.shade300),
-// children: const [
-// TableCell(
-// child: Center(child: Text('Ngoại tệ')),
-// ),
-// TableCell(
-// child: Center(child: Text('Mua tiền mặt')),
-// ),
-// TableCell(
-// child: Center(child: Text('Mua chuyển khoản')),
-// ),
-// TableCell(
-// child: Center(child: Text('Bán')),
-// )
-// ],
-// ),
-// ...rate.exchangeRates.map((rate) => TableRow(
-// children: [
-// TableCell(
-// child: Center(child: Text(rate.currencyCode)),
-// ),
-// TableCell(
-// child: Center(child: Text(rate.amount)),
-// ),
-// TableCell(
-// child: Center(child: Text(rate.amountSell)),
-// ),
-// TableCell(
-// child: Center(child: Text(rate.amounTranfer)),
-// ),
-// ].map((widget) => Expanded(child: widget)).toList(), // Sử dụng Expanded để mở rộng kích thước của ô
-// ))
-// ],
-// )
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyRadioPage(),
+    );
+  }
+}
+
+class MyRadioPage extends StatefulWidget {
+  @override
+  _MyRadioPageState createState() => _MyRadioPageState();
+}
+
+class _MyRadioPageState extends State<MyRadioPage> {
+  String selectedOption = 'Option 1';
+
+  setSelectedOption(String option) {
+    setState(() {
+      selectedOption = option;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Radio Button Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RadioListTile(
+              title: Text('Option 1'),
+              value: 'Option 1',
+              groupValue: selectedOption,
+              onChanged: (value) {
+                setSelectedOption(value!);
+              },
+            ),
+            RadioListTile(
+              title: Text('Option 2'),
+              value: 'Option 2',
+              groupValue: selectedOption,
+              onChanged: (value) {
+                setSelectedOption(value!);
+              },
+            ),
+            RadioListTile(
+              title: Text('Option 3'),
+              value: 'Option 3',
+              groupValue: selectedOption,
+              onChanged: (value) {
+                setSelectedOption(value!);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

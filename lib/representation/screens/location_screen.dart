@@ -29,7 +29,7 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  GlobalKey<ExpandableBottomSheetState> key = new GlobalKey();
+  GlobalKey<ExpandableBottomSheetState> key = GlobalKey();
   Map<String, Province> locations = {};
   Map<String, District> districts = {};
   List<Map<String, BankLocation>> address = [];
