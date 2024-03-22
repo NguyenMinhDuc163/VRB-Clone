@@ -10,8 +10,8 @@ import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
 
 import '../../models/user_model.dart';
-import '../../test.dart';
 import '../widgets/bottom_bar_widget.dart';
+import 'package:local_auth/local_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -25,6 +25,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
   bool _islogin = false;
   bool _ischecklogin = false;
+  late final LocalAuthentication auth;
+  bool _supportState = false;
+
+
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   final FocusNode _focusNode = FocusNode();
   void _toggleImage() {
@@ -40,11 +44,45 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    auth = LocalAuthentication();
+    auth.isDeviceSupported().then((isSupported) {
+      setState(() {
+        _supportState = isSupported;
+      });
+    });
+  }
+
+  @override
   void dispose() {
     _focusNode.dispose();
     super.dispose();
   }
 
+  Future<void> _authenticate() async {
+    try{
+      bool authenticated = await auth.authenticate(
+        localizedReason: 'Authenticate for testing',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+      print("authen --- $authenticated");
+    } catch(e){
+      print(e);
+    }
+  }
+
+  Future<void> _getAvailableBiometrics() async {
+    List<BiometricType> availableBiometrics = await auth.getAvailableBiometrics();
+    print(availableBiometrics);
+    if(!mounted){
+      return;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,11 +315,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             InkWell(
-                              onTap: () {
-                                //TODO van tay
-                                Navigator.of(context)
-                                    .pushNamed(ExchangeRateScreen.routeName);
-                              },
+                              onTap: _authenticate,
                               child: Image.asset(AssetPath.fingerprintButton),
                             )
                           ],

@@ -69,10 +69,10 @@ class _InterestScreenState extends State<InterestScreen> {
 
             background: Padding(
               padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              child: SingleChildScrollView(
-                child: _isLoading ? Center(
-                  child: CircularProgressIndicator(),
-                ) : Column(
+              child: _isLoading ? Center(
+                child: CircularProgressIndicator(),
+              ) :  SingleChildScrollView(
+                child:Column(
                   children: [
 
                     SizedBox(height: kDefaultPadding,),

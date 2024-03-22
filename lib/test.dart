@@ -1,69 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:local_auth/local_auth.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MaterialApp(
+    home: Authen(),
+  ));
 }
+class Authen extends StatefulWidget {
+  const Authen({super.key});
 
-class MyApp extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyRadioPage(),
-    );
-  }
+  State<Authen> createState() => _AuthenState();
 }
 
-class MyRadioPage extends StatefulWidget {
+
+
+class _AuthenState extends State<Authen> {
+
+  late final LocalAuthentication auth;
+  bool _supportState = false;
+
   @override
-  _MyRadioPageState createState() => _MyRadioPageState();
-}
-
-class _MyRadioPageState extends State<MyRadioPage> {
-  String selectedOption = 'Option 1';
-
-  setSelectedOption(String option) {
-    setState(() {
-      selectedOption = option;
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    auth = LocalAuthentication();
+    auth.isDeviceSupported().then((isSupported) {
+      setState(() {
+        _supportState = isSupported;
+      });
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Radio Button Example'),
+        title: Text('Authentication'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            RadioListTile(
-              title: Text('Option 1'),
-              value: 'Option 1',
-              groupValue: selectedOption,
-              onChanged: (value) {
-                setSelectedOption(value!);
-              },
+          children: [
+            if(_supportState)
+              Text("day la thiet bi ho tro")
+            else
+              Text("day khong phai thiet bi ho tro"),
+            const Divider(height: 100,),
+            ElevatedButton(
+              onPressed: _getAvailableBiometrics,
+              child: Text('Authenticate'),
             ),
-            RadioListTile(
-              title: Text('Option 2'),
-              value: 'Option 2',
-              groupValue: selectedOption,
-              onChanged: (value) {
-                setSelectedOption(value!);
-              },
-            ),
-            RadioListTile(
-              title: Text('Option 3'),
-              value: 'Option 3',
-              groupValue: selectedOption,
-              onChanged: (value) {
-                setSelectedOption(value!);
-              },
+            Divider(height: 100,),
+            ElevatedButton(
+              onPressed: _authenticate,
+              child: Text('Authenticate'),
             ),
           ],
         ),
       ),
     );
   }
+
+  Future<void> _authenticate() async {
+    try{
+      bool authenticated = await auth.authenticate(
+        localizedReason: 'Authenticate for testing',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: true,
+        ),
+      );
+      print("authen --- $authenticated");
+    } catch(e){
+      print(e);
+    }
+  }
+
+  Future<void> _getAvailableBiometrics() async {
+    List<BiometricType> availableBiometrics = await auth.getAvailableBiometrics();
+    print(availableBiometrics);
+    if(!mounted){
+      return;
+    }
+  }
 }
+
