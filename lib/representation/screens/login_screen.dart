@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
       if(authenticated){
-        Navigator.of(context).pushNamed(HomeScreen.routeName);
+        Navigator.of(context).pushNamed(MainApp.routeName);
       }
       else{
         print("khong thuc hien duoc");
@@ -320,6 +320,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                          ),
                               ),
                             ),
+                            //TODO van tay
                             InkWell(
                               onTap: _authenticate,
                               child: Image.asset(AssetPath.fingerprintButton),

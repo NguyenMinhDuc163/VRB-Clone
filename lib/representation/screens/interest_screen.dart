@@ -95,7 +95,7 @@ class _InterestScreenState extends State<InterestScreen> {
                     //TODO choose 1
                     InkWell(
                       onTap: () async {
-                        Provider.of<SelectionProvider>(context, listen: false).changeSize(400, 0);
+                        Provider.of<SelectionProvider>(context, listen: false).changeSize(300, 0);
                       },
                       child: Container(
                         height: 60,
@@ -238,16 +238,30 @@ class _InterestScreenState extends State<InterestScreen> {
             title: (select.type == 0) ? Text(select.listChoose[0]) : Text(select.listMoney[0]),
             value: (select.type == 0) ? select.listChoose[0] : select.listMoney[0],
             groupValue: (select.type == 0) ? select.typeProduct : select.typeMoney,
-            onChanged: (value) {
+            onChanged: (value) async {
+              setState(() {
+                _isLoading = true;
+              });
+              await Future.delayed(Duration(milliseconds: 300)); // Đợi trong 2 giây
               select.changeSelect(value!, select.type);
+              setState(() {
+                _isLoading = false;
+              });
             },
           ),
           RadioListTile(
             title: (select.type == 0) ? Text(select.listChoose[1]) : Text(select.listMoney[1]),
             value: (select.type == 0) ? select.listChoose[1] : select.listMoney[1],
             groupValue: (select.type == 0) ? select.typeProduct : select.typeMoney,
-            onChanged: (value) {
+            onChanged: (value) async {
+              setState(() {
+                _isLoading = true;
+              });
+              await Future.delayed(Duration(milliseconds: 300)); // Đợi trong 2 giây
               select.changeSelect(value!, select.type);
+              setState(() {
+                _isLoading = false;
+              });
             },
           ),
         ],
