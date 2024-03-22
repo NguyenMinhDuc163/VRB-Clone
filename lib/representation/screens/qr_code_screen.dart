@@ -1,5 +1,11 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:vrb_client/core/constants/assets_path.dart';
+import 'package:vrb_client/representation/widgets/app_bar_continer_widget.dart';
 
 import '../../models/custom_overlay_shape.dart';
 
@@ -11,50 +17,128 @@ class QRCodeScreen extends StatefulWidget {
 }
 
 class _QRCodeScreenState extends State<QRCodeScreen> {
-  late QRViewController _controller;
-  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? controller;
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      controller!.pauseCamera();
+    } else if (Platform.isIOS) {
+      controller!.resumeCamera();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            flex: 4,
-            child: QRView(
-              key: _qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: CustomOverlayShape(),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Align(
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  onPressed: () {
-                    _controller.toggleFlash();
-                  },
-                  child: Text('Flash'),
+      appBar: AppBarContainerWidget(title: 'QR Code Scanner'),
+      body: Container(
+        color: Colors.black,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Image(
+                    width: 50,
+                    height: 45,
+                    image: Image.asset(AssetPath.vietQR).image,
+                    fit: BoxFit.cover, // hoặc BoxFit.contain tùy theo yêu cầu của bạn
+                  ),
+                ),
+
+                Expanded(child: Column(
+                  children: [
+                    SizedBox(height: 20,),
+                    Image.asset(AssetPath.logo_1x),
+                  ],
                 )),
-          ),
-        ],
+              ],
+            ),
+            Expanded(
+              flex: 6,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: _onQRViewCreated,
+                overlay: CustomOverlayShape(),
+              ),
+              // child: Container(),
+            ),
+            //TODO den flash
+            Column(
+              children: [
+                SizedBox(height: 20,),
+                Text('Quét mã QR để thực hiện thanh toán', style: TextStyle(fontSize: 14, color: Colors.white),),
+                Text('Rút tiền mặt hoặc chuyển tiền', style: TextStyle(fontSize: 14, color: Colors.white),),
+                Icon(FontAwesomeIcons.boltLightning)
+              ],
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: (result != null)
+                    ? Text(
+                    'Mã code của bạn là ${describeEnum(result!.format)}   : ${result!.code}', style: TextStyle(fontSize: 14, color: Colors.white))
+                    : Text("Đang tìm kiếm mã code...", style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold))
+            )),
+            Expanded(child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildButton((){}, 'Tạo QR'),
+                _buildButton((){}, 'Tải ảnh QR'),
+
+                // ElevatedButton(onPressed: (){}, child: Text("Tải ảnh QR")),
+              ],
+            ))
+          ],
+        ),
       ),
     );
   }
 
+  Widget _buildButton(Function() onTap, String name) {
+    return Container(
+      width: 120, // Kích thước chiều rộng của nút là rộng nhất có thể
+      margin: EdgeInsets.symmetric(vertical: 8), // Khoảng cách giữa các nút
+      child: ElevatedButton(
+        onPressed: onTap,
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ của nút
+          backgroundColor: MaterialStateProperty.all<Color>(Colors.black), // Màu nền của nút
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16)), // Khoảng cách giữa các cạnh của nút và văn bản bên trong
+          shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), // Đường viền cong của nút
+          side: MaterialStateProperty.resolveWith<BorderSide>(
+                (Set<MaterialState> states) {
+              if (states.contains(MaterialState.disabled)) {
+                return BorderSide(color: Colors.grey); // Màu viền khi nút bị vô hiệu hóa
+              }
+              return BorderSide(color: Colors.white); // Màu viền mặc định khi nút được kích hoạt
+            },
+          ),
+        ),
+        child: Text(name),
+      ),
+    );
+  }
+
+
+
   void _onQRViewCreated(QRViewController controller) {
-    setState(() {
-      _controller = controller;
-    });
-    _controller.scannedDataStream.listen((scanData) {
-      print('Scanned Data: ${scanData.code}');
+    this.controller = controller;
+    controller.scannedDataStream.listen((scanData) {
+      setState(() {
+        result = scanData;
+      });
     });
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 }

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
 import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
+import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
 
 import '../../models/user_model.dart';
@@ -70,7 +71,12 @@ class _LoginScreenState extends State<LoginScreen> {
           biometricOnly: true,
         ),
       );
-      print("authen --- $authenticated");
+      if(authenticated){
+        Navigator.of(context).pushNamed(HomeScreen.routeName);
+      }
+      else{
+        print("khong thuc hien duoc");
+      }
     } catch(e){
       print(e);
     }

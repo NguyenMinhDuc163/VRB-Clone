@@ -54,4 +54,5 @@ class AssetPath{
   static const String buttomMenu = '$imagePath/bottom_menu.png';
   static const String helper = '$imagePath/helper.png';
   static const String notFound = '$imagePath/not_found.png';
+  static const String vietQR = '$imagePath/viet_qr.png';
 }
