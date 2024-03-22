@@ -28,7 +28,11 @@ class AppBarContainerWidget extends StatelessWidget implements PreferredSizeWidg
               // SizedBox(width: kDefaultPadding * 2,),
               Align(child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),),
               // SizedBox(width: kDefaultPadding * 2,),
-              Container(child: IconButton(onPressed: (){}, icon: Image.asset(AssetPath.icoHome)),),
+              // Container(child: IconButton(onPressed: (){}, icon: Image.asset(AssetPath.icoHome)),),
+              // TODO chua toi uu
+              SizedBox(
+                width: 30,
+              )
             ],
           ),
           Container(

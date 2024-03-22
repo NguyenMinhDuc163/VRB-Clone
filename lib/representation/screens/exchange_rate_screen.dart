@@ -64,7 +64,7 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                           const SizedBox(
                             height: kDefaultPadding,
                           ),
-                          const Column(
+                           Column(
                             children: [
                               Text(
                                 ExchangeRate1,
