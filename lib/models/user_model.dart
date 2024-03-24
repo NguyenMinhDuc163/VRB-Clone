@@ -1,7 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
+
+import '../provider/dialog_provider.dart';
 
 class UserModel extends ChangeNotifier {
   String _userName = 'Nguyen Van Hai';
@@ -30,5 +33,8 @@ class UserModel extends ChangeNotifier {
         SnackBar(content: Text('Không có ảnh được chọn.')),
       );
     }
+    Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+    await Future.delayed(Duration(milliseconds: 600)); // Đợi trong 2 giây
+    Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
   }
 }

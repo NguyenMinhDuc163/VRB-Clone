@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 
 import '../../core/constants/assets_path.dart';
 import '../../core/constants/dimension_constants.dart';
@@ -17,6 +18,7 @@ import '../../models/distance_point.dart';
 import '../../models/district.dart';
 import '../../models/province.dart';
 import '../../network/netword_request.dart';
+import '../../provider/dialog_provider.dart';
 import '../widgets/address_form_widget.dart';
 import '../widgets/select_local_widget.dart';
 import 'loading_screen.dart';
@@ -218,6 +220,10 @@ class _LocationScreenState extends State<LocationScreen> {
                     List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
                       (_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),locations[value]?.regionCode1 ?? "Hà Nội");
                     _polylines.clear();
+                    //TODO fix provider
+                    Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                    await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                    Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
                     setState(()  {
                       provinceChose = value;
                       districts = newDistricts;
@@ -250,6 +256,9 @@ class _LocationScreenState extends State<LocationScreen> {
                   List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
                     (_currentLocation.longitude.toString(), _currentLocation.latitude.toString(),
                       locations[provinceChose]?.regionCode1 ?? "101", districts[value]?.districtCode ?? "10111");
+                  Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                  await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                  Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
                   setState(() {
                     districtChose = value;
                     index = 1;

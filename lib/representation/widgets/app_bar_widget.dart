@@ -8,6 +8,7 @@ import 'package:vrb_client/representation/widgets/search_widget.dart';
 
 import '../../core/constants/assets_path.dart';
 import '../../models/user_model.dart';
+import '../../provider/dialog_provider.dart';
 
 class AppBarWidget extends StatelessWidget {
   const AppBarWidget(
@@ -106,7 +107,7 @@ class AppBarWidget extends StatelessWidget {
                             ),
                             child: ClipOval(
                               child: InkWell(
-                                onTap: (){
+                                onTap: () async {
                                   Provider.of<UserModel>(context, listen: false).pickAndSetAvatar(context);
                                 },
                                 child: (avatar == AssetPath.avatar) ? Image.asset(avatar) : Image.file(File(avatar)),

@@ -10,6 +10,7 @@ import 'package:vrb_client/representation/widgets/app_bar_continer_widget.dart';
 import 'package:vrb_client/representation/widgets/app_bar_widget.dart';
 
 import '../../core/constants/messages.dart';
+import '../../provider/dialog_provider.dart';
 
 class ExchangeRateScreen extends StatefulWidget {
   const ExchangeRateScreen({super.key});
@@ -102,11 +103,13 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                             .format(date.selectedDate),
                                         style: TextStyle(color: Colors.blue),
                                       ),
-                                      onTap: () {
+                                      onTap: () async {
                                         date.selectDate(context);
                                         rate.postForeignExchangeRates(
                                             DateFormat('dd/MM/yyyy')
                                                 .format(date.selectedDate));
+
+
                                       },
                                     );
                                   },

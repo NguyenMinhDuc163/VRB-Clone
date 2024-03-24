@@ -6,6 +6,7 @@ import 'package:vrb_client/provider/interest_provider.dart';
 import 'package:vrb_client/provider/selection_provider.dart';
 import '../../core/constants/assets_path.dart';
 import '../../core/constants/messages.dart';
+import '../../provider/dialog_provider.dart';
 import '../widgets/app_bar_continer_widget.dart';
 
 class InterestScreen extends StatefulWidget {
@@ -246,12 +247,11 @@ class _InterestScreenState extends State<InterestScreen> {
             value: (select.type == 0) ? select.listChoose[0] : select.listMoney[0],
             groupValue: (select.type == 0) ? select.typeProduct : select.typeMoney,
             onChanged: (value) async {
-              setState(() {
-                _isLoading = true;
-              });
+              Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
               await Future.delayed(Duration(milliseconds: 200)); // Đợi trong 2 giây
               select.changeSelect(value!, select.type);
               Provider.of<SelectionProvider>(context, listen: false).changeSize(0, 0);
+              Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
               setState(() {
                 _isLoading = false;
               });
@@ -262,15 +262,11 @@ class _InterestScreenState extends State<InterestScreen> {
             value: (select.type == 0) ? select.listChoose[1] : select.listMoney[1],
             groupValue: (select.type == 0) ? select.typeProduct : select.typeMoney,
             onChanged: (value) async {
-              setState(() {
-                _isLoading = true;
-              });
+              Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
               await Future.delayed(Duration(milliseconds: 200)); // Đợi trong 2 giây
               select.changeSelect(value!, select.type);
               Provider.of<SelectionProvider>(context, listen: false).changeSize(0, 0);
-              setState(() {
-                _isLoading = false;
-              });
+              Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
             },
           ),
         ],

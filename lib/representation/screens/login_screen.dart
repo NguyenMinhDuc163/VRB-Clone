@@ -12,6 +12,7 @@ import 'package:vrb_client/representation/screens/main_app.dart';
 import 'package:vrb_client/representation/screens/splash_screen.dart';
 
 import '../../models/user_model.dart';
+import '../../provider/dialog_provider.dart';
 import '../widgets/bottom_bar_widget.dart';
 import 'package:local_auth/local_auth.dart';
 
@@ -73,7 +74,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       );
       if(authenticated){
+        Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+        await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+        Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
         Navigator.of(context).pushNamed(MainApp.routeName);
+
       }
       else{
         print("khong thuc hien duoc");
@@ -300,19 +305,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(15))),
                               child: InkWell(
-                                onTap: () {
+                                onTap: () async {
+                                  checkLogin(context);Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                                      await Future.delayed(const Duration(milliseconds: 200)); // Đợi trong 2 giây
+                                      Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                                  Navigator.of(context)
+                                      .pushNamed(MainApp.routeName);
                                   setState(() {
                                     _islogin = true;
                                   });
-                                  checkLogin();
-                                  Navigator.of(context)
-                                      .pushNamed(MainApp.routeName);
                                 },
                                 child: Align(
-                                    child: _ischecklogin
-                                        ? CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ) :Text(
+                                    child:Text(
                                             "Đăng nhập",
                                             style: TextStyle(
                                                 color: Colors.white,
@@ -356,13 +360,9 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  Future<void> checkLogin() async {
-    setState(() {
-      _ischecklogin = true;
-    });
-    await Future.delayed(const Duration(milliseconds: 2000));
-    setState(() {
-      _ischecklogin = false;
-    });
+  Future<void> checkLogin(BuildContext context) async {
+    Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+    await Future.delayed(const Duration(milliseconds: 200)); // Đợi trong 2 giây
+    Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/provider/date_provider.dart';
+import 'package:vrb_client/provider/dialog_provider.dart';
 import 'package:vrb_client/provider/exchange_rate_provider.dart';
 import 'package:vrb_client/provider/interest_provider.dart';
 import 'package:vrb_client/provider/selection_provider.dart';
@@ -23,6 +24,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => InterestProvider()),
       ChangeNotifierProvider(create: (_) => DateProvider()),
       ChangeNotifierProvider(create: (_) => SelectionProvider()),
+      ChangeNotifierProvider(create: (_) => DialogProvider()),
 
     ],
     child: MyApp(),
