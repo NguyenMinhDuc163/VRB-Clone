@@ -31,6 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           children: [
             Expanded(
+              flex: 5,
                 child: Column(
                   children: [
                     Image.asset(
@@ -66,6 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ],
                 )),
             Expanded(
+              flex: 4,
                 child: Container(
                     width: double.infinity,
                     child: Image.asset(

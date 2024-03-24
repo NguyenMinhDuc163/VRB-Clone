@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/provider/date_provider.dart';
 import 'package:vrb_client/provider/exchange_rate_provider.dart';
@@ -14,6 +15,7 @@ import 'package:vrb_client/test.dart';
 import 'models/user_model.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserModel()),
@@ -33,6 +35,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return MaterialApp(
       title: "VRB",
       theme: ThemeData(),

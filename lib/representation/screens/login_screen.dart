@@ -9,6 +9,7 @@ import 'package:vrb_client/core/constants/dimension_constants.dart';
 import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
 import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
+import 'package:vrb_client/representation/screens/splash_screen.dart';
 
 import '../../models/user_model.dart';
 import '../widgets/bottom_bar_widget.dart';

@@ -15,7 +15,7 @@ class AppBarContainerWidget extends StatelessWidget implements PreferredSizeWidg
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 28.0),
+      // margin: EdgeInsets.only(top: 28.0),
       padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
