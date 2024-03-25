@@ -6,7 +6,7 @@ class SelectionProvider extends ChangeNotifier{
   String typeMoney = "VND";
   int type = 0;
   List<String> listChoose = ['Gửi tiền trực tuyến có kì hạn', 'Tiền gửi tích luỹ trực tuyến'];
-  List<String> listMoney = ['VND', 'USD'];
+  List<String> listMoney = ['USD', 'VND'];
   void changeSize(int newSize, int type){
     size = newSize;
     this.type = type;

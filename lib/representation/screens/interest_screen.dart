@@ -1,5 +1,6 @@
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
 import 'package:vrb_client/provider/interest_provider.dart';
@@ -19,6 +20,7 @@ class InterestScreen extends StatefulWidget {
 class _InterestScreenState extends State<InterestScreen> {
   GlobalKey<ExpandableBottomSheetState> key = GlobalKey();
   bool _isLoading = false;
+  int _size = 400;
   final FocusNode _focusNode = FocusNode();
 
 
@@ -94,60 +96,59 @@ class _InterestScreenState extends State<InterestScreen> {
                           child: Text(notification, style: TextStyle(fontSize: 14, color: Colors.blue),)
                       ),
                       SizedBox(height: kDefaultPadding,),
-                      Align(
+                      const Align(
                           alignment: Alignment.centerLeft,
                           child: Text("Loại sản phẩm", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),)),
-                      // _buildSelectItem(['Gửi tiền trực tuyến có kì hạn', 'Tiền gửi tích luỹ trực tuyến']),
             
                       //TODO choose 1
                       InkWell(
                         onTap: () async {
-                          Provider.of<SelectionProvider>(context, listen: false).changeSize(300, 0);
+                          Provider.of<SelectionProvider>(context, listen: false).changeSize(_size, 0);
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: 60,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(child: Text(select.typeProduct, style: TextStyle(fontSize: 18),)),
-                              Image.asset(AssetPath.icoDownBlack),
+                              Expanded(child: Text(select.typeProduct, style: const TextStyle(fontSize: 18),)),
+                              Image.asset(AssetPath.icoDownBold),
                             ],
                           ),
             
                         ),
                       ),
-                      SizedBox(height: kDefaultPadding,),
-                      Align(
+                      const SizedBox(height: kDefaultPadding,),
+                      const Align(
                           alignment: Alignment.centerLeft,
                           child: Text("Loại tiền", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),)),
                       //TODO choose 2
                       InkWell(
                         onTap: (){
-                          Provider.of<SelectionProvider>(context, listen: false).changeSize(300, 1);
+                          Provider.of<SelectionProvider>(context, listen: false).changeSize(_size, 1);
                         },
-                        child: Container(
+                        child: SizedBox(
                           height: 60,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(child: Text(select.typeMoney, style: TextStyle(fontSize: 18),)),
-                              Image.asset(AssetPath.icoDownBlack),
+                              Image.asset(AssetPath.icoDownBold),
                             ],
                           ),
             
                         ),
                       ),
-                      SizedBox(height: kDefaultPadding,),
+                      const SizedBox(height: kDefaultPadding,),
             
                       Align(
                           alignment: Alignment.centerLeft,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Hình thức trả ", style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
-                              SizedBox(height: kMinPadding * 2,),
-                              Text("Trả lãi cuối kì", style: TextStyle(fontSize: 18,fontWeight: FontWeight.normal)),
-                              SizedBox(height: kMinPadding,),
+                              const Text("Hình thức trả ", style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
+                              const SizedBox(height: kMinPadding * 2,),
+                              const Text("Trả lãi cuối kì", style: TextStyle(fontSize: 18,fontWeight: FontWeight.normal)),
+                              const SizedBox(height: kMinPadding,),
                               Container(
                                 height: 1, // Chiều cao của đường line
                                 color: Colors.grey.shade300, // Màu của đường line
@@ -155,12 +156,12 @@ class _InterestScreenState extends State<InterestScreen> {
                             ],
                           )
                       ),
-                      SizedBox(height: kDefaultPadding,),
+                      const SizedBox(height: kDefaultPadding,),
                       Consumer<InterestProvider>(builder: (context, rate, child){
-                        return  (select.typeMoney == "USD") ? Column(
+                        return  (select.typeMoney == "USD" && select.typeProduct == 'Tiền gửi tích luỹ trực tuyến') ? Column(
                           children: [
                             Image.asset(AssetPath.notFound),
-                            Text("Hiện không có dữ liệu", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                            const Text("Hiện không có dữ liệu", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                           ],
                         ): Container(
                           decoration: BoxDecoration(
@@ -181,26 +182,25 @@ class _InterestScreenState extends State<InterestScreen> {
                             children: [
                               TableRow(
                                 decoration: BoxDecoration(color: Colors.grey.shade300,
-                                  borderRadius: BorderRadius.circular(
-                                      10.0),),
-                                children: [
-                                  Container(
+                                    borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),),
+                                children: const [
+                                  SizedBox(
                                     height: 50,
-                                    child: Center(child: Text('Kì hạn')),
+                                    child: Center(child: Text('Kì hạn', style: TextStyle( fontSize: 15,fontWeight: FontWeight.bold),)),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: 50,
-                                    child: Center(child: Text('Lãi xuất')),
+                                    child: Center(child: Text('Lãi xuất (%/Năm)', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),)),
                                   ),
                                 ],
                               ),
                               ...rate.interestRates.map((rate) => TableRow(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     height: 50,
                                     child: Center(child: Text('${rate.termSTR} Tháng')),
                                   ),
-                                  Container(
+                                  SizedBox(
                                     height: 50,
                                     child: Center(child: Text(rate.rate)),
                                   ),
@@ -211,7 +211,7 @@ class _InterestScreenState extends State<InterestScreen> {
                         );
             
                       }),
-                      SizedBox(height: kDefaultPadding,),
+                      const SizedBox(height: kDefaultPadding,),
                     ],
                   ),
                 ),
@@ -241,7 +241,23 @@ class _InterestScreenState extends State<InterestScreen> {
   Widget _buildChoseItem(BuildContext context){
     return Consumer<SelectionProvider>(builder: (context, select, child){
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children:[
+          Container(
+            margin: EdgeInsets.all(20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text((select.type == 0) ? "Chọn loại sản phẩm" : "Chọn loại tiền",
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                InkWell(
+                    onTap: (){
+                      Provider.of<SelectionProvider>(context, listen: false).changeSize(0, 0);
+                    },
+                    child: Icon(FontAwesomeIcons.xmark))
+              ],
+            ),
+          ),
           RadioListTile(
             title: (select.type == 0) ? Text(select.listChoose[0]) : Text(select.listMoney[0]),
             value: (select.type == 0) ? select.listChoose[0] : select.listMoney[0],

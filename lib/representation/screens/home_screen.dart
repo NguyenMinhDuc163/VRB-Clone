@@ -101,7 +101,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
 
-              ElevatedButton(onPressed: (){
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.black, backgroundColor: Colors.white, // Màu văn bản
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0), // Bo góc
+                    ),
+                  ),
+                  onPressed: (){
                 setState(() {
                   _showMore = !_showMore; // Đặt trạng thái hiển thị thêm là true
                 });

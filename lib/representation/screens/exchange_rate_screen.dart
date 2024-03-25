@@ -137,7 +137,7 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                 TableRow(
                                   decoration: BoxDecoration(
                                     color: Colors.grey.shade300,
-                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                                   ),
                                   children: [
                                     Container(
