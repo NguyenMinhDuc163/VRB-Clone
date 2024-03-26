@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 
 import 'login_screen.dart';
 
@@ -48,15 +50,15 @@ class _SplashScreenState extends State<SplashScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        const Text(
-                          "Kết nối thành công",
+                         Text(
+                          LocaleKeys.intro1.tr(),
                           style: TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.bold,
                               fontSize: 24),
                         ),
-                        const Text(
-                          "Đồng hành phát triển",
+                         Text(
+                          LocaleKeys.intro2.tr(),
                           style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,

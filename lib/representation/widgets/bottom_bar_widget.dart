@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/representation/screens/contact_helper.dart';
@@ -5,6 +6,8 @@ import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
 import 'package:vrb_client/representation/screens/interest_screen.dart';
 import 'package:vrb_client/representation/screens/location_screen.dart';
 import 'package:vrb_client/representation/screens/qr_code_screen.dart';
+
+import '../../generated/locale_keys.g.dart';
 
 class BottomBarWidget extends StatelessWidget {
   const BottomBarWidget({super.key});
@@ -26,19 +29,19 @@ class BottomBarWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          _buildIcon(AssetPath.tiGia, "Tỉ giá", (){
+          _buildIcon(AssetPath.tiGia, LocaleKeys.exchangeRate.tr(), (){
             Navigator.of(context).pushNamed(ExchangeRateScreen.routeName);
           }),
-          _buildIcon(AssetPath.laiSuat, "Lãi xuất", (){
+          _buildIcon(AssetPath.laiSuat, LocaleKeys.interestRate.tr(), (){
             Navigator.of(context).pushNamed(InterestScreen.routeName);
           }),
           _buildIcon(AssetPath.icoQR, "", (){
             Navigator.of(context).pushNamed(QRCodeScreen.routeName);
           }),
-          _buildIcon(AssetPath.icoMap, "Mạng lưới", color: Colors.blue.shade900, (){
+          _buildIcon(AssetPath.icoMap, LocaleKeys.network.tr(), color: Colors.blue.shade900, (){
             Navigator.of(context).pushNamed(LocationScreen.routeName);
           }),
-          _buildIcon(AssetPath.headPhone, "Liên hệ", (){
+          _buildIcon(AssetPath.headPhone, LocaleKeys.contact.tr(), (){
             Navigator.of(context).pushNamed(ContactHelper.routeName);
           }),
         ],
@@ -54,7 +57,7 @@ class BottomBarWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(icon, color: color,),
-            Text(name),
+            Text(name, textAlign: TextAlign.center, style: TextStyle(fontSize: 14),),
           ],
         ),
       ),

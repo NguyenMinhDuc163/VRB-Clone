@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -13,10 +14,12 @@ import 'package:vrb_client/representation/screens/splash_screen.dart';
 import 'package:vrb_client/routes.dart';
 import 'package:vrb_client/test.dart';
 
+import 'generated/codegen_loader.g.dart';
 import 'models/user_model.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserModel()),
@@ -27,7 +30,13 @@ void main() {
       ChangeNotifierProvider(create: (_) => DialogProvider()),
 
     ],
-    child: MyApp(),
+    child: EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('vi')],
+      path: 'assets/translations',
+      fallbackLocale: Locale('en'),
+      assetLoader: CodegenLoader(),
+      child: MyApp(),
+    ),
   ));
 }
 
@@ -40,6 +49,9 @@ class MyApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     return MaterialApp(
       title: "VRB",
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       theme: ThemeData(),
       home: const SplashScreen(),
       routes: routes,

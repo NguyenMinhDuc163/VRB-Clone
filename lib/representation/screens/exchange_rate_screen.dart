@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:vrb_client/representation/widgets/app_bar_continer_widget.dart';
 import 'package:vrb_client/representation/widgets/app_bar_widget.dart';
 
 import '../../core/constants/messages.dart';
+import '../../generated/locale_keys.g.dart';
 import '../../provider/dialog_provider.dart';
 
 class ExchangeRateScreen extends StatefulWidget {
@@ -42,7 +44,7 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarContainerWidget(title: "Tỷ lệ giá ngoại tệ"),
+      appBar: AppBarContainerWidget(title: LocaleKeys.exchangeTile.tr()),
       body: Padding(
           padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
           child: _isLoading
@@ -57,18 +59,20 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                           const SizedBox(
                             height: kDefaultPadding,
                           ),
-                          const Text(
-                            "Tỷ giá ngoại tệ so với VND",
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
+                           // Align(
+                           //   child: Text(
+                           //    LocaleKeys.exchangeVsVND.tr(),
+                           //    style: TextStyle(
+                           //        fontSize: 18, fontWeight: FontWeight.bold),
+                           //                             ),
+                           // ),
                           const SizedBox(
                             height: kDefaultPadding,
                           ),
                           Column(
                             children: [
                               Text(
-                                Messages.exchangeRate1,
+                                LocaleKeys.exchangeRate1.tr(),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
                                 textAlign: TextAlign.start,
@@ -78,7 +82,8 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                 height: kMinPadding,
                               ),
                               Text(
-                                Messages.getExchangeRate2(date.selectedDate),
+                                // Messages.getExchangeRate2(date.selectedDate),
+                                LocaleKeys.exchangeRate2.tr(),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
                                 textAlign: TextAlign.start,
@@ -93,7 +98,7 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                             padding: const EdgeInsets.only(left: 10),
                             child: Row(
                               children: [
-                                Text("Thời gian", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),),
+                                Text(LocaleKeys.time.tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),),
                                 Text(" *", style: TextStyle(color: Colors.red),)
                               ],
                             ),
@@ -150,21 +155,21 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                   children: [
                                     Container(
                                       height: 50,
-                                      child: Center(child: Text('Ngoại tệ')),
+                                      child: Center(child: Text(LocaleKeys.foreign.tr())),
                                     ),
                                     Container(
                                       height: 50,
                                       child:
-                                      Center(child: Text('Mua tiền mặt')),
+                                      Center(child: Text(LocaleKeys.buy.tr())),
                                     ),
                                     Container(
                                       height: 50,
                                       child: Center(
-                                          child: Text('Mua chuyển khoản')),
+                                          child: Text(LocaleKeys.buyByTrans.tr())),
                                     ),
                                     Container(
                                       height: 50,
-                                      child: Center(child: Text('Bán')),
+                                      child: Center(child: Text(LocaleKeys.sell.tr())),
                                     ),
                                   ],
                                 ),

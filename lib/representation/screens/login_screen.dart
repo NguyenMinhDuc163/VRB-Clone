@@ -1,16 +1,15 @@
 import 'dart:io';
 
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
-import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
-import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
-import 'package:vrb_client/representation/screens/splash_screen.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../../models/user_model.dart';
 import '../../provider/dialog_provider.dart';
 import '../widgets/bottom_bar_widget.dart';
@@ -35,6 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   final FocusNode _focusNode = FocusNode();
   void _toggleImage() {
+
     setState(() {
       _isPressed = !_isPressed;
     });
@@ -126,6 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
               right: 0, // Đặt giá trị right cho Row
               child: Column(
                 children: [
+                  // Text(LocaleKeys.you_have_pushed_the_button_this_many_times.tr()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -137,7 +138,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Image.asset(AssetPath.logo_1x),
                       ),
                       InkWell(
-                        onTap: _toggleImage,
+                        //TODO language
+                        // onTap: _toggleImage,
+                        onTap: (){
+                          if (context.locale == Locale('vi')) {
+                            context.setLocale(Locale('en'));
+                          } else {
+                            context.setLocale(Locale('vi'));
+                          }
+                        },
                         child: Container(
                           width: 80,
                           height: 50,
@@ -207,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   Expanded(
                                     child: TextField(
                                       decoration: InputDecoration(
-                                          hintText: 'Tên truy Cập ',
+                                          hintText: LocaleKeys.userName.tr(),
                                           border: InputBorder.none),
                                     ),
                                   ),
@@ -237,8 +246,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             Expanded(
                               child: TextField(
                                 obscureText: _obscureText,
-                                decoration: const InputDecoration(
-                                    hintText: 'Nhập mật khẩu',
+                                decoration:  InputDecoration(
+                                    hintText: LocaleKeys.passWord.tr(),
                                     border: InputBorder.none),
                               ),
                             ),
@@ -263,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               child: InkWell(
                                 child: Text(
-                                  "Quên mật khẩu?",
+                                  LocaleKeys.register.tr(),
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.blue.shade900),
                                 ),
@@ -273,7 +282,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Container(
                               child: InkWell(
                                 child: Text(
-                                  "Đăng ký mở tài khoản",
+                                  LocaleKeys.forgot.tr(),
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.blue.shade900),
                                 ),
@@ -317,7 +326,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 },
                                 child: Align(
                                     child:Text(
-                                            "Đăng nhập",
+                                            LocaleKeys.signIn.tr(),
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.bold),
@@ -343,7 +352,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             },
                             child: Text(
-                              " Đăng nhập tài khoản khác",
+                              LocaleKeys.signInAnother.tr(),
                               style: TextStyle(
                                   color: Colors.blue.shade900, fontSize: 14),
                             ),

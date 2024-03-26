@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/provider/interest_provider.dart';
 import 'package:vrb_client/provider/selection_provider.dart';
 import '../../core/constants/assets_path.dart';
@@ -47,7 +49,7 @@ class _InterestScreenState extends State<InterestScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarContainerWidget(title: "Lãi xuất"),
+      appBar:  AppBarContainerWidget(title: LocaleKeys.interestTitle.tr()),
       body: Consumer<SelectionProvider>(
         builder: (context, select, child) {
           return WillPopScope(
@@ -92,8 +94,8 @@ class _InterestScreenState extends State<InterestScreen> {
                               const SizedBox(
                                 height: kDefaultPadding,
                               ),
-                              const Text(
-                                "Lãi suất dành cho khách hàng cá nhân",
+                               Text(
+                                LocaleKeys.individualRate.tr(),
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
@@ -106,18 +108,18 @@ class _InterestScreenState extends State<InterestScreen> {
                                       color: Colors.blue.shade50,
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10))),
-                                  child: const Text(
-                                    Messages.notification,
+                                  child: Text(
+                                    LocaleKeys.notification.tr(),
                                     style: TextStyle(
                                         fontSize: 14, color: Colors.blue),
                                   )),
                               const SizedBox(
                                 height: kDefaultPadding,
                               ),
-                              const Align(
+                               Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "Loại sản phẩm",
+                                    LocaleKeys.productType.tr(),
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 12),
@@ -149,10 +151,10 @@ class _InterestScreenState extends State<InterestScreen> {
                               const SizedBox(
                                 height: kDefaultPadding,
                               ),
-                              const Align(
+                               Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "Loại tiền",
+                                    LocaleKeys.currencyType.tr(),
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 12),
@@ -190,8 +192,8 @@ class _InterestScreenState extends State<InterestScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Text(
-                                        "Hình thức trả ",
+                                       Text(
+                                        LocaleKeys.calc.tr(),
                                         style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold),
@@ -260,12 +262,12 @@ class _InterestScreenState extends State<InterestScreen> {
                                                     .vertical(
                                                     top: Radius.circular(10)),
                                               ),
-                                              children: const [
+                                              children: [
                                                 SizedBox(
                                                   height: 50,
                                                   child: Center(
                                                       child: Text(
-                                                    'Kì hạn',
+                                                    LocaleKeys.tenor.tr(),
                                                     style: TextStyle(
                                                         fontSize: 15,
                                                         fontWeight:
@@ -276,7 +278,7 @@ class _InterestScreenState extends State<InterestScreen> {
                                                   height: 50,
                                                   child: Center(
                                                       child: Text(
-                                                    'Lãi xuất (%/Năm)',
+                                                    LocaleKeys.rate.tr(),
                                                     style: TextStyle(
                                                         fontSize: 15,
                                                         fontWeight:

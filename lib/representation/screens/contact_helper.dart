@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/representation/widgets/app_bar_continer_widget.dart';
 
 import '../../core/constants/messages.dart';
@@ -12,7 +14,7 @@ class ContactHelper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarContainerWidget(title: "Liên hệ",),
+      appBar: AppBarContainerWidget(title: LocaleKeys.contactTitle.tr(),),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
         child: SingleChildScrollView(
@@ -20,14 +22,14 @@ class ContactHelper extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Center(child: Image.asset(AssetPath.helper)),
-              Text("NGÂN HÀNG LIÊN DOANH VIỆT - NGA", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+              Text(LocaleKeys.slogan.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               Center(child: Text("(VRB)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),),
               SizedBox(height: kDefaultPadding,),
               _buildRow(Icon(FontAwesomeIcons.phone), 'Hotline', "18006656/ 02439429365"),
               _buildRow(Icon(FontAwesomeIcons.envelopeOpen), 'Email', "vrbhotline@vrbank.com.vn"),
-              _buildRow(Icon(FontAwesomeIcons.image), 'Trụ sở chính', Messages.address),
+              _buildRow(Icon(FontAwesomeIcons.image), LocaleKeys.headOffice.tr(), LocaleKeys.address.tr()),
               InkWell(
-                child: Text("Phiên bản: 1.0.10", style: TextStyle(fontSize: 14, color: Colors.blue.shade800),),
+                child: Text(LocaleKeys.version.tr(), style: TextStyle(fontSize: 14, color: Colors.blue.shade800),),
                 onTap: (){},
               )
             ],
