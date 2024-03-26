@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/representation/widgets/app_bar_continer_widget.dart';
 
 import '../../models/custom_overlay_shape.dart';
@@ -60,7 +62,7 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
               ],
             ),
             Expanded(
-              flex: 6,
+              flex: 5,
               child: QRView(
                 key: qrKey,
                 onQRViewCreated: _onQRViewCreated,
@@ -69,29 +71,39 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
               // child: Container(),
             ),
             //TODO den flash
+
             Column(
               children: [
                 SizedBox(height: 20,),
-                Text('Quét mã QR để thực hiện thanh toán', style: TextStyle(fontSize: 14, color: Colors.white),),
-                Text('Rút tiền mặt hoặc chuyển tiền', style: TextStyle(fontSize: 14, color: Colors.white),),
-                Icon(FontAwesomeIcons.boltLightning)
+                Text(LocaleKeys.instruct1.tr(), style: TextStyle(fontSize: 14, color: Colors.white),),
+                Text(LocaleKeys.instruct2.tr(), style: TextStyle(fontSize: 14, color: Colors.white),),
+                // Icon(FontAwesomeIcons.boltLightning)
               ],
+            ),
+            Expanded(
+              flex: 1,
+              child: Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      controller?.toggleFlash();
+                    },
+                    child: Icon(Icons.flash_on),
+                  )),
             ),
             Expanded(
               flex: 1,
               child: Center(
                 child: (result != null)
                     ? Text(
-                    'Mã code của bạn là ${describeEnum(result!.format)}   : ${result!.code}', style: TextStyle(fontSize: 14, color: Colors.white))
-                    : Text("Đang tìm kiếm mã code...", style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold))
+                    '${LocaleKeys.showCode.tr()} ${describeEnum(result!.format)}   : ${result!.code}', style: TextStyle(fontSize: 14, color: Colors.white))
+                    : Text(LocaleKeys.findCode.tr(), style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold))
             )),
             Expanded(child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildButton((){}, 'Tạo QR'),
-                _buildButton((){}, 'Tải ảnh QR'),
-
-                // ElevatedButton(onPressed: (){}, child: Text("Tải ảnh QR")),
+                _buildButton((){}, LocaleKeys.createQR.tr()),
+                _buildButton((){}, LocaleKeys.downloadQR.tr()),
               ],
             ))
           ],

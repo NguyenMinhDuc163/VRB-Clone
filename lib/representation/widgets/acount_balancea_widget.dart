@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/representation/widgets/select_item_widget.dart';
 
 import '../../core/constants/assets_path.dart';
@@ -35,14 +37,14 @@ class _AccountBalanceWidgetState extends State<AccountBalanceWidget> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Padding(
+           Padding(
             padding: EdgeInsets.only(left: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Tài khoản",
+                  LocaleKeys.account.tr(),
                   style: TextStyle(fontSize: 14, color: Colors.black),
                 ),
                 SelectItemWidget(selectedValue: '100068890')
@@ -69,7 +71,7 @@ class _AccountBalanceWidgetState extends State<AccountBalanceWidget> {
                 ),
               ),
               child: Text(
-                'Danh Sách',
+                LocaleKeys.list.tr(),
                 style: TextStyle(
                   color: Colors.blue.shade900, // Màu chữ của button
                   fontSize: 14,

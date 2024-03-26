@@ -1,8 +1,10 @@
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/payment_screen.dart';
 
@@ -28,11 +30,11 @@ class _MainAppState extends State<MainApp> {
         items: [
           CurvedNavigationBarItem(
             child: Image.asset(AssetPath.icoHome),
-            label: 'Trang Chủ',
+            label: LocaleKeys.home.tr(),
           ),
           CurvedNavigationBarItem(
             child: Image.asset(AssetPath.icoGift2),
-            label: 'Đổi quà',
+            label: LocaleKeys.gift.tr(),
           ),
           CurvedNavigationBarItem(
             child: Image.asset(AssetPath.icoQR),
@@ -40,11 +42,11 @@ class _MainAppState extends State<MainApp> {
           ),
           CurvedNavigationBarItem(
             child: Image.asset(AssetPath.icoNotification),
-            label: 'Thông báo',
+            label: LocaleKeys.notiHome.tr(),
           ),
           CurvedNavigationBarItem(
             child: Image.asset(AssetPath.icoSetting),
-            label: 'Cài đặt',
+            label: LocaleKeys.setting.tr(),
           ),
         ],
         color: Colors.white,

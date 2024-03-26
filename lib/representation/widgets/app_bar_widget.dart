@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/representation/widgets/search_widget.dart';
 
 import '../../core/constants/assets_path.dart';
@@ -84,8 +86,8 @@ class AppBarWidget extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Text(
-                            "Chào buổi sáng",
+                           Text(
+                            LocaleKeys.hi.tr(),
                             style: TextStyle(fontSize: 14, color: Colors.white),
                           ),
                           Text(

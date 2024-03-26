@@ -56,9 +56,9 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                     return SingleChildScrollView(
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: kDefaultPadding,
-                          ),
+                          // const SizedBox(
+                          //   height: kDefaultPadding,
+                          // ),
                            // Align(
                            //   child: Text(
                            //    LocaleKeys.exchangeVsVND.tr(),
@@ -155,21 +155,21 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                   children: [
                                     Container(
                                       height: 50,
-                                      child: Center(child: Text(LocaleKeys.foreign.tr())),
+                                      child: Center(child: Text(LocaleKeys.foreign.tr(), textAlign: TextAlign.center,)),
                                     ),
                                     Container(
                                       height: 50,
                                       child:
-                                      Center(child: Text(LocaleKeys.buy.tr())),
+                                      Center(child: Text(LocaleKeys.buy.tr(), textAlign: TextAlign.center,)),
                                     ),
                                     Container(
                                       height: 50,
                                       child: Center(
-                                          child: Text(LocaleKeys.buyByTrans.tr())),
+                                          child: Text(LocaleKeys.buyByTrans.tr(), textAlign: TextAlign.center,)),
                                     ),
                                     Container(
                                       height: 50,
-                                      child: Center(child: Text(LocaleKeys.sell.tr())),
+                                      child: Center(child: Text(LocaleKeys.sell.tr(), textAlign: TextAlign.center,)),
                                     ),
                                   ],
                                 ),

@@ -35,6 +35,8 @@ class AssetPath{
   static const String tiGia = '$iconPath/ti_gia.png';
   static const String notificationBing = '$iconPath/notification_bing.png';
   static const String icoMap = '$iconPath/ico_map.png';
+  static const String icoAmerica = '$iconPath/ico_america.png';
+  static const String icoVN = '$iconPath/ico_vn.png';
 
 
   static const String logoBankVRB = '$imagePath/logo_bank_vrb.png';

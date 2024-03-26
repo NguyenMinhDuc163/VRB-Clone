@@ -35,5 +35,40 @@ abstract class  LocaleKeys {
   static const version = 'version';
   static const intro1 = 'intro1';
   static const intro2 = 'intro2';
+  static const typeProduct1 = 'typeProduct1';
+  static const typeProduct2 = 'typeProduct2';
+  static const formCalc = 'formCalc';
+  static const locationTitle = 'locationTitle';
+  static const province = 'province';
+  static const district = 'district';
+  static const nearest = 'nearest';
+  static const branch = 'branch';
+  static const direct = 'direct';
+  static const notFount = 'notFount';
+
+  static const find = 'find';
+  static const hi = 'hi';
+  static const service = 'service';
+  static const config = 'config';
+  static const block1 = 'block1';
+  static const block2 = 'block2';
+  static const block3 = 'block3';
+  static const block4 = 'block4';
+  static const block5 = 'block5';
+  static const block6 = 'block6';
+  static const account = 'account';
+  static const list = 'list';
+  static const home = 'home';
+  static const gift = 'gift';
+  static const notiHome = 'notiHome';
+  static const setting = 'setting';
+  static const instruct1 = 'instruct1';
+  static const instruct2 = 'instruct2';
+  static const findCode = 'findCode';
+  static const showCode = 'showCode';
+  static const createQR = 'createQR';
+  static const downloadQR = 'downloadQR';
+  static const payInterest = 'payInterest';
+  static const dataEmpty = 'dataEmpty';
 
 }

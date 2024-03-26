@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/models/user_model.dart';
 import 'package:vrb_client/representation/widgets/block_item_widget.dart';
 
@@ -23,15 +25,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> items = [
-      const BlockItemWidget(description: 'Chuyển tiền trong nước', iconInner: AssetPath.icoTransfer),
-      const BlockItemWidget(description: 'Mở TK tiền gửi trực tuyến', iconInner: AssetPath.icoSave),
-      const BlockItemWidget(description: 'Quản lý chi tiêu', iconInner: AssetPath.icoExpense),
-      const BlockItemWidget(description: 'Mở TK số đẹp/ SĐT / iNick', iconInner: AssetPath.icoGoodNum),
-      const BlockItemWidget(description: 'Tạo đề nghị vay', iconInner: AssetPath.icoLoan),
-      const BlockItemWidget(description: 'Mẫu quà tặng', iconInner: AssetPath.icoGift),
-      const BlockItemWidget(description: 'Mẫu quà tặng', iconInner: AssetPath.icoGift),
-      const BlockItemWidget(description: 'Mẫu quà tặng', iconInner: AssetPath.icoGift),
-      const BlockItemWidget(description: 'Mẫu quà tặng', iconInner: AssetPath.icoGift),
+       BlockItemWidget(description: LocaleKeys.block1.tr(), iconInner: AssetPath.icoTransfer),
+       BlockItemWidget(description: LocaleKeys.block2.tr(), iconInner: AssetPath.icoSave),
+       BlockItemWidget(description: LocaleKeys.block3.tr(), iconInner: AssetPath.icoExpense),
+       BlockItemWidget(description: LocaleKeys.block4.tr(), iconInner: AssetPath.icoGoodNum),
+       BlockItemWidget(description: LocaleKeys.block5.tr(), iconInner: AssetPath.icoLoan),
+       BlockItemWidget(description: LocaleKeys.block6.tr(), iconInner: AssetPath.icoGift),
     ];
 
     return Consumer<UserModel>(builder: (context, user, child){
@@ -48,16 +47,16 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Expanded( // văn bản đầu tiên chiếm hết không gian có thể và căn trái
+                   Expanded( // văn bản đầu tiên chiếm hết không gian có thể và căn trái
                     child: Text(
-                      'Dịch vụ yêu thích',
+                      LocaleKeys.service.tr(),
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                   ),
                   InkWell(
                     onTap: () {},
                     child: Text(
-                      'Tuỳ chỉnh',
+                      LocaleKeys.config.tr(),
                       style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -100,19 +99,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(child: items[3]), Expanded(child: items[4]), Expanded(child: items[5])
                 ],
               ),
-
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.black, backgroundColor: Colors.white, // Màu văn bản
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0), // Bo góc
-                    ),
-                  ),
-                  onPressed: (){
-                setState(() {
-                  _showMore = !_showMore; // Đặt trạng thái hiển thị thêm là true
-                });
-              }, child: _showMore == false ? const Text("Xem tất cả dịch vụ") :const Text("Thu gon") )
+              // TODO show more
+              // ElevatedButton(
+              //     style: ElevatedButton.styleFrom(
+              //       foregroundColor: Colors.black, backgroundColor: Colors.white, // Màu văn bản
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.circular(10.0), // Bo góc
+              //       ),
+              //     ),
+              //     onPressed: (){
+              //   setState(() {
+              //     _showMore = !_showMore; // Đặt trạng thái hiển thị thêm là true
+              //   });
+              // }, child: _showMore == false ? const Text("Xem tất cả dịch vụ") :const Text("Thu gon") )
             ],
           ),
         ),

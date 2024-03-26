@@ -73,12 +73,13 @@ class _InterestScreenState extends State<InterestScreen> {
               },
               child: ExpandableBottomSheet(
                 key: key,
-                onIsContractedCallback: () => print('contracted'),
-                onIsExtendedCallback: () => print('extended'),
-                animationDurationExtend: Duration(milliseconds: 500),
-                animationDurationContract: Duration(milliseconds: 250),
-                animationCurveExpand: Curves.bounceOut,
-                animationCurveContract: Curves.ease,
+                //TODO hieu ung
+                // onIsContractedCallback: () => print('contracted'),
+                // onIsExtendedCallback: () => print('extended'),
+                // animationDurationExtend: Duration(milliseconds: 500),
+                // animationDurationContract: Duration(milliseconds: 250),
+                // animationCurveExpand: Curves.bounceOut,
+                // animationCurveContract: Curves.ease,
                 persistentContentHeight:
                     select.size.toDouble(), // do rong khi keo xuong
 
@@ -201,7 +202,7 @@ class _InterestScreenState extends State<InterestScreen> {
                                       const SizedBox(
                                         height: kMinPadding * 2,
                                       ),
-                                      const Text("Trả lãi cuối kì",
+                                       Text(LocaleKeys.payInterest.tr(),
                                           style: TextStyle(
                                               fontSize: 18,
                                               fontWeight: FontWeight.normal)),
@@ -222,12 +223,12 @@ class _InterestScreenState extends State<InterestScreen> {
                                   builder: (context, rate, child) {
                                 return (select.typeMoney == "USD" &&
                                         select.typeProduct ==
-                                            'Tiền gửi tích luỹ trực tuyến')
+                                            LocaleKeys.typeProduct1.tr())
                                     ? Column(
                                         children: [
                                           Image.asset(AssetPath.notFound),
-                                          const Text(
-                                            "Hiện không có dữ liệu",
+                                           Text(
+                                            LocaleKeys.dataEmpty.tr(),
                                             style: TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold),

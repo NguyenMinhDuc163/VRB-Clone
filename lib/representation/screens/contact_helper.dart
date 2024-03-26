@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
 import 'package:vrb_client/generated/locale_keys.g.dart';
@@ -25,8 +26,8 @@ class ContactHelper extends StatelessWidget {
               Text(LocaleKeys.slogan.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               Center(child: Text("(VRB)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),),
               SizedBox(height: kDefaultPadding,),
-              _buildRow(Icon(FontAwesomeIcons.phone), 'Hotline', "18006656/ 02439429365"),
-              _buildRow(Icon(FontAwesomeIcons.envelopeOpen), 'Email', "vrbhotline@vrbank.com.vn"),
+              _buildRow(Icon(FontAwesomeIcons.phone), 'Hotline', "18006656/ 02439429365", onTap: _makePhoneCall),
+              _buildRow(Icon(FontAwesomeIcons.envelopeOpen), 'Email', "vrbhotline@vrbank.com.vn", onTap: _launchEmail),
               _buildRow(Icon(FontAwesomeIcons.image), LocaleKeys.headOffice.tr(), LocaleKeys.address.tr()),
               InkWell(
                 child: Text(LocaleKeys.version.tr(), style: TextStyle(fontSize: 14, color: Colors.blue.shade800),),
@@ -61,25 +62,47 @@ class ContactHelper extends StatelessWidget {
       )
     );
   }
+  _makePhoneCall() async {
+    final String telUrl = 'tel:18006656';
+    final Uri uri = Uri.parse(telUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'Không thể gọi số điện thoại';
+    }
+  }
+  _launchEmail() async {
+    const String email = 'vrbhotline@vrbank.com.vn';
+    final Uri emailUri = Uri.parse('mailto:$email');
 
-  Widget _buildRow(Icon icon, String text1, String text2){
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      throw 'Không thể mở ứng dụng email';
+    }
+  }
+
+  Widget _buildRow(Icon icon, String text1, String text2, {Function()? onTap}){
     return Row(
       children: [
         icon,
         SizedBox(width: kDefaultPadding * 2,),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(text1, style: TextStyle(fontSize: 16),),
-            SizedBox(height: kMinPadding,),
-            Text(text2, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 3,
-                textAlign: TextAlign.start,
-            ),
-            SizedBox(height: kDefaultPadding,),
-          ],
+        InkWell(
+          onTap:(onTap != null) ? onTap : (){},
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(text1, style: TextStyle(fontSize: 16),),
+              SizedBox(height: kMinPadding,),
+              Text(text2, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                  textAlign: TextAlign.start,
+              ),
+              SizedBox(height: kDefaultPadding,),
+            ],
+          ),
         )
       ],
     );

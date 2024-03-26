@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_button/flutter_animated_button.dart';
@@ -10,6 +11,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 
 import '../../core/constants/assets_path.dart';
 import '../../core/constants/dimension_constants.dart';
@@ -20,6 +22,7 @@ import '../../models/province.dart';
 import '../../network/netword_request.dart';
 import '../../provider/dialog_provider.dart';
 import '../widgets/address_form_widget.dart';
+import '../widgets/app_bar_continer_widget.dart';
 import '../widgets/select_local_widget.dart';
 import 'loading_screen.dart';
 
@@ -169,9 +172,7 @@ class _LocationScreenState extends State<LocationScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Center(child: Text('Vị trí ATM, chi nhánh')),
-      ),
+      appBar:  AppBarContainerWidget(title: LocaleKeys.locationTitle.tr()),
       body: _isLoading == true ? LoadingScreen() : ExpandableBottomSheet(
         key: key,
         onIsContractedCallback: () => print('contracted'),
@@ -212,7 +213,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     (2 *
                         kMinPadding), // Sử dụng chiều rộng của màn hình trừ đi khoảng cách mép trái và phải
                 child: SelectLocalWidget(
-                  defaultHint: "Tỉnh/ Thành Phố",
+                  defaultHint: LocaleKeys.province.tr(),
                   selectedValue: provinceChose,
                   items: locations.keys.toList(),
                   onChanged: (value) async {
@@ -249,7 +250,7 @@ class _LocationScreenState extends State<LocationScreen> {
               width: size.width -
                   (2 * kMinPadding), // Đặt chiều rộng cho SelectLocalWidget
               child: SelectLocalWidget(
-                defaultHint: "Quận/ Huyện",
+                defaultHint: LocaleKeys.district.tr(),
                 selectedValue: districtChose,
                 items: districts.keys.toList(),
                 onChanged: (value) async {
@@ -313,7 +314,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
 
                     children: [
-                      Expanded(child: _buildButton('Gần Nhất', () async{
+                      Expanded(child: _buildButton(LocaleKeys.nearest.tr(), () async{
                         //TODO tam thoi fix call
                         try{
                           List<Map<String, BankLocation>> newAddresses = await DioTest.
@@ -350,7 +351,7 @@ class _LocationScreenState extends State<LocationScreen> {
                         }
 
                       }, 1)),
-                      Expanded(child: _buildButton('Chi Nhánh', () async {
+                      Expanded(child: _buildButton(LocaleKeys.branch.tr(), () async {
                         if(districtChose != null){
                           String regionCode1 = locations[provinceChose]?.regionCode1 ?? "101";
                           String districtCode = districts[districtChose]?.districtCode ?? '10111';
@@ -403,7 +404,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 );
               }).toList() : [Center(child:Container(
                 padding: EdgeInsets.symmetric(vertical: 30),
-                child: Text("Không có ATM/ Chi nhánh tại khu vực này", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                child: Text(LocaleKeys.notFount.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
               ),)],
             )
         ),

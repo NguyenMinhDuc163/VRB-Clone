@@ -1,11 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 
 class SelectionProvider extends ChangeNotifier{
   int size = 0;
-  String typeProduct = "Gửi tiền trực tuyến có kì hạn";
+  String typeProduct = LocaleKeys.typeProduct1.tr();
   String typeMoney = "VND";
   int type = 0;
-  List<String> listChoose = ['Gửi tiền trực tuyến có kì hạn', 'Tiền gửi tích luỹ trực tuyến'];
+  List<String> listChoose = [LocaleKeys.typeProduct1.tr(), LocaleKeys.typeProduct2.tr()];
   List<String> listMoney = ['USD', 'VND'];
   void changeSize(int newSize, int type){
     size = newSize;

@@ -146,14 +146,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           } else {
                             context.setLocale(Locale('vi'));
                           }
+                          setState(() {
+                            _isPressed = !_isPressed;
+                          });
                         },
                         child: Container(
-                          width: 80,
-                          height: 50,
+                          width: 65,
+                          height: 42,
                           padding: EdgeInsets.all(8),
-                          child: _isPressed
-                              ? Image.asset(AssetPath.buttonLanguage)
-                              : Image.asset(AssetPath.buttonLanguage),
+                          child: !_isPressed
+                              ? _buildIconLanguage(AssetPath.icoVN, "VN")
+                              : _buildIconLanguage(AssetPath.icoAmerica, "EN")
                         ),
                       ),
                     ],
@@ -367,6 +370,35 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildIconLanguage(String path, String name){
+    return Container(
+      padding: EdgeInsets.all(1),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(30)),
+        color: Colors.white,
+        border: Border.all(
+          color: Colors.grey, // Màu viền
+          width: 2, // Độ dày của viền
+        ),
+      ),
+      // width: 15,
+      // height: 15,
+      child:(name == "EN") ? Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Image.asset(path, fit: BoxFit.cover, width: 20, height: 20,),
+          Container(child: Text(name, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),))
+        ],
+      ): Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(child: Text(name, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)),
+          Image.asset(path, fit: BoxFit.cover, width: 20, height: 20,),
+        ],
+      )
     );
   }
   Future<void> checkLogin(BuildContext context) async {
