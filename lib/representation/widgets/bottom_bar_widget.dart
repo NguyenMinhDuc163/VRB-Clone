@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/representation/screens/contact_helper.dart';
 import 'package:vrb_client/representation/screens/exchange_rate_screen.dart';
@@ -8,6 +9,7 @@ import 'package:vrb_client/representation/screens/location_screen.dart';
 import 'package:vrb_client/representation/screens/qr_code_screen.dart';
 
 import '../../generated/locale_keys.g.dart';
+import '../../provider/selection_provider.dart';
 
 class BottomBarWidget extends StatelessWidget {
   const BottomBarWidget({super.key});
@@ -33,6 +35,8 @@ class BottomBarWidget extends StatelessWidget {
             Navigator.of(context).pushNamed(ExchangeRateScreen.routeName);
           }),
           _buildIcon(AssetPath.laiSuat, LocaleKeys.interestRate.tr(), (){
+            Provider.of<SelectionProvider>(context, listen: false)
+                .setData(LocaleKeys.typeProduct1.tr());
             Navigator.of(context).pushNamed(InterestScreen.routeName);
           }),
           _buildIcon(AssetPath.icoQR, "", (){

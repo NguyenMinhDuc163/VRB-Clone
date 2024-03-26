@@ -46,6 +46,10 @@ class CodegenLoader extends AssetLoader {
     'typeProduct1' : 'Online term deposit',
     'typeProduct2' : 'Online accumulate deposit',
     'formCalc': 'Interest paid the end of the period',
+    'month': 'Month',
+    'chooseProduct': 'Select product type',
+    'chooseMoney': 'Select currency',
+
     // contact
     'contactTitle': 'Contact',
     'slogan': 'VietNam Russia Joint Venture Bank',
@@ -135,6 +139,7 @@ class CodegenLoader extends AssetLoader {
 
     'typeProduct1' : 'Gửi tiền trực tuyến có kì hạn',
     'typeProduct2' : 'Tiền gửi tích luỹ trực tuyến',
+
     'formCalc': 'Trả lãi cuối kì',
 
     'locationTitle': 'Vị trí ATM, chi nhánh',
@@ -169,6 +174,9 @@ class CodegenLoader extends AssetLoader {
     'downloadQR': 'Tải ảnh QR',
     'payInterest': 'Trả lãi cuối kì',
     'dataEmpty': 'Hiện không có dữ liệu',
+    'month': 'Tháng',
+    'chooseProduct': 'Chọn loại sản phẩm',
+    'chooseMoney': 'Chọn loại tiền',
 
   };
   static  Map<String, Map<String, dynamic>> mapLocales = {

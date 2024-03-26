@@ -15,7 +15,13 @@ class SelectionProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void setData(String data){
+    typeProduct = data;
+    notifyListeners();
+  }
   void changeSelect(String value, int type){
+    print(value);
+    print(LocaleKeys.typeProduct1.tr());
     if(type == 0){
       typeProduct = value;
     }else{

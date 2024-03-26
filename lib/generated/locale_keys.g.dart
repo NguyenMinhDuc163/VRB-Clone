@@ -70,5 +70,8 @@ abstract class  LocaleKeys {
   static const downloadQR = 'downloadQR';
   static const payInterest = 'payInterest';
   static const dataEmpty = 'dataEmpty';
+  static const month = 'month';
+  static const chooseProduct = 'chooseProduct';
+  static const chooseMoney = 'chooseMoney';
 
 }

@@ -57,7 +57,7 @@ class _InterestScreenState extends State<InterestScreen> {
             onWillPop: () async {
               Provider.of<SelectionProvider>(context, listen: false)
                   .changeSize(0, 0);
-              // Thêm xử lý của bạn ở đây
+              //int Thêm xử lý của bạn ở đây
               // Nếu bạn muốn ngăn chặn việc quay lại, return false
               // Nếu bạn muốn cho phép việc quay lại, return true
               return true; // hoặc false tùy thuộc vào logic của bạn
@@ -295,7 +295,7 @@ class _InterestScreenState extends State<InterestScreen> {
                                                           height: 50,
                                                           child: Center(
                                                               child: Text(
-                                                                  '${rate.termSTR} Tháng')),
+                                                                  '${rate.termSTR} ${LocaleKeys.month.tr()}')),
                                                         ),
                                                         SizedBox(
                                                           height: 50,
@@ -348,7 +348,7 @@ class _InterestScreenState extends State<InterestScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  (select.type == 0) ? "Chọn loại sản phẩm" : "Chọn loại tiền",
+                  (select.type == 0) ? LocaleKeys.chooseProduct.tr() : LocaleKeys.chooseMoney.tr(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 InkWell(
@@ -362,10 +362,10 @@ class _InterestScreenState extends State<InterestScreen> {
           ),
           RadioListTile(
             title: (select.type == 0)
-                ? Text(select.listChoose[0])
+                ? Text(LocaleKeys.typeProduct1.tr())
                 : Text(select.listMoney[0]),
             value:
-                (select.type == 0) ? select.listChoose[0] : select.listMoney[0],
+                (select.type == 0) ? LocaleKeys.typeProduct1.tr() : select.listMoney[0],
             groupValue:
                 (select.type == 0) ? select.typeProduct : select.typeMoney,
             onChanged: (value) async {
@@ -385,10 +385,10 @@ class _InterestScreenState extends State<InterestScreen> {
           ),
           RadioListTile(
             title: (select.type == 0)
-                ? Text(select.listChoose[1])
+                ? Text(LocaleKeys.typeProduct2.tr())
                 : Text(select.listMoney[1]),
             value:
-                (select.type == 0) ? select.listChoose[1] : select.listMoney[1],
+                (select.type == 0) ? LocaleKeys.typeProduct2.tr() : select.listMoney[1],
             groupValue:
                 (select.type == 0) ? select.typeProduct : select.typeMoney,
             onChanged: (value) async {
