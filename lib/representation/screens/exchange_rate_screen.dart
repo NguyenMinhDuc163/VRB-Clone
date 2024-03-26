@@ -49,8 +49,8 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
               ? Center(
                   child: CircularProgressIndicator(),
                 )
-              : Consumer<ExchangeRateProvider>(
-                  builder: (context, rate, child) {
+              : Consumer2<ExchangeRateProvider, DateProvider>(
+                   builder: (BuildContext context, ExchangeRateProvider rate, DateProvider date, Widget? child) {
                     return SingleChildScrollView(
                       child: Column(
                         children: [
@@ -65,10 +65,10 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                           const SizedBox(
                             height: kDefaultPadding,
                           ),
-                           Column(
+                          Column(
                             children: [
                               Text(
-                                ExchangeRate1,
+                                Messages.exchangeRate1,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 3,
                                 textAlign: TextAlign.start,
@@ -78,7 +78,7 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                 height: kMinPadding,
                               ),
                               Text(
-                                ExchangeRate2,
+                                Messages.getExchangeRate2(date.selectedDate),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
                                 textAlign: TextAlign.start,
@@ -89,35 +89,43 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                           SizedBox(
                             height: kDefaultPadding,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.all(10),
-                                //TODO time
-                                child: Consumer<DateProvider>(
-                                  builder: (context, date, child) {
-                                    return InkWell(
-                                      child: Text(
-                                        DateFormat('dd/MM/yyyy')
-                                            .format(date.selectedDate),
-                                        style: TextStyle(color: Colors.blue),
-                                      ),
-                                      onTap: () async {
-                                        date.selectDate(context);
-                                        rate.postForeignExchangeRates(
-                                            DateFormat('dd/MM/yyyy')
-                                                .format(date.selectedDate));
-
-
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                              Image.asset(AssetPath.calendar),
-                            ],
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Row(
+                              children: [
+                                Text("Thời gian", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),),
+                                Text(" *", style: TextStyle(color: Colors.red),)
+                              ],
+                            ),
                           ),
+                          Container(
+                            padding: EdgeInsets.all(10),
+                            //TODO time
+                            child: InkWell(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    DateFormat('dd/MM/yyyy')
+                                        .format(date.selectedDate),
+                                    style: TextStyle(color: Colors.black, fontSize: 16),
+                                  ),
+                                  Image.asset(AssetPath.calendar),
+                                ],
+                              ),
+                              onTap: () async {
+                                date.selectDate(context);
+                                rate.postForeignExchangeRates(
+                                    DateFormat('dd/MM/yyyy')
+                                        .format(date.selectedDate));
+                              },
+                            ),
+                          ),
+                          Container(
+                            height: 1, // Chiều cao của đường line
+                            color: Colors.grey.shade400, // Màu của đường line
+                          ),
+                          SizedBox(height: kDefaultPadding,),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
@@ -147,7 +155,7 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                     Container(
                                       height: 50,
                                       child:
-                                          Center(child: Text('Mua tiền mặt')),
+                                      Center(child: Text('Mua tiền mặt')),
                                     ),
                                     Container(
                                       height: 50,
@@ -161,29 +169,29 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                                   ],
                                 ),
                                 ...rate.exchangeRates.map((rate) => TableRow(
-                                      children: [
-                                        Container(
-                                          height: 50,
-                                          child: Center(
-                                              child: Text(rate.currencyCode)),
-                                        ),
-                                        Container(
-                                          height: 50,
-                                          child:
-                                              Center(child: Text(rate.amount)),
-                                        ),
-                                        Container(
-                                          height: 50,
-                                          child: Center(
-                                              child: Text(rate.amountSell)),
-                                        ),
-                                        Container(
-                                          height: 50,
-                                          child: Center(
-                                              child: Text(rate.amounTranfer)),
-                                        ),
-                                      ],
-                                    )),
+                                  children: [
+                                    Container(
+                                      height: 50,
+                                      child: Center(
+                                          child: Text(rate.currencyCode)),
+                                    ),
+                                    Container(
+                                      height: 50,
+                                      child:
+                                      Center(child: Text(rate.amount)),
+                                    ),
+                                    Container(
+                                      height: 50,
+                                      child: Center(
+                                          child: Text(rate.amountSell)),
+                                    ),
+                                    Container(
+                                      height: 50,
+                                      child: Center(
+                                          child: Text(rate.amounTranfer)),
+                                    ),
+                                  ],
+                                )),
                               ],
                             ),
                           ),
@@ -193,21 +201,8 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                         ],
                       ),
                     );
-                  },
+      },
                 )),
     );
   }
-
-  // Future<void> _selectDate(BuildContext context) async {
-  //   final DateTime? picked = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(2015, 8),
-  //     lastDate: DateTime(2101),
-  //   );
-  //   if (picked != null)
-  //     setState(() {
-  //       selectedDate = picked;
-  //     });
-  // }
 }

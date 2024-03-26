@@ -25,7 +25,7 @@ class ContactHelper extends StatelessWidget {
               SizedBox(height: kDefaultPadding,),
               _buildRow(Icon(FontAwesomeIcons.phone), 'Hotline', "18006656/ 02439429365"),
               _buildRow(Icon(FontAwesomeIcons.envelopeOpen), 'Email', "vrbhotline@vrbank.com.vn"),
-              _buildRow(Icon(FontAwesomeIcons.image), 'Trụ sở chính', address),
+              _buildRow(Icon(FontAwesomeIcons.image), 'Trụ sở chính', Messages.address),
               InkWell(
                 child: Text("Phiên bản: 1.0.10", style: TextStyle(fontSize: 14, color: Colors.blue.shade800),),
                 onTap: (){},
