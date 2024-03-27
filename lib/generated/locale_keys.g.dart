@@ -13,7 +13,8 @@ abstract class  LocaleKeys {
   static const contact = 'contact';
   static const exchangeTile = 'exchangeTile';
   static const exchangeRate1 = 'exchangeRate1';
-  static const exchangeRate2 = 'exchangeRate2';
+  static const exchangeRate2_1 = 'exchangeRate2_1';
+  static const exchangeRate2_2 = 'exchangeRate2_2';
   static const time = 'time';
   static const exchangeVsVND = 'exchangeVsVND';
   static const foreign = 'foreign';

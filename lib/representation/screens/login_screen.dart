@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Expanded(
                         child: Image.asset(AssetPath.logo_1x),
                       ),
-                      InkWell(
+                      GestureDetector(
                         //TODO language
                         // onTap: _toggleImage,
                         onTap: (){

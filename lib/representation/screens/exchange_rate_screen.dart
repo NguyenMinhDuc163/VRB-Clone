@@ -83,7 +83,8 @@ class _ExchangeRateScreenState extends State<ExchangeRateScreen> {
                               ),
                               Text(
                                 // Messages.getExchangeRate2(date.selectedDate),
-                                LocaleKeys.exchangeRate2.tr(),
+                                '${LocaleKeys.exchangeRate2_1.tr()} ${DateFormat('dd/MM/yyyy').
+                                format(date.selectedDate)} ${LocaleKeys.exchangeRate2_2.tr()}',
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 4,
                                 textAlign: TextAlign.start,

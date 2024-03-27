@@ -26,7 +26,8 @@ class CodegenLoader extends AssetLoader {
     //exchange
     'exchangeTile': 'Exchange rate',
     'exchangeRate1': Messages.exchangeRate1En,
-    'exchangeRate2': Messages.ExchangeRate2En(),
+    'exchangeRate2_1': Messages.ExchangeRate2_1En(),
+    'exchangeRate2_2': Messages.ExchangeRate2_2En(),
     'time': 'Time',
     'exchangeVsVND': 'Foreign currency exchange rate compared to VND',
     'foreign': 'Foreign Currency',
@@ -111,7 +112,8 @@ class CodegenLoader extends AssetLoader {
 
     'exchangeTile': 'Tỉ giá ngoại tệ',
     'exchangeRate1': Messages.exchangeRate1,
-    'exchangeRate2': Messages.ExchangeRate2(),
+    'exchangeRate2_1': Messages.ExchangeRate2_1(),
+    'exchangeRate2_2': Messages.ExchangeRate2_2(),
     'time': 'Thời gian',
 
     'foreign': 'Ngoại tệ',

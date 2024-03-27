@@ -50,15 +50,17 @@ class _SplashScreenState extends State<SplashScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                         Text(
-                          LocaleKeys.intro1.tr(),
+                         const Text(
+                          // LocaleKeys.intro1.tr(),
+                           "Kết nối thành công",
                           style: TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.bold,
                               fontSize: 24),
                         ),
-                         Text(
-                          LocaleKeys.intro2.tr(),
+                         const Text(
+                          // LocaleKeys.intro2.tr(),
+                           'Đồng hành phát triển',
                           style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
