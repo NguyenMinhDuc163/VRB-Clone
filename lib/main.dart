@@ -6,6 +6,7 @@ import 'package:vrb_client/provider/date_provider.dart';
 import 'package:vrb_client/provider/dialog_provider.dart';
 import 'package:vrb_client/provider/exchange_rate_provider.dart';
 import 'package:vrb_client/provider/interest_provider.dart';
+import 'package:vrb_client/provider/location_provider.dart';
 import 'package:vrb_client/provider/selection_provider.dart';
 import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/login_screen.dart';
@@ -28,6 +29,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => DateProvider()),
       ChangeNotifierProvider(create: (_) => SelectionProvider()),
       ChangeNotifierProvider(create: (_) => DialogProvider()),
+      ChangeNotifierProvider(create: (_) => LocationProvider()),
 
     ],
     child: EasyLocalization(
