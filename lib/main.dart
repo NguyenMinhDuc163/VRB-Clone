@@ -8,6 +8,7 @@ import 'package:vrb_client/provider/exchange_rate_provider.dart';
 import 'package:vrb_client/provider/interest_provider.dart';
 import 'package:vrb_client/provider/location_provider.dart';
 import 'package:vrb_client/provider/selection_provider.dart';
+import 'package:vrb_client/representation/demobutton.dart';
 import 'package:vrb_client/representation/screens/home_screen.dart';
 import 'package:vrb_client/representation/screens/login_screen.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       theme: ThemeData(),
       home: const SplashScreen(),
+      // home: const DemoButton(),
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,

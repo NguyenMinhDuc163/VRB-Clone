@@ -13,6 +13,7 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/provider/location_provider.dart';
+import 'package:vrb_client/representation/widgets/custom_button_sheet_widger.dart';
 import 'package:vrb_client/representation/screens/search_local_screen.dart';
 
 import '../../core/constants/assets_path.dart';
@@ -37,8 +38,7 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  GlobalKey<ExpandableBottomSheetState> key = GlobalKey();
-  final Location _locationController = Location();
+  GlobalKey<ExpandableBottomSheetCustomState> key = GlobalKey();
   GoogleMapController? mapController;
   Completer<GoogleMapController> _controller = Completer();
   String provinceName = LocaleKeys.province.tr();
@@ -56,7 +56,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   //TODO test truong hop user khong cho phep truy cap local
   Future<void> _requestPermission() async {
-    final hasPermission = await _locationController.hasPermission();
+    final hasPermission = await Provider.of<LocationProvider>(context, listen: false).locationController.hasPermission();
     if (hasPermission == PermissionStatus.denied) {
       // Hiển thị hướng dẫn hoặc thông báo
       showDialog(
@@ -166,15 +166,15 @@ class _LocationScreenState extends State<LocationScreen> {
     return Consumer<LocationProvider>(builder: (context, location,  child){
       return Scaffold(
         appBar:  AppBarContainerWidget(title: LocaleKeys.locationTitle.tr()),
-        body: location.isLoading == true ? LoadingScreen() : ExpandableBottomSheet(
+        body: location.isLoading == true ? LoadingScreen() : ExpandableBottomSheetCustom(
           key: key,
-          onIsContractedCallback: () => print('contracted'),
-          onIsExtendedCallback: () => print('extended'),
-          animationDurationExtend: Duration(milliseconds: 500),
-          animationDurationContract: Duration(milliseconds: 250),
-          animationCurveExpand: Curves.bounceOut,
-          animationCurveContract: Curves.ease,
-          persistentContentHeight: 0, // do rong khi keo xuong
+          // onIsContractedCallback: () => print('contracted'),
+          // onIsExtendedCallback: () => print('extended'),
+          // animationDurationExtend: Duration(milliseconds: 500),
+          // animationDurationContract: Duration(milliseconds: 250),
+          // animationCurveExpand: Curves.bounceOut,
+          // animationCurveContract: Curves.ease,
+          // persistentContentHeight: 0, // do rong khi keo xuong
 
           background: Stack(
             children: [
@@ -359,9 +359,9 @@ class _LocationScreenState extends State<LocationScreen> {
                             setState(() {
                               districtName = value;
                             });
-                          Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                          await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                          Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                          // Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                          // await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                          // Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
                     }
                     ));
                   }),
@@ -496,7 +496,9 @@ class _LocationScreenState extends State<LocationScreen> {
                   child: Text(LocaleKeys.notFount.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
                 ),)],
               )
-          ),
+          ), callbackPersistentContentHeight: (double e) {
+            print(e);
+        },
         ),
       );
     });

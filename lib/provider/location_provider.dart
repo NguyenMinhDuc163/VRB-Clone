@@ -23,8 +23,8 @@ class LocationProvider extends ChangeNotifier{
   LatLng currentLocation = LatLng(21.0014109, 105.8046842);
   int selectedButtonIndex = 0;
   int index = 0;
-  GoogleMapController? mapController;
-  Completer<GoogleMapController> controller = Completer();
+  // GoogleMapController? mapController;
+  // Completer<GoogleMapController> controller = Completer();
   Set<Polyline> polylines = {};
   late BitmapDescriptor customMarker;
 

@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/dialog_provider.dart';
-
+import 'package:remove_diacritic/remove_diacritic.dart';
 class SearchLocationWidget extends SearchDelegate{
 
 
   List<String> searchTerms ;
   Function(String) onSelect;
-  late FocusNode _focusNode;
-  SearchLocationWidget({required this.searchTerms, required this.onSelect}){
-    _focusNode = FocusNode();
-  }
+  SearchLocationWidget({required this.searchTerms, required this.onSelect});
 
 
   @override
@@ -19,7 +17,7 @@ class SearchLocationWidget extends SearchDelegate{
     return [
       IconButton(onPressed: (){
         query = '';
-      }, icon: Icon(Icons.clear))
+      }, icon: Icon(FontAwesomeIcons.deleteLeft))
     ];
   }
 
@@ -33,9 +31,11 @@ class SearchLocationWidget extends SearchDelegate{
   @override
   Widget buildResults(BuildContext context) {
     List<String> mathQuery = [];
-    for(var x in searchTerms){
-      if(x.toLowerCase().contains(query.toLowerCase())){
-        mathQuery.add(x);
+
+    for(var item in searchTerms){
+      if(removeDiacritics(item.toLowerCase()).contains(query.toLowerCase()) || item.toLowerCase().contains(query.toLowerCase() )){
+
+        mathQuery.add(item);
       }
     }
     return ListView.builder(
@@ -47,6 +47,9 @@ class SearchLocationWidget extends SearchDelegate{
               // Gọi hàm callback khi người dùng chọn một từ
               onSelect(res);
               // Đóng SearchLocationWidget và trả về từ đã chọn
+              Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+              await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+              Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
               close(context, res);
             },
             child: ListTile(
@@ -59,9 +62,10 @@ class SearchLocationWidget extends SearchDelegate{
   @override
   Widget buildSuggestions(BuildContext context) {
     List<String> mathQuery = [];
-    for(var x in searchTerms){
-      if(x.toLowerCase().contains(query.toLowerCase())){
-        mathQuery.add(x);
+
+    for(var item in searchTerms){
+      if(removeDiacritics(item.toLowerCase()).contains(query.toLowerCase()) || item.toLowerCase().contains(query.toLowerCase() )){
+        mathQuery.add(item);
       }
     }
     return ListView.builder(
@@ -69,10 +73,13 @@ class SearchLocationWidget extends SearchDelegate{
         itemBuilder: (context, index){
           var res = mathQuery[index];
           return InkWell(
-            onTap: () {
+            onTap: () async {
               // Gọi hàm callback khi người dùng chọn một từ
               onSelect(res);
               // Đóng SearchLocationWidget và trả về từ đã chọn
+              Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+              await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+              Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
               close(context, res);
             },
             child: ListTile(
