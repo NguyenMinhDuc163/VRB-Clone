@@ -96,6 +96,10 @@ class CodegenLoader extends AssetLoader {
     'downloadQR': 'Download QR image',
     'payInterest': 'Pay Interest',
     'dataEmpty': 'There is currently no data available',
+
+    //
+  'searchLocal' : 'Search',
+  'notFoundData': 'No data'
   };
   static  Map<String, dynamic> vi = {
     'userName': 'Tên Đăng Nhập',
@@ -179,7 +183,8 @@ class CodegenLoader extends AssetLoader {
     'month': 'Tháng',
     'chooseProduct': 'Chọn loại sản phẩm',
     'chooseMoney': 'Chọn loại tiền',
-
+    'searchLocal' : 'Tìm kiếm',
+    'notFoundData': 'Không có dữ liệu',
   };
   static  Map<String, Map<String, dynamic>> mapLocales = {
     "en": en,

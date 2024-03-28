@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_button/flutter_animated_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,8 +12,8 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/provider/location_provider.dart';
+import 'package:vrb_client/representation/screens/search_location_screen.dart';
 import 'package:vrb_client/representation/widgets/custom_button_sheet_widger.dart';
-import 'package:vrb_client/representation/screens/search_local_screen.dart';
 
 import '../../core/constants/assets_path.dart';
 import '../../core/constants/dimension_constants.dart';
@@ -26,7 +25,6 @@ import '../../network/netword_request.dart';
 import '../../provider/dialog_provider.dart';
 import '../widgets/address_form_widget.dart';
 import '../widgets/app_bar_continer_widget.dart';
-import '../widgets/search_location_widget.dart';
 import '../widgets/select_local_widget.dart';
 import 'loading_screen.dart';
 
@@ -206,83 +204,34 @@ class _LocationScreenState extends State<LocationScreen> {
                   width: size.width -
                       (2 *
                           kMinPadding), // Sử dụng chiều rộng của màn hình trừ đi khoảng cách mép trái và phải
-                  // child: SelectLocalWidget(
-                  //   defaultHint: LocaleKeys.province.tr(),
-                  //   selectedValue: location.provinceChose,
-                  //   items: location.locations.keys.toList(),
-                  //   onChanged: (value) async {
-                  //     Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
-                  //     List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
-                  //       (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
-                  //     location.clearPolylines();
-                  //     //TODO fix provider
-                  //     Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                  //     await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                  //     Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                  //     location.setProvinceChose(value!);
-                  //     location.setDistricts(newDistricts);
-                  //     location.setAddress(newAddresses);
-                  //     location.setMarker(location.setMarkers(0));
-                  //
-                  //   },
-                  //   onValueChanged: (value) {
-                  //       location.setDistrictChose(null); // Reset giá trị của dopdown thứ hai khi dropdown thứ nhất thay đổi
-                  //   },
-                  // ),
                   child: _buildButtonLocal(
+
                       provinceName , (){
                     List<String> data = Provider.of<LocationProvider>(context, listen: false).locations
                         .entries.map((e){
                       return e.value.regionName;
                     }).toList();
-                    print(location);
+                    Navigator.of(context).pushNamed(SearchLocationScreen.routeName,
+                      arguments: {'searchTerms': data, 'titleField': LocaleKeys.province.tr()}, ).then((value) async {
+                      print(value);
+                      Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
+                      List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
+                        (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
+                      location.clearPolylines();
+                      //TODO fix provider
+                      location.setProvinceChose(value.toString());
+                      location.setDistricts(newDistricts);
+                      location.setAddress(newAddresses);
+                      location.setMarker(location.setMarkers(0));
+                      setState(() {
+                        provinceName = value.toString();
+                        districtName = LocaleKeys.district.tr();
+                      });
+                      Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                      await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                      Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                    });
 
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => SearchLocalScreen(searchTerms: data, onTap: (String value) async {
-                    //       print(value);
-                    //       Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
-                    //       List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
-                    //         (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
-                    //       location.clearPolylines();
-                    //       //TODO fix provider
-                    //       location.setProvinceChose(value!);
-                    //       location.setDistricts(newDistricts);
-                    //       location.setAddress(newAddresses);
-                    //       location.setMarker(location.setMarkers(0));
-                    //       setState(() {
-                    //         provinceName = value;
-                    //         districtName = LocaleKeys.district.tr();
-                    //       });
-                    //       Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                    //       await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                    //       Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                    //     }),
-                    //   ),
-                    // );
-
-                    showSearch(context: context, delegate: SearchLocationWidget(
-                        searchTerms: data, onSelect: (String value) async {
-                          print(value);
-                          Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
-                          List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
-                            (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
-                          location.clearPolylines();
-                          //TODO fix provider
-                          location.setProvinceChose(value!);
-                          location.setDistricts(newDistricts);
-                          location.setAddress(newAddresses);
-                          location.setMarker(location.setMarkers(0));
-                          setState(() {
-                            provinceName = value;
-                            districtName = LocaleKeys.district.tr();
-                          });
-                          Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                          await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                          Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                    },
-                    ));
                   }),
                 ),
               ),
@@ -291,24 +240,7 @@ class _LocationScreenState extends State<LocationScreen> {
                     40, // Đặt vị trí của SelectLocalWidget tiếp theo
                 left: kMinPadding,
                 width: size.width -
-                    (2 * kMinPadding), // Đặt chiều rộng cho SelectLocalWidget
-                // child: SelectLocalWidget(
-                //   defaultHint: LocaleKeys.district.tr(),
-                //   selectedValue: location.districtChose,
-                //   items: location.districts.keys.toList(),
-                //   onChanged: (value) async {
-                //     List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
-                //       (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
-                //         location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
-                //     Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                //     await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                //     Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                //       location.setDistrictChose(value);
-                //       location.setMarkers(1);
-                //       location.setAddress(newAddresses);
-                //       location.setMarker(location.setMarkers(location.index));
-                //   },
-                // ),
+                    (2 * kMinPadding),
                 child: Container(
                   padding: EdgeInsets.all(10),
                   width: size.width -
@@ -320,50 +252,44 @@ class _LocationScreenState extends State<LocationScreen> {
                       return e.value.districtName;
                     }).toList();
                     print(location);
+                    Navigator.of(context).pushNamed(SearchLocationScreen.routeName,
+                        arguments: {'searchTerms': data, 'titleField': LocaleKeys.district.tr()}).then((value) async {
+                      print(value);
 
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => SearchLocalScreen(searchTerms: data, onTap: (String value) async {
-                    //
+                      List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
+                        (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
+                          location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
+                      location.setDistrictChose(value.toString());
+                      location.setMarkers(1);
+                      location.setAddress(newAddresses);
+                      location.setMarker(location.setMarkers(location.index));
+                      setState(() {
+                        districtName = value.toString();
+                      });
+                      Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                      await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                      Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                    });
+
+                    // showSearch(context: context, delegate: SearchLocationWidget(
+                    //     searchTerms:data, onSelect: (String value) async {
                     //       print(value);
                     //
                     //       List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
                     //         (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
                     //           location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
-                    //       location.setDistrictChose(value);
-                    //       location.setMarkers(1);
-                    //       location.setAddress(newAddresses);
-                    //       location.setMarker(location.setMarkers(location.index));
-                    //       setState(() {
-                    //         districtName = value;
-                    //       });
-                    //       Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                    //       await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                    //       Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                    //     },),
-                    //   ),
-                    // );
-
-                    showSearch(context: context, delegate: SearchLocationWidget(
-                        searchTerms:data, onSelect: (String value) async {
-                          print(value);
-
-                          List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
-                            (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
-                              location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
-                            location.setDistrictChose(value);
-                            location.setMarkers(1);
-                            location.setAddress(newAddresses);
-                            location.setMarker(location.setMarkers(location.index));
-                            setState(() {
-                              districtName = value;
-                            });
-                          // Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                          // await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                          // Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                    }
-                    ));
+                    //         location.setDistrictChose(value);
+                    //         location.setMarkers(1);
+                    //         location.setAddress(newAddresses);
+                    //         location.setMarker(location.setMarkers(location.index));
+                    //         setState(() {
+                    //           districtName = value;
+                    //         });
+                    //       // Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                    //       // await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                    //       // Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                    // }
+                    // ));
                   }),
                 ),
               ),

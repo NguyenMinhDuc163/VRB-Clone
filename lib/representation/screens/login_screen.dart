@@ -16,7 +16,6 @@ import '../../provider/location_provider.dart';
 import '../widgets/bottom_bar_widget.dart';
 import 'package:local_auth/local_auth.dart';
 
-import '../widgets/search_location_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

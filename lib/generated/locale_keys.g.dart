@@ -74,5 +74,7 @@ abstract class  LocaleKeys {
   static const month = 'month';
   static const chooseProduct = 'chooseProduct';
   static const chooseMoney = 'chooseMoney';
+  static const searchLocal = 'searchLocal';
+  static const notFoundData = 'notFoundData';
 
 }
