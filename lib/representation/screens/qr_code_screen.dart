@@ -49,13 +49,16 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                     width: 50,
                     height: 45,
                     image: Image.asset(AssetPath.vietQR).image,
-                    fit: BoxFit.cover, // hoặc BoxFit.contain tùy theo yêu cầu của bạn
+                    fit: BoxFit
+                        .cover, // hoặc BoxFit.contain tùy theo yêu cầu của bạn
                   ),
                 ),
-
-                Expanded(child: Column(
+                Expanded(
+                    child: Column(
                   children: [
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Image.asset(AssetPath.logo_1x),
                   ],
                 )),
@@ -74,9 +77,17 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
 
             Column(
               children: [
-                SizedBox(height: 20,),
-                Text(LocaleKeys.instruct1.tr(), style: TextStyle(fontSize: 14, color: Colors.white),),
-                Text(LocaleKeys.instruct2.tr(), style: TextStyle(fontSize: 14, color: Colors.white),),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  LocaleKeys.instruct1.tr(),
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
+                Text(
+                  LocaleKeys.instruct2.tr(),
+                  style: TextStyle(fontSize: 14, color: Colors.white),
+                ),
                 // Icon(FontAwesomeIcons.boltLightning)
               ],
             ),
@@ -92,18 +103,23 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
                   )),
             ),
             Expanded(
-              flex: 1,
-              child: Center(
-                child: (result != null)
-                    ? Text(
-                    '${LocaleKeys.showCode.tr()} ${describeEnum(result!.format)}   : ${result!.code}', style: TextStyle(fontSize: 14, color: Colors.white))
-                    : Text(LocaleKeys.findCode.tr(), style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold))
-            )),
-            Expanded(child: Row(
+                flex: 1,
+                child: Center(
+                    child: (result != null)
+                        ? Text(
+                            '${LocaleKeys.showCode.tr()} ${describeEnum(result!.format)}   : ${result!.code}',
+                            style: TextStyle(fontSize: 14, color: Colors.white))
+                        : Text(LocaleKeys.findCode.tr(),
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)))),
+            Expanded(
+                child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildButton((){}, LocaleKeys.createQR.tr()),
-                _buildButton((){}, LocaleKeys.downloadQR.tr()),
+                _buildButton(() {}, LocaleKeys.createQR.tr()),
+                _buildButton(() {}, LocaleKeys.downloadQR.tr()),
               ],
             ))
           ],
@@ -119,25 +135,35 @@ class _QRCodeScreenState extends State<QRCodeScreen> {
       child: ElevatedButton(
         onPressed: onTap,
         style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Màu chữ của nút
-          backgroundColor: MaterialStateProperty.all<Color>(Colors.black), // Màu nền của nút
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16)), // Khoảng cách giữa các cạnh của nút và văn bản bên trong
-          shape: MaterialStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))), // Đường viền cong của nút
+          foregroundColor:
+              MaterialStateProperty.all<Color>(Colors.white), // Màu chữ của nút
+          backgroundColor:
+              MaterialStateProperty.all<Color>(Colors.black), // Màu nền của nút
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(
+              16)), // Khoảng cách giữa các cạnh của nút và văn bản bên trong
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+              RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8))), // Đường viền cong của nút
           side: MaterialStateProperty.resolveWith<BorderSide>(
-                (Set<MaterialState> states) {
+            (Set<MaterialState> states) {
               if (states.contains(MaterialState.disabled)) {
-                return BorderSide(color: Colors.grey); // Màu viền khi nút bị vô hiệu hóa
+                return BorderSide(
+                    color: Colors.grey); // Màu viền khi nút bị vô hiệu hóa
               }
-              return BorderSide(color: Colors.white); // Màu viền mặc định khi nút được kích hoạt
+              return BorderSide(
+                  color:
+                      Colors.white); // Màu viền mặc định khi nút được kích hoạt
             },
           ),
         ),
-        child: Text(name),
+        child: Text(name,
+            overflow: TextOverflow.ellipsis, // Xử lý overflow
+            textAlign: TextAlign.center, // Căn giữa
+            maxLines: 2), // Số dòng tối đa),
       ),
     );
   }
-
-
 
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;

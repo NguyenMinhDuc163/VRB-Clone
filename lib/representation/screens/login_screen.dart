@@ -12,8 +12,11 @@ import 'package:vrb_client/representation/screens/main_app.dart';
 import '../../generated/locale_keys.g.dart';
 import '../../models/user_model.dart';
 import '../../provider/dialog_provider.dart';
+import '../../provider/location_provider.dart';
 import '../widgets/bottom_bar_widget.dart';
 import 'package:local_auth/local_auth.dart';
+
+import '../widgets/search_location_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -279,7 +282,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                   style: TextStyle(
                                       fontSize: 12, color: Colors.blue.shade900),
                                 ),
-                                onTap: () {},
+                                onTap: () {
+
+                                },
                               ),
                             ),
                             Container(

@@ -13,6 +13,7 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/provider/location_provider.dart';
+import 'package:vrb_client/representation/screens/search_local_screen.dart';
 
 import '../../core/constants/assets_path.dart';
 import '../../core/constants/dimension_constants.dart';
@@ -24,6 +25,7 @@ import '../../network/netword_request.dart';
 import '../../provider/dialog_provider.dart';
 import '../widgets/address_form_widget.dart';
 import '../widgets/app_bar_continer_widget.dart';
+import '../widgets/search_location_widget.dart';
 import '../widgets/select_local_widget.dart';
 import 'loading_screen.dart';
 
@@ -39,6 +41,8 @@ class _LocationScreenState extends State<LocationScreen> {
   final Location _locationController = Location();
   GoogleMapController? mapController;
   Completer<GoogleMapController> _controller = Completer();
+  String provinceName = LocaleKeys.province.tr();
+  String districtName = LocaleKeys.district.tr();
 
   @override
   void initState() {
@@ -104,12 +108,45 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 
+  Widget _buildButtonLocal(String name, Function() onTap){
+    return  Container(
+      height: 50,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3), // Điều chỉnh vị trí của bóng
+          ),
+        ],
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Row(
+          mainAxisAlignment:
+          MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+                child: Text(name,
+                  style: TextStyle(fontSize: 18, fontWeight:
+                  FontWeight.bold),
+                )),
+            Image.asset(AssetPath.icoDownBold),
+          ],
+        ),
+      ),
+    );
 
+  }
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     ScrollController scrollController = ScrollController();
-
+    int isCheckChoose = 0;
 
     double distanceBetween(String latitude, String longitude){
       return Geolocator.distanceBetween
@@ -165,33 +202,88 @@ class _LocationScreenState extends State<LocationScreen> {
                 top: kMinPadding,
                 left: kMinPadding,
                 child: Container(
+                  padding: EdgeInsets.all(10),
                   width: size.width -
                       (2 *
                           kMinPadding), // Sử dụng chiều rộng của màn hình trừ đi khoảng cách mép trái và phải
-                  child: SelectLocalWidget(
-                    defaultHint: LocaleKeys.province.tr(),
-                    selectedValue: location.provinceChose,
-                    items: location.locations.keys.toList(),
-                    onChanged: (value) async {
-                      Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
-                      List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
-                        (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
-                      location.clearPolylines();
-                      //TODO fix provider
-                      Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                      await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                      Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                      location.setProvinceChose(value!);
-                      location.setDistricts(newDistricts);
-                      location.setAddress(newAddresses);
-                      location.setMarker(location.setMarkers(0));
+                  // child: SelectLocalWidget(
+                  //   defaultHint: LocaleKeys.province.tr(),
+                  //   selectedValue: location.provinceChose,
+                  //   items: location.locations.keys.toList(),
+                  //   onChanged: (value) async {
+                  //     Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
+                  //     List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
+                  //       (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
+                  //     location.clearPolylines();
+                  //     //TODO fix provider
+                  //     Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                  //     await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                  //     Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                  //     location.setProvinceChose(value!);
+                  //     location.setDistricts(newDistricts);
+                  //     location.setAddress(newAddresses);
+                  //     location.setMarker(location.setMarkers(0));
+                  //
+                  //   },
+                  //   onValueChanged: (value) {
+                  //       location.setDistrictChose(null); // Reset giá trị của dopdown thứ hai khi dropdown thứ nhất thay đổi
+                  //   },
+                  // ),
+                  child: _buildButtonLocal(
+                      provinceName , (){
+                    List<String> data = Provider.of<LocationProvider>(context, listen: false).locations
+                        .entries.map((e){
+                      return e.value.regionName;
+                    }).toList();
+                    print(location);
 
-                    },
-                    onValueChanged: (value) {
-                        location.setDistrictChose(null); // Reset giá trị của dopdown thứ hai khi dropdown thứ nhất thay đổi
-                    },
-                  ),
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => SearchLocalScreen(searchTerms: data, onTap: (String value) async {
+                    //       print(value);
+                    //       Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
+                    //       List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
+                    //         (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
+                    //       location.clearPolylines();
+                    //       //TODO fix provider
+                    //       location.setProvinceChose(value!);
+                    //       location.setDistricts(newDistricts);
+                    //       location.setAddress(newAddresses);
+                    //       location.setMarker(location.setMarkers(0));
+                    //       setState(() {
+                    //         provinceName = value;
+                    //         districtName = LocaleKeys.district.tr();
+                    //       });
+                    //       Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                    //       await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                    //       Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                    //     }),
+                    //   ),
+                    // );
 
+                    showSearch(context: context, delegate: SearchLocationWidget(
+                        searchTerms: data, onSelect: (String value) async {
+                          print(value);
+                          Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
+                          List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
+                            (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
+                          location.clearPolylines();
+                          //TODO fix provider
+                          location.setProvinceChose(value!);
+                          location.setDistricts(newDistricts);
+                          location.setAddress(newAddresses);
+                          location.setMarker(location.setMarkers(0));
+                          setState(() {
+                            provinceName = value;
+                            districtName = LocaleKeys.district.tr();
+                          });
+                          Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                          await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                          Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                    },
+                    ));
+                  }),
                 ),
               ),
               Positioned(
@@ -200,22 +292,79 @@ class _LocationScreenState extends State<LocationScreen> {
                 left: kMinPadding,
                 width: size.width -
                     (2 * kMinPadding), // Đặt chiều rộng cho SelectLocalWidget
-                child: SelectLocalWidget(
-                  defaultHint: LocaleKeys.district.tr(),
-                  selectedValue: location.districtChose,
-                  items: location.districts.keys.toList(),
-                  onChanged: (value) async {
-                    List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
-                      (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
-                        location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
-                    Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                    await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                    Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                      location.setDistrictChose(value);
-                      location.setMarkers(1);
-                      location.setAddress(newAddresses);
-                      location.setMarker(location.setMarkers(location.index));
-                  },
+                // child: SelectLocalWidget(
+                //   defaultHint: LocaleKeys.district.tr(),
+                //   selectedValue: location.districtChose,
+                //   items: location.districts.keys.toList(),
+                //   onChanged: (value) async {
+                //     List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
+                //       (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
+                //         location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
+                //     Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                //     await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                //     Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                //       location.setDistrictChose(value);
+                //       location.setMarkers(1);
+                //       location.setAddress(newAddresses);
+                //       location.setMarker(location.setMarkers(location.index));
+                //   },
+                // ),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  width: size.width -
+                      (2 *
+                          kMinPadding),
+                  child: _buildButtonLocal(districtName, (){
+                    List<String> data = Provider.of<LocationProvider>(context, listen: false).districts
+                        .entries.map((e){
+                      return e.value.districtName;
+                    }).toList();
+                    print(location);
+
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => SearchLocalScreen(searchTerms: data, onTap: (String value) async {
+                    //
+                    //       print(value);
+                    //
+                    //       List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
+                    //         (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
+                    //           location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
+                    //       location.setDistrictChose(value);
+                    //       location.setMarkers(1);
+                    //       location.setAddress(newAddresses);
+                    //       location.setMarker(location.setMarkers(location.index));
+                    //       setState(() {
+                    //         districtName = value;
+                    //       });
+                    //       Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                    //       await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                    //       Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                    //     },),
+                    //   ),
+                    // );
+
+                    showSearch(context: context, delegate: SearchLocationWidget(
+                        searchTerms:data, onSelect: (String value) async {
+                          print(value);
+
+                          List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
+                            (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
+                              location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
+                            location.setDistrictChose(value);
+                            location.setMarkers(1);
+                            location.setAddress(newAddresses);
+                            location.setMarker(location.setMarkers(location.index));
+                            setState(() {
+                              districtName = value;
+                            });
+                          Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+                          await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
+                          Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                    }
+                    ));
+                  }),
                 ),
               ),
             ],
@@ -277,8 +426,6 @@ class _LocationScreenState extends State<LocationScreen> {
                             location.setMarkers(0);
                             print("Loi duoc goi $e");
                           }
-
-                          // print(address[0].isEmpty && address[1].isEmpty);
                         }, 0)),
                         Expanded(child: _buildButton('ATM', () async {
                           if(location.provinceChose != null){
@@ -329,7 +476,6 @@ class _LocationScreenState extends State<LocationScreen> {
                 controller: scrollController,
                 children:  (Provider.of<LocationProvider>(context, listen: false).address[location.index].isNotEmpty) ?
                 Provider.of<LocationProvider>(context, listen: false).address[(location.index != 0 || location.index != 1) ? location.index : 0].entries.map((e) {
-                  print(Provider.of<LocationProvider>(context, listen: false).address.isEmpty);
                   return GestureDetector(
                     onTap: () {
                       //TODO dang lay gt default
@@ -354,5 +500,6 @@ class _LocationScreenState extends State<LocationScreen> {
         ),
       );
     });
+
   }
 }

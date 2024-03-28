@@ -68,8 +68,8 @@ class LocationProvider extends ChangeNotifier{
         ImageConfiguration(size: Size(100, 100)), AssetPath.logoBankVRB)
         .then((descriptor) {
         customMarker = descriptor;
+        notifyListeners();
     });
-    notifyListeners();
   }
 
   Set<Marker> setMarkers(int index) {
