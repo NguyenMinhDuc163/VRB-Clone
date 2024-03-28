@@ -55,6 +55,8 @@ dependencies:
   local_auth: ^2.2.0
   easy_localization: ^3.0.5
   flutter_localization: ^0.2.0
+  unorm_dart: ^0.3.0
+  remove_diacritic: ^0.9.0
 
 dev_dependencies:
   flutter_test:
