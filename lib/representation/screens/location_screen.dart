@@ -270,26 +270,6 @@ class _LocationScreenState extends State<LocationScreen> {
                       await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
                       Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
                     });
-
-                    // showSearch(context: context, delegate: SearchLocationWidget(
-                    //     searchTerms:data, onSelect: (String value) async {
-                    //       print(value);
-                    //
-                    //       List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
-                    //         (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
-                    //           location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
-                    //         location.setDistrictChose(value);
-                    //         location.setMarkers(1);
-                    //         location.setAddress(newAddresses);
-                    //         location.setMarker(location.setMarkers(location.index));
-                    //         setState(() {
-                    //           districtName = value;
-                    //         });
-                    //       // Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                    //       // await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-                    //       // Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
-                    // }
-                    // ));
                   }),
                 ),
               ),

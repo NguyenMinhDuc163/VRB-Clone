@@ -1,106 +1,147 @@
+import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SearchBarApp extends StatefulWidget {
-  const SearchBarApp({super.key});
-
-  @override
-  State<SearchBarApp> createState() => _SearchBarAppState();
+void main() {
+  runApp(MyApp());
 }
 
-class _SearchBarAppState extends State<SearchBarApp> {
-  final TextEditingController _searchController = TextEditingController();
-  bool isSearchClicked = false;
-  String searchText = '';
-  List<String> items = [
-    'Items 1',
-    'Messi',
-    'Ronaldo',
-    'Virat Kohli',
-    '2',
-    'Rock',
-    'Elon Musk',
-  ];
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Persistent BottomSheet',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: HomeScreen(),
+    );
+  }
+}
 
-  List<String> filteredItems = [];
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
+  int size = 0;
+  bool isKeyboard = false;
+  bool isSubmit = false;
+  TextEditingController _controller = TextEditingController();
+  TextInputType? keyboardType;
+  FocusNode _focusNode = FocusNode();
   @override
   void initState() {
     super.initState();
-    filteredItems = List.from(items);
-  }
-
-  void _onSearchChanged(String value) {
-    setState(() {
-      searchText = value;
-      myFilterItems();
-    });
-  }
-
-  void myFilterItems() {
-    if (searchText.isEmpty) {
-      filteredItems = List.from(items);
-    } else {
-      filteredItems = items
-          .where(
-              (item) => item.toLowerCase().contains(searchText.toLowerCase()))
-          .toList();
-    }
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    if (bottomInset > 0) {
+      // Bàn phím được mở
+      setState(() {
+        size = 0;
+      });
+      print('Keyboard opened');
+    } else {
+      setState(() {
+        if(keyboardType == TextInputType.text){
+          size = 345;
+        }
+        else{
+          size = 250;
+        }
+      });
+      // Bàn phím được đóng
+      print('Keyboard closed');
+    }
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        /* if the search button is clickable then show
-         the container otherwise text "Search Bar"*/
-        title: isSearchClicked
-            ? Container(
-          height: 50,
-          margin: EdgeInsets.symmetric(vertical: 20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            color: Colors.grey.shade200,
-            // thay doi mau vien
-            border: Border.all(color: Colors.grey, width: 1.0),
-          ),
-          child: TextField(
-            controller: _searchController,
-            onChanged: _onSearchChanged,
-            decoration: const InputDecoration(
-              hintText: 'Tìm kiếm',
-              hintStyle: TextStyle(fontSize: 18),
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
+      resizeToAvoidBottomInset: false,
+      body: ExpandableBottomSheet(
+        background: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              SizedBox(height: 100),
+              TextField(
+                focusNode: _focusNode,
+                textInputAction: TextInputAction.go,
+                controller: _controller,
+                keyboardType: (isKeyboard) ? TextInputType.text : TextInputType.number,
+                onSubmitted: (value){
+                  keyboardType = (isKeyboard) ? TextInputType.text : TextInputType.number;
+                  print("day la $keyboardType");
+                },
+                decoration: InputDecoration(
+                  labelText: 'Nhap du lieu',
+                ),
               ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: 12.0), ),
+            ],
           ),
-        )
-            : const Text("Search Bar"),
-        // actions: [
-        //   IconButton(
-        //     onPressed: () {
-        //       setState(() {
-        //         isSearchClicked = !isSearchClicked;
-        //         if (!isSearchClicked) {
-        //           _searchController.clear();
-        //           myFilterItems();
-        //         }
-        //       });
-        //     },
-        //     icon: Icon(isSearchClicked ? Icons.close : Icons.search),
-        //   )
-        // ],
+        ),
+        expandableContent: Container(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          height: size.toDouble(),
+          color: Colors.grey.shade200,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    child: InkWell(
+                      onTap: (){
+                        setState(() {
+                          isKeyboard = !isKeyboard;
+                          print(isKeyboard);
+                        });
+                      },
+                      child: Icon(FontAwesomeIcons.keyboard, size: 30,),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      // _focusNode.unfocus();
+                      // setState(() {
+                      //   if(keyboardType == TextInputType.text){
+                      //     size = 340;
+                      //   }
+                      //   else{
+                      //     size = 245;
+                      //   }
+                      // });
+                    },
+                    child: Icon(FontAwesomeIcons.xmark),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+        // persistentHeader: Container(
+        //   color: Colors.red,
+        // ),
+        persistentContentHeight: size.toDouble(),
       ),
-      // body parts
-      body: ListView.builder(
-          itemCount: filteredItems.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(filteredItems[index]),
-            );
-          }),
     );
+
+
   }
 }

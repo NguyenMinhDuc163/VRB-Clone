@@ -220,6 +220,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 children: [
                                   Expanded(
                                     child: TextField(
+                                      keyboardType: TextInputType.number,
                                       decoration: InputDecoration(
                                           hintText: LocaleKeys.userName.tr(),
                                           border: InputBorder.none),
