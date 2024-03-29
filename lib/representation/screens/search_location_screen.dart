@@ -86,7 +86,7 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
               Expanded(
                 child: SingleChildScrollView(
                   child: (filteredItems.isEmpty || widget.searchTerms.isEmpty)
-                      ? const Center(child: Text(LocaleKeys.notFoundData, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ?  Center(child: Text(LocaleKeys.notFoundData.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),)
                       :ListView.builder(
                     shrinkWrap: true,
@@ -129,8 +129,8 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
       child: TextField(
         controller: _searchController,
         onChanged: _onSearchChanged,
-        decoration: const InputDecoration(
-          hintText: LocaleKeys.searchLocal,
+        decoration: InputDecoration(
+          hintText: LocaleKeys.searchLocal.tr(),
           hintStyle: TextStyle(fontSize: 18),
           prefixIcon: Icon(Icons.search),
           border: OutlineInputBorder(
