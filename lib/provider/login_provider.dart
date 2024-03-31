@@ -31,7 +31,7 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setkeyboardType(TextInputType type){
+  void setKeyboardType(TextInputType type){
     keyboardType = type;
     notifyListeners();
   }

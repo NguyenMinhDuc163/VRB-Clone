@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
+import 'package:vrb_client/provider/login_provider.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
 
 import '../../generated/locale_keys.g.dart';
@@ -16,6 +17,7 @@ import '../../provider/location_provider.dart';
 import '../widgets/bottom_bar_widget.dart';
 import 'package:local_auth/local_auth.dart';
 
+import '../widgets/text_field_keyboard_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -31,12 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _ischecklogin = false;
   late final LocalAuthentication auth;
   bool _supportState = false;
-
-
+  final TextEditingController userNameController  = TextEditingController();
+  final TextEditingController passwordController  = TextEditingController();
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   final FocusNode _focusNode = FocusNode();
   void _toggleImage() {
-
     setState(() {
       _isPressed = !_isPressed;
     });
@@ -67,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _authenticate() async {
-    try{
+    try {
       bool authenticated = await auth.authenticate(
         localizedReason: 'Authenticate for testing',
         options: const AuthenticationOptions(
@@ -75,25 +76,26 @@ class _LoginScreenState extends State<LoginScreen> {
           biometricOnly: true,
         ),
       );
-      if(authenticated){
-        Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+      if (authenticated) {
+        Provider.of<DialogProvider>(context, listen: false)
+            .showLoadingDialog(context);
         await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
-        Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+        Provider.of<DialogProvider>(context, listen: false)
+            .hideLoadingDialog(context);
         Navigator.of(context).pushNamed(MainApp.routeName);
-
-      }
-      else{
+      } else {
         print("khong thuc hien duoc");
       }
-    } catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
   Future<void> _getAvailableBiometrics() async {
-    List<BiometricType> availableBiometrics = await auth.getAvailableBiometrics();
+    List<BiometricType> availableBiometrics =
+        await auth.getAvailableBiometrics();
     print(availableBiometrics);
-    if(!mounted){
+    if (!mounted) {
       return;
     }
   }
@@ -101,10 +103,17 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      behavior: HitTestBehavior.translucent, // Cho phép GestureDetector bắt sự kiện trên toàn bộ khu vực widget
+      behavior: HitTestBehavior
+          .translucent, // Cho phép GestureDetector bắt sự kiện trên toàn bộ khu vực widget
       onTap: () {
         // Khi bên ngoài form được chạm, ẩn bàn phím bằng cách mất trọng tâm
         FocusScope.of(context).requestFocus(FocusNode());
+
+        setState(() {
+          Provider.of<LoginProvider>(context, listen: false).setVisibleButtonSheet(false);
+        });
+        Provider.of<LoginProvider>(context, listen: false).setCheckHeight(true);
+        Provider.of<LoginProvider>(context, listen: false).setKeyboardType(TextInputType.text);
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -142,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       GestureDetector(
                         //TODO language
                         // onTap: _toggleImage,
-                        onTap: (){
+                        onTap: () {
                           if (context.locale == Locale('vi')) {
                             context.setLocale(Locale('en'));
                           } else {
@@ -153,13 +162,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         },
                         child: Container(
-                          width: 65,
-                          height: 42,
-                          padding: EdgeInsets.all(8),
-                          child: !_isPressed
-                              ? _buildIconLanguage(AssetPath.icoVN, "VN")
-                              : _buildIconLanguage(AssetPath.icoAmerica, "EN")
-                        ),
+                            width: 65,
+                            height: 42,
+                            padding: EdgeInsets.all(8),
+                            child: !_isPressed
+                                ? _buildIconLanguage(AssetPath.icoVN, "VN")
+                                : _buildIconLanguage(
+                                    AssetPath.icoAmerica, "EN")),
                       ),
                     ],
                   ),
@@ -173,24 +182,28 @@ class _LoginScreenState extends State<LoginScreen> {
                               // Image.asset(AssetPath.avatar),
                               Consumer<UserModel>(
                                   builder: (context, user, child) {
-                                    return Container(
-                                      width: 80, // Đảm bảo kích thước của ảnh bằng nhau
-                                      height: 80,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Colors.white, // Màu nền của hình tròn
-                                      ),
-                                      child: ClipOval(
-                                        child: InkWell(
-                                          onTap: (){
-                                            Provider.of<UserModel>(context, listen: false).pickAndSetAvatar(context);
-                                          },
-                                          child: (user.avatar == AssetPath.avatar)
-                                            ? Image.asset(user.avatar)
-                                            : Image.file(File(user.avatar)),
-                                        ),
-                                      ),
-                                    );
+                                return Container(
+                                  width:
+                                      80, // Đảm bảo kích thước của ảnh bằng nhau
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color:
+                                        Colors.white, // Màu nền của hình tròn
+                                  ),
+                                  child: ClipOval(
+                                    child: InkWell(
+                                      onTap: () {
+                                        Provider.of<UserModel>(context,
+                                                listen: false)
+                                            .pickAndSetAvatar(context);
+                                      },
+                                      child: (user.avatar == AssetPath.avatar)
+                                          ? Image.asset(user.avatar)
+                                          : Image.file(File(user.avatar)),
+                                    ),
+                                  ),
+                                );
                               }),
                               const SizedBox(
                                 height: 5,
@@ -216,23 +229,23 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 height: kMediumPadding * 4,
                               ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: TextField(
-                                      keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
-                                          hintText: LocaleKeys.userName.tr(),
-                                          border: InputBorder.none),
-                                    ),
-                                  ),
-
-                                  IconButton(
-                                    icon: Icon(FontAwesomeIcons.user),
-                                    onPressed: _toggleVisibility,
-                                  ),
-                                ],
-                              ),
+                              // Row(
+                              //   children: [
+                              //     Expanded(
+                              //       child: TextField(
+                              //         keyboardType: TextInputType.number,
+                              //         decoration: InputDecoration(
+                              //             hintText: LocaleKeys.userName.tr(),
+                              //             border: InputBorder.none),
+                              //       ),
+                              //     ),
+                              //     IconButton(
+                              //       icon: Icon(FontAwesomeIcons.user),
+                              //       onPressed: _toggleVisibility,
+                              //     ),
+                              //   ],
+                              // ),
+                              TextFieldKeyboardWidget(icon: FontAwesomeIcons.user, hintText: LocaleKeys.userName.tr(), controller: userNameController,),
                               Container(
                                 height: 1, // Chiều cao của đường line
                                 color: Colors.grey, // Màu của đường line
@@ -247,24 +260,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
                     child: Column(
                       children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                obscureText: _obscureText,
-                                decoration:  InputDecoration(
-                                    hintText: LocaleKeys.passWord.tr(),
-                                    border: InputBorder.none),
-                              ),
-                            ),
-                            IconButton(
-                              icon: Icon(_obscureText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
-                              onPressed: _toggleVisibility,
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: TextField(
+                        //         obscureText: _obscureText,
+                        //         decoration: InputDecoration(
+                        //             hintText: LocaleKeys.passWord.tr(),
+                        //             border: InputBorder.none),
+                        //       ),
+                        //     ),
+                        //     IconButton(
+                        //       icon: Icon(_obscureText
+                        //           ? Icons.visibility
+                        //           : Icons.visibility_off),
+                        //       onPressed: _toggleVisibility,
+                        //     ),
+                        //   ],
+                        // ),
+                        TextFieldKeyboardWidget(icon: Icons.visibility, hintText: LocaleKeys.passWord.tr(), controller: passwordController,),
                         Container(
                           height: 1, // Chiều cao của đường line
                           color: Colors.grey, // Màu của đường line
@@ -280,11 +294,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   LocaleKeys.register.tr(),
                                   style: TextStyle(
-                                      fontSize: 12, color: Colors.blue.shade900),
+                                      fontSize: 12,
+                                      color: Colors.blue.shade900),
                                 ),
-                                onTap: () {
-
-                                },
+                                onTap: () {},
                               ),
                             ),
                             Container(
@@ -292,7 +305,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: Text(
                                   LocaleKeys.forgot.tr(),
                                   style: TextStyle(
-                                      fontSize: 12, color: Colors.blue.shade900),
+                                      fontSize: 12,
+                                      color: Colors.blue.shade900),
                                 ),
                                 onTap: () {},
                               ),
@@ -323,9 +337,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                       Radius.circular(15))),
                               child: InkWell(
                                 onTap: () async {
-                                  checkLogin(context);Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
-                                      await Future.delayed(const Duration(milliseconds: 200)); // Đợi trong 2 giây
-                                      Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+                                  checkLogin(context);
+                                  Provider.of<DialogProvider>(context,
+                                          listen: false)
+                                      .showLoadingDialog(context);
+                                  await Future.delayed(const Duration(
+                                      milliseconds: 200)); // Đợi trong 2 giây
+                                  Provider.of<DialogProvider>(context,
+                                          listen: false)
+                                      .hideLoadingDialog(context);
                                   Navigator.of(context)
                                       .pushNamed(MainApp.routeName);
                                   setState(() {
@@ -333,13 +353,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   });
                                 },
                                 child: Align(
-                                    child:Text(
-                                            LocaleKeys.signIn.tr(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          )
-                                         ),
+                                    child: Text(
+                                  LocaleKeys.signIn.tr(),
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                )),
                               ),
                             ),
                             //TODO van tay
@@ -374,41 +393,108 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ],
         ),
+          bottomSheet: Consumer<LoginProvider>(builder: (context, keyboard, child){
+            return Visibility(
+              visible: keyboard.isCheckHeight,
+              replacement: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(250)),
+              child: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(350)),
+            );
+          },)
       ),
     );
   }
 
-  Widget _buildIconLanguage(String path, String name){
-    return Container(
-      padding: EdgeInsets.all(1),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.grey, // Màu viền
-          width: 2, // Độ dày của viền
+  Widget _buildButton(double height) {
+    return Consumer<LoginProvider>(builder: (context, keyboard,  child){
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        height: height,
+        color: Colors.grey.shade200,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  child: GestureDetector(
+                    onTap: (){
+                      keyboard.changeKeyboardType(context);
+                    },
+                    child: const Icon(
+                      FontAwesomeIcons.keyboard,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    keyboard.focusNode.unfocus();
+                    keyboard.setVisibleButtonSheet(false);
+                    keyboard.setCheckHeight(true);
+                    keyboard.setKeyboardType(TextInputType.text);
+                  },
+                  child: Icon(FontAwesomeIcons.xmark),
+                )
+              ],
+            ),
+          ],
         ),
-      ),
-      // width: 15,
-      // height: 15,
-      child:(name == "EN") ? Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Image.asset(path, fit: BoxFit.cover, width: 20, height: 20,),
-          Container(child: Text(name, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),))
-        ],
-      ): Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(child: Text(name, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),)),
-          Image.asset(path, fit: BoxFit.cover, width: 20, height: 20,),
-        ],
-      )
-    );
+      );
+    });
   }
+  Widget _buildIconLanguage(String path, String name) {
+    return Container(
+        padding: EdgeInsets.all(1),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.grey, // Màu viền
+            width: 2, // Độ dày của viền
+          ),
+        ),
+        // width: 15,
+        // height: 15,
+        child: (name == "EN")
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Image.asset(
+                    path,
+                    fit: BoxFit.cover,
+                    width: 20,
+                    height: 20,
+                  ),
+                  Container(
+                      child: Text(
+                    name,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ))
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      child: Text(
+                    name,
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  )),
+                  Image.asset(
+                    path,
+                    fit: BoxFit.cover,
+                    width: 20,
+                    height: 20,
+                  ),
+                ],
+              ));
+  }
+
   Future<void> checkLogin(BuildContext context) async {
-    Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
+    Provider.of<DialogProvider>(context, listen: false)
+        .showLoadingDialog(context);
     await Future.delayed(const Duration(milliseconds: 200)); // Đợi trong 2 giây
-    Provider.of<DialogProvider>(context, listen: false).hideLoadingDialog(context);
+    Provider.of<DialogProvider>(context, listen: false)
+        .hideLoadingDialog(context);
   }
 }

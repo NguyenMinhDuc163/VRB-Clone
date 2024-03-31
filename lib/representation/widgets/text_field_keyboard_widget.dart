@@ -6,8 +6,10 @@ import 'package:vrb_client/demo_button.dart';
 import 'package:vrb_client/provider/login_provider.dart';
 
 class TextFieldKeyboardWidget extends StatefulWidget {
-  const TextFieldKeyboardWidget({super.key});
-
+  const TextFieldKeyboardWidget({super.key, required this.icon, required this.hintText, required this.controller});
+  final IconData icon;
+  final String hintText;
+  final TextEditingController controller;
   @override
   State<TextFieldKeyboardWidget> createState() => _TextFieldKeyboardWidgetState();
 }
@@ -15,27 +17,39 @@ class TextFieldKeyboardWidget extends StatefulWidget {
 class _TextFieldKeyboardWidgetState extends State<TextFieldKeyboardWidget> {
   @override
   void dispose() {
-   // focusNode.dispose();
+    Provider.of<LoginProvider>(context, listen: false).focusNode.dispose();
     super.dispose();
   }
   @override
   Widget build(BuildContext context) {
     return Consumer<LoginProvider>(builder: (context, keyboard, child){
-      return Column(
+      return Row(
         children: [
-          TextField(
-            keyboardType: keyboard.keyboardType,
-            focusNode: keyboard.focusNode,
-            onTap: () {
-              keyboard.setVisibleButtonSheet(true);
-            },
-            onSubmitted: (val){
-              keyboard.setVisibleButtonSheet(false);
-              keyboard.setCheckHeight(true);
-              keyboard.setkeyboardType(TextInputType.text);
-            },
+          Expanded(
+            child: TextField(
+              controller: widget.controller,
+              keyboardType: keyboard.keyboardType,
+              focusNode: keyboard.focusNode,
+              onTap: () {
+                keyboard.setVisibleButtonSheet(true);
+              },
+              onSubmitted: (val){
+                keyboard.setVisibleButtonSheet(false);
+                keyboard.setCheckHeight(true);
+                keyboard.setKeyboardType(TextInputType.text);
+              },
+                decoration: InputDecoration(
+                    hintText: widget.hintText,
+                    border: InputBorder.none)
+            ),
           ),
+          IconButton(
+            icon: Icon(
+                widget.icon,),
 
+            // onPressed: _toggleVisibility,
+              onPressed: (){},
+          ),
         ],
       );
     });
