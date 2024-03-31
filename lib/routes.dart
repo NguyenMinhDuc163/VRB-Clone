@@ -24,7 +24,6 @@ final Map<String, WidgetBuilder> routes = {
   LocationScreen.routeName: (context) => const LocationScreen(),
   MainApp.routeName: (context) => const MainApp(),
   LoginScreen.routeName: (context) => const LoginScreen(),
-  // SearchLocationScreen.routeName: (context) => const SearchLocationScreen(),
 
 
   // noi tong hop ca routes

@@ -31,9 +31,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   int size = 0;
   bool isKeyboard = false;
   bool isSubmit = false;
-  TextEditingController _controller = TextEditingController();
   TextInputType? keyboardType;
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode1 = FocusNode();
+  final FocusNode _focusNode2 = FocusNode();
+  final TextEditingController _sharedController = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -43,8 +44,9 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _controller.dispose();
-    _focusNode.dispose();
+    _sharedController.dispose();
+    _focusNode1.dispose();
+    _focusNode2.dispose();
     super.dispose();
   }
 
@@ -65,10 +67,25 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
         else{
           size = 250;
         }
-      });
+      }
+      );
       // Bàn phím được đóng
       print('Keyboard closed');
+                      size = 250;
     }
+  }
+  void _toggleFocus() {
+    setState(() {
+      if (_focusNode1.hasFocus) {
+        // Nếu TextField 1 đang được focus, chuyển focus sang TextField 2
+        size = 250;
+        FocusScope.of(context).requestFocus(_focusNode2);
+      } else {
+        // Ngược lại, focus vào TextField 1
+        size = 350;
+        FocusScope.of(context).requestFocus(_focusNode1);
+      }
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -77,24 +94,54 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       body: ExpandableBottomSheet(
         background: Container(
           color: Colors.white,
-          child: Column(
-            children: [
-              SizedBox(height: 100),
-              TextField(
-                focusNode: _focusNode,
-                textInputAction: TextInputAction.go,
-                controller: _controller,
-                keyboardType: (isKeyboard) ? TextInputType.text : TextInputType.number,
-                onSubmitted: (value){
-                  keyboardType = (isKeyboard) ? TextInputType.text : TextInputType.number;
-                  print("day la $keyboardType");
-                },
-                decoration: InputDecoration(
-                  labelText: 'Nhap du lieu',
+          child: Padding(
+            padding: EdgeInsets.only(top: 100),
+            child: Stack(
+              children: [
+
+                TextField(
+                  focusNode: _focusNode2,
+                  textInputAction: TextInputAction.go,
+                  controller: _sharedController,
+                  keyboardType:  TextInputType.number,
+                  onChanged: (value){
+                    setState(() {
+                      keyboardType = TextInputType.number;
+                      size = 250;
+                    });
+                    print("day la $keyboardType");
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Nhap du lieu',
+                  ),
                 ),
-              ),
-            ],
-          ),
+                Container(
+                  color: Colors.white,
+                ),
+                TextField(
+                  onTap: (){
+                    setState(() {
+                      size = 350;
+                    });
+                  },
+                  focusNode: _focusNode1,
+                  textInputAction: TextInputAction.go,
+                  controller: _sharedController,
+                  keyboardType: TextInputType.text,
+                  onChanged: (value){
+                    setState(() {
+                      keyboardType = TextInputType.text ;
+                      size = 350;
+                    });
+                    print("day la $keyboardType");
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Nhap du lieu',
+                  ),
+                ),
+              ],
+            ),
+          )
         ),
         expandableContent: Container(
           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -107,26 +154,12 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                 children: [
                   Container(
                     child: InkWell(
-                      onTap: (){
-                        setState(() {
-                          isKeyboard = !isKeyboard;
-                          print(isKeyboard);
-                        });
-                      },
+                      onTap: _toggleFocus,
                       child: Icon(FontAwesomeIcons.keyboard, size: 30,),
                     ),
                   ),
                   InkWell(
                     onTap: (){
-                      // _focusNode.unfocus();
-                      // setState(() {
-                      //   if(keyboardType == TextInputType.text){
-                      //     size = 340;
-                      //   }
-                      //   else{
-                      //     size = 245;
-                      //   }
-                      // });
                     },
                     child: Icon(FontAwesomeIcons.xmark),
                   )

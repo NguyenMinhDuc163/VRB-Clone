@@ -7,9 +7,11 @@ import 'package:vrb_client/provider/dialog_provider.dart';
 import 'package:vrb_client/provider/exchange_rate_provider.dart';
 import 'package:vrb_client/provider/interest_provider.dart';
 import 'package:vrb_client/provider/location_provider.dart';
+import 'package:vrb_client/provider/login_provider.dart';
 import 'package:vrb_client/provider/selection_provider.dart';
 import 'package:vrb_client/representation/screens/splash_screen.dart';
 import 'package:vrb_client/routes.dart';
+import 'demo_button.dart';
 import 'generated/codegen_loader.g.dart';
 import 'models/user_model.dart';
 
@@ -25,7 +27,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => SelectionProvider()),
       ChangeNotifierProvider(create: (_) => DialogProvider()),
       ChangeNotifierProvider(create: (_) => LocationProvider()),
-
+      ChangeNotifierProvider(create: (_) => LoginProvider()),
     ],
     child: EasyLocalization(
       supportedLocales: [Locale('en'), Locale('vi')],
@@ -51,6 +53,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       theme: ThemeData(),
       home: const SplashScreen(),
+      // home: const keyboard(),
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,
