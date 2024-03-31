@@ -15,33 +15,33 @@
 // }
 //
 // class _keyboardState extends State<keyboard> {
-//   // TextInputType keyboardType = TextInputType.text;
-//   // FocusNode focusNode = FocusNode();
-//   // bool isCheckHeight = true;
-//   // bool isVisibleButtonSheet = false;
-//   //
-//   // void _changeKeyboardType() {
-//   //   setState(() {
-//   //     if (keyboardType == TextInputType.text) {
-//   //       keyboardType = TextInputType.number;
-//   //       isCheckHeight = true;
-//   //     } else {
-//   //       keyboardType = TextInputType.text;
-//   //       isCheckHeight = false;
-//   //     }
-//   //   });
-//   //   focusNode.unfocus();
-//   //   Future.delayed(Duration(milliseconds: 1), () {
-//   //     FocusScope.of(context).requestFocus(focusNode);
-//   //   });
-//   //   print(isCheckHeight);
-//   // }
+//   TextInputType keyboardType = TextInputType.text;
+//   FocusNode focusNode = FocusNode();
+//   bool isCheckHeight = true;
+//   bool isVisibleButtonSheet = false;
 //
-//   // @override
-//   // void dispose() {
-//   //   focusNode.dispose();
-//   //   super.dispose();
-//   // }
+//   void _changeKeyboardType() {
+//     setState(() {
+//       if (keyboardType == TextInputType.text) {
+//         keyboardType = TextInputType.number;
+//         isCheckHeight = true;
+//       } else {
+//         keyboardType = TextInputType.text;
+//         isCheckHeight = false;
+//       }
+//     });
+//     focusNode.unfocus();
+//     Future.delayed(Duration(milliseconds: 1), () {
+//       FocusScope.of(context).requestFocus(focusNode);
+//     });
+//     print(isCheckHeight);
+//   }
+//
+//   @override
+//   void dispose() {
+//     focusNode.dispose();
+//     super.dispose();
+//   }
 //   @override
 //   Widget build(BuildContext context) {
 //     return GestureDetector(
@@ -60,29 +60,29 @@
 //         appBar: AppBar(
 //           title: Text('Xin chao'),
 //         ),
-//         // body: Center(
-//         //   child: Column(
-//         //     children: [
-//         //       TextField(
-//         //         keyboardType: keyboardType,
-//         //         focusNode: focusNode,
-//         //         onTap: () {
-//         //           setState(() {
-//         //             isVisibleButtonSheet = true;
-//         //           });
-//         //         },
-//         //         onSubmitted: (val){
-//         //           setState(() {
-//         //             isVisibleButtonSheet = false;
-//         //             isCheckHeight = true;
-//         //             keyboardType = TextInputType.text;
-//         //           }
-//         //           );
-//         //         },
-//         //       ),
-//         //     ],
-//         //   ),
-//         // ),
+//         body: Center(
+//           child: Column(
+//             children: [
+//               TextField(
+//                 keyboardType: keyboardType,
+//                 focusNode: focusNode,
+//                 onTap: () {
+//                   setState(() {
+//                     isVisibleButtonSheet = true;
+//                   });
+//                 },
+//                 onSubmitted: (val){
+//                   setState(() {
+//                     isVisibleButtonSheet = false;
+//                     isCheckHeight = true;
+//                     keyboardType = TextInputType.text;
+//                   }
+//                   );
+//                 },
+//               ),
+//             ],
+//           ),
+//         ),
 //         body: SingleChildScrollView(child: TextFieldKeyboardWidget()),
 //         bottomSheet: Consumer<LoginProvider>(builder: (context, keyboard, child){
 //           return Visibility(

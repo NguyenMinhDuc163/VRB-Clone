@@ -396,8 +396,8 @@ class _LoginScreenState extends State<LoginScreen> {
           bottomSheet: Consumer<LoginProvider>(builder: (context, keyboard, child){
             return Visibility(
               visible: keyboard.isCheckHeight,
-              replacement: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(250)),
-              child: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(350)),
+              replacement: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(255)),
+              child: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(355)),
             );
           },)
       ),
@@ -422,13 +422,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Icon(
                       FontAwesomeIcons.keyboard,
-                      size: 30,
+                      size: 35,
                     ),
                   ),
                 ),
                 InkWell(
                   onTap: () {
-                    keyboard.focusNode.unfocus();
+                    // keyboard.focusNode.unfocus();
+                    FocusScope.of(context).requestFocus(FocusNode());
                     keyboard.setVisibleButtonSheet(false);
                     keyboard.setCheckHeight(true);
                     keyboard.setKeyboardType(TextInputType.text);

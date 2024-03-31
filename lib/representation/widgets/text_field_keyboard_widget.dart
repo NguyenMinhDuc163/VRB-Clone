@@ -1,8 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/demo_button.dart';
+import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/provider/login_provider.dart';
 
 class TextFieldKeyboardWidget extends StatefulWidget {
@@ -15,9 +17,15 @@ class TextFieldKeyboardWidget extends StatefulWidget {
 }
 
 class _TextFieldKeyboardWidgetState extends State<TextFieldKeyboardWidget> {
+
   @override
   void dispose() {
-    Provider.of<LoginProvider>(context, listen: false).focusNode.dispose();
+    if(widget.hintText == LocaleKeys.userName.tr()){
+      Provider.of<LoginProvider>(context, listen: false).focusNodeName.dispose();
+    }
+    else{
+      Provider.of<LoginProvider>(context, listen: false).focusNodePass.dispose();
+    }
     super.dispose();
   }
   @override
@@ -29,8 +37,9 @@ class _TextFieldKeyboardWidgetState extends State<TextFieldKeyboardWidget> {
             child: TextField(
               controller: widget.controller,
               keyboardType: keyboard.keyboardType,
-              focusNode: keyboard.focusNode,
+              focusNode:(widget.hintText == LocaleKeys.userName.tr()) ? keyboard.focusNodeName : keyboard.focusNodePass,
               onTap: () {
+                keyboard.setType((widget.hintText == LocaleKeys.userName.tr()) ? 0 : 1);
                 keyboard.setVisibleButtonSheet(true);
               },
               onSubmitted: (val){
@@ -46,7 +55,6 @@ class _TextFieldKeyboardWidgetState extends State<TextFieldKeyboardWidget> {
           IconButton(
             icon: Icon(
                 widget.icon,),
-
             // onPressed: _toggleVisibility,
               onPressed: (){},
           ),
