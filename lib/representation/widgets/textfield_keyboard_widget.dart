@@ -24,6 +24,8 @@ class TextFieldKeyboardWidget extends StatefulWidget {
 class _TextFieldKeyboardWidgetState extends State<TextFieldKeyboardWidget> {
   @override
   void dispose() {
+    Provider.of<LoginProvider>(context, listen: false)
+      .setKeyboardType(TextInputType.text);
     if (widget.hintText == LocaleKeys.userName.tr()) {
       Provider.of<LoginProvider>(context, listen: false)
           .focusNodeName
@@ -33,6 +35,7 @@ class _TextFieldKeyboardWidgetState extends State<TextFieldKeyboardWidget> {
           .focusNodePass
           .dispose();
     }
+
     super.dispose();
   }
 
@@ -43,23 +46,43 @@ class _TextFieldKeyboardWidgetState extends State<TextFieldKeyboardWidget> {
         children: [
           Expanded(
             child: TextField(
+                textInputAction: TextInputAction.done,
                 controller: widget.controller,
                 keyboardType: keyboard.keyboardType,
                 focusNode: (widget.hintText == LocaleKeys.userName.tr())
                     ? keyboard.focusNodeName
                     : keyboard.focusNodePass,
                 onTap: () {
+                  // if(keyboard.keyboardType == TextInputType.number){
+                  //   keyboard.setKeyboardType(TextInputType.text);
+                  //   if(widget.hintText == LocaleKeys.userName.tr()){
+                  //     keyboard.focusNodeName.unfocus();
+                  //     Future.delayed(const Duration(milliseconds: 1), () {
+                  //       FocusScope.of(context).requestFocus(keyboard.focusNodeName);
+                  //     });
+                  //   }else{
+                  //     keyboard.focusNodePass.unfocus();
+                  //     Future.delayed(const Duration(milliseconds: 1), () {
+                  //       FocusScope.of(context).requestFocus(keyboard.focusNodePass);
+                  //     });
+                  // }
+                  //
+                  // }
                   keyboard.setType(
                       (widget.hintText == LocaleKeys.userName.tr()) ? 0 : 1);
-                  print('--------------- keyborad : ${keyboard.keyboardType}');
                   keyboard.setVisibleButtonSheet(true);
                   keyboard.setCheckHeight(true);
-                  keyboard.setKeyboardType(TextInputType.number);
+
+                  if(keyboard.keyboardType == TextInputType.number){
+                    keyboard.setKeyboardType(TextInputType.text);
+                  }else{
+                    keyboard.setKeyboardType(TextInputType.number);
+                  }
                 },
                 onSubmitted: (val) {
                   keyboard.setVisibleButtonSheet(false);
                   keyboard.setCheckHeight(true);
-                  keyboard.setKeyboardType(TextInputType.text);
+                  keyboard.setKeyboardType(TextInputType.number);
                 },
                 decoration: InputDecoration(
                     hintText: widget.hintText, border: InputBorder.none)),

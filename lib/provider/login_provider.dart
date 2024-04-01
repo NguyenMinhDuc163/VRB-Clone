@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class LoginProvider extends ChangeNotifier {
-  TextInputType keyboardType = TextInputType.number;
+  TextInputType keyboardType = TextInputType.text;
   // FocusNode focusNode = FocusNode();
   FocusNode focusNodeName = FocusNode();
   FocusNode focusNodePass = FocusNode();
@@ -22,7 +22,6 @@ class LoginProvider extends ChangeNotifier {
           ? FocusScope.of(context).requestFocus(focusNodeName)
           : FocusScope.of(context).requestFocus(focusNodePass);
     });
-    print("------------provider : $keyboardType");
     notifyListeners();
   }
 

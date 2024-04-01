@@ -413,10 +413,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 visible: keyboard.isCheckHeight,
                 replacement: Visibility(
                     visible: keyboard.isVisibleButtonSheet,
-                    child: _buildButton(255)),
+                    //255
+                    child: _buildButton(220)),
                 child: Visibility(
+                  //355
                     visible: keyboard.isVisibleButtonSheet,
-                    child: _buildButton(355)),
+                    child: _buildButton(220)),
               );
             },
           )),
@@ -435,27 +437,32 @@ class _LoginScreenState extends State<LoginScreen> {
               // mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Row(
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          keyboard.changeKeyboardType(context);
-                        },
-                        child: const Icon(
+                  child: GestureDetector(
+                    onTap: () {
+                      keyboard.changeKeyboardType(context);
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(
                           FontAwesomeIcons.keyboard,
                           size: 35,
                         ),
-                      ),
-                      SizedBox(
-                        width: kDefaultPadding,
-                      ),
-                      Text(
-                        (keyboard.keyboardType != TextInputType.text)
-                            ? 'abc'
-                            : '123',
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                        const SizedBox(
+                          width: kDefaultPadding,
+                        ),
+                        SizedBox(
+                          height: 35,
+                          child: Center(
+                            child: Text(
+                              (keyboard.keyboardType != TextInputType.text)
+                                  ? 'abc'
+                                  : '123',
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 InkWell(
