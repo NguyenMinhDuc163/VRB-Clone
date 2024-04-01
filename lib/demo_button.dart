@@ -5,7 +5,7 @@
 // import 'package:keyboard_actions/keyboard_actions.dart';
 // import 'package:provider/provider.dart';
 // import 'package:vrb_client/provider/login_provider.dart';
-// import 'package:vrb_client/representation/widgets/text_field_keyboard_widget.dart';
+// import 'package:vrb_client/representation/widgets/textfield_keyboard_widget.dart';
 //
 // class keyboard extends StatefulWidget {
 //   const keyboard({super.key});
@@ -50,15 +50,15 @@
 //         // Khi bên ngoài form được chạm, ẩn bàn phím bằng cách mất trọng tâm
 //         FocusScope.of(context).requestFocus(FocusNode());
 //         setState(() {
-//           Provider.of<LoginProvider>(context, listen: false).setVisibleButtonSheet(false);
+//           isVisibleButtonSheet = false;
 //         });
-//         Provider.of<LoginProvider>(context, listen: false).setCheckHeight(true);
-//         Provider.of<LoginProvider>(context, listen: false).setkeyboardType(TextInputType.text);
+//         isCheckHeight = true;
+//         keyboardType = TextInputType.text;
 //       },
 //       child: Scaffold(
 //         resizeToAvoidBottomInset: false,
 //         appBar: AppBar(
-//           title: Text('Xin chao'),
+//           title: Text('KeyBoard'),
 //         ),
 //         body: Center(
 //           child: Column(
@@ -83,60 +83,51 @@
 //             ],
 //           ),
 //         ),
-//         body: SingleChildScrollView(child: TextFieldKeyboardWidget()),
-//         bottomSheet: Consumer<LoginProvider>(builder: (context, keyboard, child){
-//           return Visibility(
-//             visible: keyboard.isCheckHeight,
-//             replacement: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(250)),
-//             child: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(350)),
-//           );
-//         },),
+//
 //         bottomSheet: Visibility(
 //           visible: isCheckHeight,
-//           replacement: Visibility(visible: isVisibleButtonSheet, child: _buildButton(250)),
-//           child: Visibility(visible: isVisibleButtonSheet, child: _buildButton(350)),
+//           replacement: Visibility(visible: isVisibleButtonSheet, child: _buildButton(255)),
+//           child: Visibility(visible: isVisibleButtonSheet, child: _buildButton(355)),
 //         ), // This trailing comma makes auto-formatting nicer for build methods.
 //       ),
 //     );
 //   }
 //
 //   Widget _buildButton(double height) {
-//     return Consumer<LoginProvider>(builder: (context, keyboard,  child){
-//       return Container(
-//         padding: EdgeInsets.symmetric(horizontal: 10),
-//         height: height,
-//         color: Colors.grey.shade200,
-//         child: Column(
-//           children: [
-//             Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Container(
-//                   child: GestureDetector(
-//                     onTap: (){
-//                       keyboard.changeKeyboardType(context);
-//                     },
-//                     child: const Icon(
-//                       FontAwesomeIcons.keyboard,
-//                       size: 30,
-//                     ),
+//     return Container(
+//       padding: EdgeInsets.symmetric(horizontal: 10),
+//       height: height,
+//       color: Colors.grey.shade200,
+//       child: Column(
+//         children: [
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Container(
+//                 child: GestureDetector(
+//                   onTap: (){
+//                     _changeKeyboardType();
+//                   },
+//                   child: const Icon(
+//                     FontAwesomeIcons.keyboard,
+//                     size: 35,
 //                   ),
 //                 ),
-//                 InkWell(
-//                   onTap: () {
-//                     keyboard.focusNode.unfocus();
-//                     keyboard.setVisibleButtonSheet(false);
-//                     keyboard.setCheckHeight(true);
-//                     keyboard.setkeyboardType(TextInputType.text);
-//                   },
-//                   child: Icon(FontAwesomeIcons.xmark),
-//                 )
-//               ],
-//             ),
-//           ],
-//         ),
-//       );
-//     });
+//               ),
+//               InkWell(
+//                 onTap: () {
+//                   focusNode.unfocus();
+//                   isVisibleButtonSheet = false;
+//                   isCheckHeight = false;
+//                   keyboardType = TextInputType.text;
+//                 },
+//                 child: Icon(FontAwesomeIcons.xmark),
+//               )
+//             ],
+//           ),
+//         ],
+//       ),
+//     );
 //   }
 //
 // }

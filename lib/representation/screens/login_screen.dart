@@ -17,7 +17,7 @@ import '../../provider/location_provider.dart';
 import '../widgets/bottom_bar_widget.dart';
 import 'package:local_auth/local_auth.dart';
 
-import '../widgets/text_field_keyboard_widget.dart';
+import '../widgets/textfield_keyboard_widget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -33,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _ischecklogin = false;
   late final LocalAuthentication auth;
   bool _supportState = false;
-  final TextEditingController userNameController  = TextEditingController();
-  final TextEditingController passwordController  = TextEditingController();
+  final TextEditingController userNameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   GlobalKey<CurvedNavigationBarState> _bottomNavigationKey = GlobalKey();
   final FocusNode _focusNode = FocusNode();
   void _toggleImage() {
@@ -110,198 +110,211 @@ class _LoginScreenState extends State<LoginScreen> {
         FocusScope.of(context).requestFocus(FocusNode());
 
         setState(() {
-          Provider.of<LoginProvider>(context, listen: false).setVisibleButtonSheet(false);
+          Provider.of<LoginProvider>(context, listen: false)
+              .setVisibleButtonSheet(false);
         });
         Provider.of<LoginProvider>(context, listen: false).setCheckHeight(true);
-        Provider.of<LoginProvider>(context, listen: false).setKeyboardType(TextInputType.text);
+        Provider.of<LoginProvider>(context, listen: false)
+            .setKeyboardType(TextInputType.text);
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        body: Stack(
-          children: [
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Image.asset(AssetPath.blockWhite),
-            ),
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Image.asset(AssetPath.backgroundBottom),
-            ),
-            Positioned(bottom: 0, child: BottomBarWidget()),
-            Positioned(
-              top: 50, // Đặt giá trị top cho Row
-              left: 0, // Đặt giá trị left cho Row
-              right: 0, // Đặt giá trị right cho Row
-              child: Column(
-                children: [
-                  // Text(LocaleKeys.you_have_pushed_the_button_this_many_times.tr()),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        height: 50,
-                      ),
-                      Expanded(
-                        child: Image.asset(AssetPath.logo_1x),
-                      ),
-                      GestureDetector(
-                        //TODO language
-                        // onTap: _toggleImage,
-                        onTap: () {
-                          if (context.locale == Locale('vi')) {
-                            context.setLocale(Locale('en'));
-                          } else {
-                            context.setLocale(Locale('vi'));
-                          }
-                          setState(() {
-                            _isPressed = !_isPressed;
-                          });
-                        },
-                        child: Container(
-                            width: 65,
-                            height: 42,
-                            padding: EdgeInsets.all(8),
-                            child: !_isPressed
-                                ? _buildIconLanguage(AssetPath.icoVN, "VN")
-                                : _buildIconLanguage(
-                                    AssetPath.icoAmerica, "EN")),
-                      ),
-                    ],
-                  ),
-                  (_islogin)
-                      ? Container(
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 15,
-                              ),
-                              // Image.asset(AssetPath.avatar),
-                              Consumer<UserModel>(
-                                  builder: (context, user, child) {
-                                return Container(
-                                  width:
-                                      80, // Đảm bảo kích thước của ảnh bằng nhau
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color:
-                                        Colors.white, // Màu nền của hình tròn
-                                  ),
-                                  child: ClipOval(
-                                    child: InkWell(
-                                      onTap: () {
-                                        Provider.of<UserModel>(context,
-                                                listen: false)
-                                            .pickAndSetAvatar(context);
-                                      },
-                                      child: (user.avatar == AssetPath.avatar)
-                                          ? Image.asset(user.avatar)
-                                          : Image.file(File(user.avatar)),
-                                    ),
-                                  ),
-                                );
-                              }),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                context.watch<UserModel>().userName.toString(),
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black),
-                              ),
-                              const SizedBox(
-                                height: kMediumPadding,
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: kMediumPadding * 4,
-                              ),
-                              // Row(
-                              //   children: [
-                              //     Expanded(
-                              //       child: TextField(
-                              //         keyboardType: TextInputType.number,
-                              //         decoration: InputDecoration(
-                              //             hintText: LocaleKeys.userName.tr(),
-                              //             border: InputBorder.none),
-                              //       ),
-                              //     ),
-                              //     IconButton(
-                              //       icon: Icon(FontAwesomeIcons.user),
-                              //       onPressed: _toggleVisibility,
-                              //     ),
-                              //   ],
-                              // ),
-                              TextFieldKeyboardWidget(icon: FontAwesomeIcons.user, hintText: LocaleKeys.userName.tr(), controller: userNameController,),
-                              Container(
-                                height: 1, // Chiều cao của đường line
-                                color: Colors.grey, // Màu của đường line
-                              ),
-                            ],
-                          ),
-                        ),
-                  SizedBox(
-                    height: kDefaultPadding,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                    child: Column(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.white,
+          body: Stack(
+            children: [
+              Positioned(
+                top: 0,
+                left: 0,
+                child: Image.asset(AssetPath.blockWhite),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Image.asset(AssetPath.backgroundBottom),
+              ),
+              Positioned(bottom: 0, child: BottomBarWidget()),
+              Positioned(
+                top: 50, // Đặt giá trị top cho Row
+                left: 0, // Đặt giá trị left cho Row
+                right: 0, // Đặt giá trị right cho Row
+                child: Column(
+                  children: [
+                    // Text(LocaleKeys.you_have_pushed_the_button_this_many_times.tr()),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: TextField(
-                        //         obscureText: _obscureText,
-                        //         decoration: InputDecoration(
-                        //             hintText: LocaleKeys.passWord.tr(),
-                        //             border: InputBorder.none),
-                        //       ),
-                        //     ),
-                        //     IconButton(
-                        //       icon: Icon(_obscureText
-                        //           ? Icons.visibility
-                        //           : Icons.visibility_off),
-                        //       onPressed: _toggleVisibility,
-                        //     ),
-                        //   ],
-                        // ),
-                        TextFieldKeyboardWidget(icon: Icons.visibility, hintText: LocaleKeys.passWord.tr(), controller: passwordController,),
-                        Container(
-                          height: 1, // Chiều cao của đường line
-                          color: Colors.grey, // Màu của đường line
+                        SizedBox(
+                          width: 80,
+                          height: 50,
                         ),
-                        const SizedBox(
-                          height: kMinPadding * 2,
+                        Expanded(
+                          child: Image.asset(AssetPath.logo_1x),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: InkWell(
-                                child: Text(
-                                  LocaleKeys.register.tr(),
-                                  style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.blue.shade900),
+                        GestureDetector(
+                          //TODO language
+                          // onTap: _toggleImage,
+                          onTap: () {
+                            if (context.locale == Locale('vi')) {
+                              context.setLocale(Locale('en'));
+                            } else {
+                              context.setLocale(Locale('vi'));
+                            }
+                            setState(() {
+                              _isPressed = !_isPressed;
+                            });
+                          },
+                          child: Container(
+                              width: 65,
+                              height: 42,
+                              padding: EdgeInsets.all(8),
+                              child: !_isPressed
+                                  ? _buildIconLanguage(AssetPath.icoVN, "VN")
+                                  : _buildIconLanguage(
+                                      AssetPath.icoAmerica, "EN")),
+                        ),
+                      ],
+                    ),
+                    (_islogin)
+                        ? Container(
+                            child: Column(
+                              children: [
+                                const SizedBox(
+                                  height: 15,
                                 ),
-                                onTap: () {},
-                              ),
+                                // Image.asset(AssetPath.avatar),
+                                Consumer<UserModel>(
+                                    builder: (context, user, child) {
+                                  return Container(
+                                    width:
+                                        80, // Đảm bảo kích thước của ảnh bằng nhau
+                                    height: 80,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          Colors.white, // Màu nền của hình tròn
+                                    ),
+                                    child: ClipOval(
+                                      child: InkWell(
+                                        onTap: () {
+                                          Provider.of<UserModel>(context,
+                                                  listen: false)
+                                              .pickAndSetAvatar(context);
+                                        },
+                                        child: (user.avatar == AssetPath.avatar)
+                                            ? Image.asset(user.avatar)
+                                            : Image.file(File(user.avatar)),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  context
+                                      .watch<UserModel>()
+                                      .userName
+                                      .toString(),
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                ),
+                                const SizedBox(
+                                  height: kMediumPadding,
+                                ),
+                              ],
                             ),
-                            Container(
-                              child: InkWell(
+                          )
+                        : Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: kDefaultPadding),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: kMediumPadding * 4,
+                                ),
+                                // Row(
+                                //   children: [
+                                //     Expanded(
+                                //       child: TextField(
+                                //         keyboardType: TextInputType.number,
+                                //         decoration: InputDecoration(
+                                //             hintText: LocaleKeys.userName.tr(),
+                                //             border: InputBorder.none),
+                                //       ),
+                                //     ),
+                                //     IconButton(
+                                //       icon: Icon(FontAwesomeIcons.user),
+                                //       onPressed: _toggleVisibility,
+                                //     ),
+                                //   ],
+                                // ),
+                                TextFieldKeyboardWidget(
+                                  icon: FontAwesomeIcons.user,
+                                  hintText: LocaleKeys.userName.tr(),
+                                  controller: userNameController,
+                                ),
+                                Container(
+                                  height: 1, // Chiều cao của đường line
+                                  color: Colors.grey, // Màu của đường line
+                                ),
+                              ],
+                            ),
+                          ),
+                    SizedBox(
+                      height: kDefaultPadding,
+                    ),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      child: Column(
+                        children: [
+                          // Row(
+                          //   children: [
+                          //     Expanded(
+                          //       child: TextField(
+                          //         obscureText: _obscureText,
+                          //         decoration: InputDecoration(
+                          //             hintText: LocaleKeys.passWord.tr(),
+                          //             border: InputBorder.none),
+                          //       ),
+                          //     ),
+                          //     IconButton(
+                          //       icon: Icon(_obscureText
+                          //           ? Icons.visibility
+                          //           : Icons.visibility_off),
+                          //       onPressed: _toggleVisibility,
+                          //     ),
+                          //   ],
+                          // ),
+                          TextFieldKeyboardWidget(
+                            icon: Icons.visibility,
+                            hintText: LocaleKeys.passWord.tr(),
+                            controller: passwordController,
+                          ),
+                          Container(
+                            height: 1, // Chiều cao của đường line
+                            color: Colors.grey, // Màu của đường line
+                          ),
+                          const SizedBox(
+                            height: kMinPadding * 2,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: InkWell(
+                                  child: Text(
+                                    LocaleKeys.register.tr(),
+                                    style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.blue.shade900),
+                                  ),
+                                  onTap: () {},
+                                ),
+                              ),
+                              InkWell(
                                 child: Text(
                                   LocaleKeys.forgot.tr(),
                                   style: TextStyle(
@@ -310,120 +323,139 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 onTap: () {},
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: kDefaultPadding * 3,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              width: 270,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [
-                                      const Color(0xFF19226D).withOpacity(0.9),
-                                      const Color(0xFFED1C24).withOpacity(0.8),
-                                    ],
-                                    stops: [0.5, 1],
-                                  ),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(15))),
-                              child: InkWell(
-                                onTap: () async {
-                                  checkLogin(context);
-                                  Provider.of<DialogProvider>(context,
-                                          listen: false)
-                                      .showLoadingDialog(context);
-                                  await Future.delayed(const Duration(
-                                      milliseconds: 200)); // Đợi trong 2 giây
-                                  Provider.of<DialogProvider>(context,
-                                          listen: false)
-                                      .hideLoadingDialog(context);
-                                  Navigator.of(context)
-                                      .pushNamed(MainApp.routeName);
-                                  setState(() {
-                                    _islogin = true;
-                                  });
-                                },
-                                child: Align(
-                                    child: Text(
-                                  LocaleKeys.signIn.tr(),
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                )),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: kDefaultPadding * 3,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(8),
+                                width: 270,
+                                height: 45,
+                                decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [
+                                        const Color(0xFF19226D)
+                                            .withOpacity(0.9),
+                                        const Color(0xFFED1C24)
+                                            .withOpacity(0.8),
+                                      ],
+                                      stops: [0.5, 1],
+                                    ),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15))),
+                                child: InkWell(
+                                  onTap: () async {
+                                    checkLogin(context);
+                                    Provider.of<DialogProvider>(context,
+                                            listen: false)
+                                        .showLoadingDialog(context);
+                                    await Future.delayed(const Duration(
+                                        milliseconds: 200)); // Đợi trong 2 giây
+                                    Provider.of<DialogProvider>(context,
+                                            listen: false)
+                                        .hideLoadingDialog(context);
+                                    Navigator.of(context)
+                                        .pushNamed(MainApp.routeName);
+                                    setState(() {
+                                      _islogin = true;
+                                    });
+                                  },
+                                  child: Align(
+                                      child: Text(
+                                    LocaleKeys.signIn.tr(),
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                ),
+                              ),
+                              //TODO van tay
+                              InkWell(
+                                onTap: _authenticate,
+                                child: Image.asset(AssetPath.fingerprintButton),
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            height: kDefaultPadding,
+                          ),
+                          Align(
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _islogin = false;
+                                });
+                              },
+                              child: Text(
+                                LocaleKeys.signInAnother.tr(),
+                                style: TextStyle(
+                                    color: Colors.blue.shade900, fontSize: 14),
                               ),
                             ),
-                            //TODO van tay
-                            InkWell(
-                              onTap: _authenticate,
-                              child: Image.asset(AssetPath.fingerprintButton),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: kDefaultPadding,
-                        ),
-                        Align(
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                _islogin = false;
-                              });
-                            },
-                            child: Text(
-                              LocaleKeys.signInAnother.tr(),
-                              style: TextStyle(
-                                  color: Colors.blue.shade900, fontSize: 14),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-          bottomSheet: Consumer<LoginProvider>(builder: (context, keyboard, child){
-            return Visibility(
-              visible: keyboard.isCheckHeight,
-              replacement: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(255)),
-              child: Visibility(visible: keyboard.isVisibleButtonSheet, child: _buildButton(355)),
-            );
-          },)
-      ),
+            ],
+          ),
+          bottomSheet: Consumer<LoginProvider>(
+            builder: (context, keyboard, child) {
+              return Visibility(
+                visible: keyboard.isCheckHeight,
+                replacement: Visibility(
+                    visible: keyboard.isVisibleButtonSheet,
+                    child: _buildButton(255)),
+                child: Visibility(
+                    visible: keyboard.isVisibleButtonSheet,
+                    child: _buildButton(355)),
+              );
+            },
+          )),
     );
   }
 
   Widget _buildButton(double height) {
-    return Consumer<LoginProvider>(builder: (context, keyboard,  child){
+    return Consumer<LoginProvider>(builder: (context, keyboard, child) {
       return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10),
         height: height,
         color: Colors.grey.shade200,
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              // mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  child: GestureDetector(
-                    onTap: (){
-                      keyboard.changeKeyboardType(context);
-                    },
-                    child: const Icon(
-                      FontAwesomeIcons.keyboard,
-                      size: 35,
-                    ),
+                Expanded(
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          keyboard.changeKeyboardType(context);
+                        },
+                        child: const Icon(
+                          FontAwesomeIcons.keyboard,
+                          size: 35,
+                        ),
+                      ),
+                      SizedBox(
+                        width: kDefaultPadding,
+                      ),
+                      Text(
+                        (keyboard.keyboardType != TextInputType.text)
+                            ? 'abc'
+                            : '123',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
                 ),
                 InkWell(
@@ -443,6 +475,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     });
   }
+
   Widget _buildIconLanguage(String path, String name) {
     return Container(
         padding: EdgeInsets.all(1),
