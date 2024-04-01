@@ -8,12 +8,14 @@ class LoginProvider extends ChangeNotifier {
   bool isCheckHeight = true;
   bool isVisibleButtonSheet = false;
   int type = 0;
+  bool checkNum = false;
   void changeKeyboardType(BuildContext context) {
     if (keyboardType == TextInputType.text) {
       keyboardType = TextInputType.number;
       isCheckHeight = true;
     } else {
       keyboardType = TextInputType.text;
+      setKeyboardType(TextInputType.text);
       isCheckHeight = false;
     }
     (type == 0) ? focusNodeName.unfocus() : focusNodePass.unfocus();
@@ -25,6 +27,10 @@ class LoginProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setCheckNum(bool check){
+    this.checkNum = check;
+    notifyListeners();
+  }
   void setCheckHeight(bool check) {
     isCheckHeight = check;
     notifyListeners();

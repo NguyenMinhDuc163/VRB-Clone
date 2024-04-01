@@ -64,6 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     _focusNode.dispose();
+    userNameController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -102,6 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // lay kichh thuoc ca ban phimm
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return GestureDetector(
       behavior: HitTestBehavior
           .translucent, // Cho phép GestureDetector bắt sự kiện trên toàn bộ khu vực widget
@@ -234,22 +238,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(
                                   height: kMediumPadding * 4,
                                 ),
-                                // Row(
-                                //   children: [
-                                //     Expanded(
-                                //       child: TextField(
-                                //         keyboardType: TextInputType.number,
-                                //         decoration: InputDecoration(
-                                //             hintText: LocaleKeys.userName.tr(),
-                                //             border: InputBorder.none),
-                                //       ),
-                                //     ),
-                                //     IconButton(
-                                //       icon: Icon(FontAwesomeIcons.user),
-                                //       onPressed: _toggleVisibility,
-                                //     ),
-                                //   ],
-                                // ),
                                 TextFieldKeyboardWidget(
                                   icon: FontAwesomeIcons.user,
                                   hintText: LocaleKeys.userName.tr(),
@@ -270,24 +258,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           EdgeInsets.symmetric(horizontal: kDefaultPadding),
                       child: Column(
                         children: [
-                          // Row(
-                          //   children: [
-                          //     Expanded(
-                          //       child: TextField(
-                          //         obscureText: _obscureText,
-                          //         decoration: InputDecoration(
-                          //             hintText: LocaleKeys.passWord.tr(),
-                          //             border: InputBorder.none),
-                          //       ),
-                          //     ),
-                          //     IconButton(
-                          //       icon: Icon(_obscureText
-                          //           ? Icons.visibility
-                          //           : Icons.visibility_off),
-                          //       onPressed: _toggleVisibility,
-                          //     ),
-                          //   ],
-                          // ),
                           TextFieldKeyboardWidget(
                             icon: Icons.visibility,
                             hintText: LocaleKeys.passWord.tr(),
@@ -414,11 +384,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 replacement: Visibility(
                     visible: keyboard.isVisibleButtonSheet,
                     //255
-                    child: _buildButton(220)),
+                    child: _buildButton(keyboardHeight + 35) ),
                 child: Visibility(
                   //355
                     visible: keyboard.isVisibleButtonSheet,
-                    child: _buildButton(220)),
+                    child: _buildButton(keyboardHeight +  35)),
               );
             },
           )),
@@ -429,7 +399,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Consumer<LoginProvider>(builder: (context, keyboard, child) {
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        height: height,
+        height: height > 50 ? height : 0,
         color: Colors.grey.shade200,
         child: Column(
           children: [
