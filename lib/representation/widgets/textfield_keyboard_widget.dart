@@ -18,9 +18,10 @@ class TextFieldKeyBoardWiget extends StatefulWidget {
 
 
 class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
-  PersistentBottomSheetController? _controller;
+  OverlayEntry?_overlayEntry;
+
   Widget _textFieldWidget(String title, TextEditingController controller, FocusNode focusNode,
-      TextInputType textInputType, VoidCallback? onTap, IconData icon, double height){
+      TextInputType textInputType, VoidCallback? onTap, IconData icon){
     return Container(
       padding: const EdgeInsets.symmetric(
           horizontal: kDefaultPadding),
@@ -69,74 +70,77 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
       ),
     );
   }
-  OverlayEntry?_overlayEntry;
+
   void showBottomSheet(){
       final overlay= Overlay.of(context);
-      _overlayEntry = OverlayEntry(builder: (context) => Positioned(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          left: 0,
-          right: 0,
+      _overlayEntry = OverlayEntry(builder: (context) {
+        double bottomInset = MediaQuery.of(context).viewInsets.bottom;
+        return Positioned(
+            bottom: bottomInset > 50 ? bottomInset: bottomInset - 35,
+            left: 0,
+            right: 0,
 
-          child:Material(
-            child: Consumer<LoginProvider>(builder: (context, keyboard, child) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                // height: bottomInset > 50 ? bottomInset + 35 : 0,
-                // height: 350,
-                color: Colors.grey.shade200,
-                child: Column(
-                  children: [
-                    Row(
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              keyboard.switchKeyboard();
-                            },
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  FontAwesomeIcons.keyboard,
-                                  size: 35,
-                                ),
-                                const SizedBox(
-                                  width: kDefaultPadding,
-                                ),
-                                SizedBox(
-                                  height: 35,
-                                  child: Center(
-                                    child: Text(
-                                      (keyboard.isChange)
-                                          ? 'abc'
-                                          : '123',
-                                      style: const TextStyle(fontWeight: FontWeight.bold),
+            child:Material(
+              child: Consumer<LoginProvider>(builder: (context, keyboard, child) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  color: Colors.grey.shade200,
+                  child: Column(
+                    children: [
+                      Row(
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                keyboard.switchKeyboard();
+                              },
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    FontAwesomeIcons.keyboard,
+                                    size: 35,
+                                  ),
+                                  const SizedBox(
+                                    width: kDefaultPadding,
+                                  ),
+                                  SizedBox(
+                                    height: 35,
+                                    child: Center(
+                                      child: Text(
+                                        (keyboard.isChange)
+                                            ? 'abc'
+                                            : '123',
+                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            // keyboard.focusNode.unfocus();
-                            FocusScope.of(context).requestFocus(FocusNode());
-                            keyboard.setVisibleButtonSheet(false);
-                          },
-                          child: Icon(FontAwesomeIcons.xmark),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            }),
-          )));
+                          InkWell(
+                            onTap: () {
+                              // keyboard.focusNode.unfocus();
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              keyboard.setVisibleButtonSheet(false);
+                            },
+                            child: const Icon(FontAwesomeIcons.xmark),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ));
+      }
+
+      );
+      overlay.insert(_overlayEntry!);
   }
   @override
   Widget build(BuildContext context) {
-    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Consumer<LoginProvider>(builder: (context, keyboard, child) {
       return Column(
         children: [
@@ -145,7 +149,7 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
               keyboard.isChange
                   ?
               _textFieldWidget(LocaleKeys.userName.tr(), keyboard.controller, keyboard.myFocusNode1, TextInputType.text, () { },
-                  FontAwesomeIcons.user, keyboardHeight + 35
+                  FontAwesomeIcons.user
               )
                   : const SizedBox(),
               keyboard.isChange
@@ -159,14 +163,14 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
                     keyboard.myFocusNode2.requestFocus();
                   }
                 });
-              }, FontAwesomeIcons.user, keyboardHeight + 35)
+              }, FontAwesomeIcons.user)
             ],
           ),
           Stack(
             children: [
               keyboard.isChange
               ? _textFieldWidget(LocaleKeys.passWord.tr(), keyboard.controller1, keyboard.myFocusNode3, TextInputType.text, () { },
-                  Icons.visibility, keyboardHeight + 35)
+                  Icons.visibility)
                   : const SizedBox(),
               keyboard.isChange
                   ? const SizedBox()
@@ -179,7 +183,7 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
                     keyboard.myFocusNode4.requestFocus();
                   }
                 });
-              }, Icons.visibility, keyboardHeight + 35)
+              }, Icons.visibility)
             ],
           ),
         ],
