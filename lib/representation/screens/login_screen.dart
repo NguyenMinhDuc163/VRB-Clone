@@ -140,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           width: 80,
                           height: 50,
                         ),
@@ -353,11 +353,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ],
           ),
-          bottomSheet: Consumer<LoginProvider>(
-            builder: (context, keyboard, child) {
-              return _buildButton(keyboardHeight + 35) ;
-            },
-          )
+          // bottomSheet: Consumer<LoginProvider>(
+          //   builder: (context, keyboard, child) {
+          //     return _buildButton(keyboardHeight + 35) ;
+          //   },
+          // )
       ),
     );
   }

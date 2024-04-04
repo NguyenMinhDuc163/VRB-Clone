@@ -18,11 +18,11 @@ class TextFieldKeyBoardWiget extends StatefulWidget {
 
 
 class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
-
+  PersistentBottomSheetController? _controller;
   Widget _textFieldWidget(String title, TextEditingController controller, FocusNode focusNode,
-      TextInputType textInputType, VoidCallback? onTap, IconData icon){
+      TextInputType textInputType, VoidCallback? onTap, IconData icon, double height){
     return Container(
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
           horizontal: kDefaultPadding),
       child: Column(
         children: [
@@ -37,7 +37,11 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
                     keyboardType: textInputType,
                     // autofocus: true,
                     onChanged: (text) {},
-                    onTap: onTap,
+                    // onTap: onTap,
+                    onTap: (){
+                      onTap!();
+                      showBottomSheet();
+                    },
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(
                           RegExp('[a-zA-Z0-9]'))
@@ -60,13 +64,79 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
             height: 1, // Chiều cao của đường line
             color: Colors.grey, // Màu của đường line
           ),
-          SizedBox(height: kDefaultPadding,)
+          const SizedBox(height: kDefaultPadding,)
         ],
       ),
     );
   }
+  OverlayEntry?_overlayEntry;
+  void showBottomSheet(){
+      final overlay= Overlay.of(context);
+      _overlayEntry = OverlayEntry(builder: (context) => Positioned(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          left: 0,
+          right: 0,
+
+          child:Material(
+            child: Consumer<LoginProvider>(builder: (context, keyboard, child) {
+              return Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                // height: bottomInset > 50 ? bottomInset + 35 : 0,
+                // height: 350,
+                color: Colors.grey.shade200,
+                child: Column(
+                  children: [
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              keyboard.switchKeyboard();
+                            },
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  FontAwesomeIcons.keyboard,
+                                  size: 35,
+                                ),
+                                const SizedBox(
+                                  width: kDefaultPadding,
+                                ),
+                                SizedBox(
+                                  height: 35,
+                                  child: Center(
+                                    child: Text(
+                                      (keyboard.isChange)
+                                          ? 'abc'
+                                          : '123',
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            // keyboard.focusNode.unfocus();
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            keyboard.setVisibleButtonSheet(false);
+                          },
+                          child: Icon(FontAwesomeIcons.xmark),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }),
+          )));
+  }
   @override
   Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return Consumer<LoginProvider>(builder: (context, keyboard, child) {
       return Column(
         children: [
@@ -75,7 +145,7 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
               keyboard.isChange
                   ?
               _textFieldWidget(LocaleKeys.userName.tr(), keyboard.controller, keyboard.myFocusNode1, TextInputType.text, () { },
-                  FontAwesomeIcons.user
+                  FontAwesomeIcons.user, keyboardHeight + 35
               )
                   : const SizedBox(),
               keyboard.isChange
@@ -89,14 +159,14 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
                     keyboard.myFocusNode2.requestFocus();
                   }
                 });
-              }, FontAwesomeIcons.user)
+              }, FontAwesomeIcons.user, keyboardHeight + 35)
             ],
           ),
           Stack(
             children: [
               keyboard.isChange
               ? _textFieldWidget(LocaleKeys.passWord.tr(), keyboard.controller1, keyboard.myFocusNode3, TextInputType.text, () { },
-                  Icons.visibility)
+                  Icons.visibility, keyboardHeight + 35)
                   : const SizedBox(),
               keyboard.isChange
                   ? const SizedBox()
@@ -109,7 +179,7 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
                     keyboard.myFocusNode4.requestFocus();
                   }
                 });
-              }, Icons.visibility)
+              }, Icons.visibility, keyboardHeight + 35)
             ],
           ),
         ],
