@@ -103,7 +103,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+  {
     // lay kichh thuoc ca ban phimm
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return GestureDetector(
@@ -112,14 +113,6 @@ class _LoginScreenState extends State<LoginScreen> {
       onTap: () {
         // Khi bên ngoài form được chạm, ẩn bàn phím bằng cách mất trọng tâm
         FocusScope.of(context).requestFocus(FocusNode());
-
-        setState(() {
-          Provider.of<LoginProvider>(context, listen: false)
-              .setVisibleButtonSheet(false);
-        });
-        Provider.of<LoginProvider>(context, listen: false).setCheckHeight(true);
-        Provider.of<LoginProvider>(context, listen: false)
-            .setKeyboardType(TextInputType.text);
       },
       child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -231,42 +224,43 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           )
                         : Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: kDefaultPadding),
+                            // padding: EdgeInsets.symmetric(
+                            //     horizontal: kDefaultPadding),
                             child: Column(
                               children: [
                                 SizedBox(
                                   height: kMediumPadding * 4,
                                 ),
-                                TextFieldKeyboardWidget(
-                                  icon: FontAwesomeIcons.user,
-                                  hintText: LocaleKeys.userName.tr(),
-                                  controller: userNameController,
-                                ),
-                                Container(
-                                  height: 1, // Chiều cao của đường line
-                                  color: Colors.grey, // Màu của đường line
-                                ),
+                                // TextFieldKeyboardWidget(
+                                //   icon: FontAwesomeIcons.user,
+                                //   hintText: LocaleKeys.userName.tr(),
+                                //   controller: userNameController,
+                                // ),
+                                TextFieldKeyBoardWiget(),
+                                // Container(
+                                //   height: 1, // Chiều cao của đường line
+                                //   color: Colors.grey, // Màu của đường line
+                                // ),
                               ],
                             ),
                           ),
-                    SizedBox(
-                      height: kDefaultPadding,
-                    ),
+                    // SizedBox(
+                    //   height: kDefaultPadding,
+                    // ),
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: kDefaultPadding),
                       child: Column(
                         children: [
-                          TextFieldKeyboardWidget(
-                            icon: Icons.visibility,
-                            hintText: LocaleKeys.passWord.tr(),
-                            controller: passwordController,
-                          ),
-                          Container(
-                            height: 1, // Chiều cao của đường line
-                            color: Colors.grey, // Màu của đường line
-                          ),
+                          // TextFieldKeyboardWidget(
+                          //   icon: Icons.visibility,
+                          //   hintText: LocaleKeys.passWord.tr(),
+                          //   controller: passwordController,
+                          // ),
+                          // Container(
+                          //   height: 1, // Chiều cao của đường line
+                          //   color: Colors.grey, // Màu của đường line
+                          // ),
                           const SizedBox(
                             height: kMinPadding * 2,
                           ),
@@ -379,19 +373,22 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           bottomSheet: Consumer<LoginProvider>(
             builder: (context, keyboard, child) {
-              return Visibility(
-                visible: keyboard.isCheckHeight,
-                replacement: Visibility(
-                    visible: keyboard.isVisibleButtonSheet,
-                    //255
-                    child: _buildButton(keyboardHeight + 35) ),
-                child: Visibility(
-                  //355
-                    visible: keyboard.isVisibleButtonSheet,
-                    child: _buildButton(keyboardHeight +  35)),
-              );
+              // return Visibility(
+              //   visible: true,
+              //   replacement: Visibility(
+              //       // visible: keyboard.isVisibleButtonSheet,
+              //       visible: true,
+              //       //255
+              //       child: _buildButton(keyboardHeight + 35) ),
+              //   child: Visibility(
+              //     //355
+              //       visible: true,
+              //       child: _buildButton(keyboardHeight +  35)),
+              // );
+              return _buildButton(keyboardHeight + 35) ;
             },
-          )),
+          )
+      ),
     );
   }
 
@@ -409,7 +406,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      keyboard.changeKeyboardType(context);
+                      keyboard.switchKeyboard();
                     },
                     child: Row(
                       children: [
@@ -424,7 +421,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 35,
                           child: Center(
                             child: Text(
-                              (keyboard.keyboardType != TextInputType.text)
+                              (keyboard.isChange)
                                   ? 'abc'
                                   : '123',
                               style: const TextStyle(fontWeight: FontWeight.bold),
@@ -440,8 +437,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     // keyboard.focusNode.unfocus();
                     FocusScope.of(context).requestFocus(FocusNode());
                     keyboard.setVisibleButtonSheet(false);
-                    keyboard.setCheckHeight(true);
-                    keyboard.setKeyboardType(TextInputType.text);
                   },
                   child: Icon(FontAwesomeIcons.xmark),
                 )

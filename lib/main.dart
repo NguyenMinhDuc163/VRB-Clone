@@ -55,6 +55,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       theme: ThemeData(),
       home: const SplashScreen(),
+      // home: const Content(),
       routes: routes,
       debugShowCheckedModeBanner: false,
       onGenerateRoute: generateRoutes,

@@ -1,38 +1,35 @@
 import 'package:flutter/cupertino.dart';
 
 class LoginProvider extends ChangeNotifier {
-  TextInputType keyboardType = TextInputType.text;
-  // FocusNode focusNode = FocusNode();
-  FocusNode focusNodeName = FocusNode();
-  FocusNode focusNodePass = FocusNode();
-  bool isCheckHeight = true;
+  TextEditingController controller = TextEditingController();
+  TextEditingController controller1 = TextEditingController();
+  FocusNode myFocusNode1 = FocusNode();
+  FocusNode myFocusNode2 = FocusNode();
+  FocusNode myFocusNode3 = FocusNode();
+  FocusNode myFocusNode4 = FocusNode();
+  bool isChange = true;
   bool isVisibleButtonSheet = false;
-  int type = 0;
-  bool checkNum = false;
-  void changeKeyboardType(BuildContext context) {
-    if (keyboardType == TextInputType.text) {
-      keyboardType = TextInputType.number;
-      isCheckHeight = true;
-    } else {
-      keyboardType = TextInputType.text;
-      setKeyboardType(TextInputType.text);
-      isCheckHeight = false;
-    }
-    (type == 0) ? focusNodeName.unfocus() : focusNodePass.unfocus();
-    Future.delayed(const Duration(milliseconds: 1), () {
-      (type == 0)
-          ? FocusScope.of(context).requestFocus(focusNodeName)
-          : FocusScope.of(context).requestFocus(focusNodePass);
-    });
-    notifyListeners();
-  }
+  // bool ignore = true;
+  // TextInputType key = TextInputType.number;
+  FocusNode? previousFocusNode;
 
-  void setCheckNum(bool check){
-    this.checkNum = check;
-    notifyListeners();
-  }
-  void setCheckHeight(bool check) {
-    isCheckHeight = check;
+  void switchKeyboard() async {
+    if(myFocusNode1.hasFocus || myFocusNode2.hasFocus){
+      isChange = !isChange;
+      if (isChange) {
+        myFocusNode1.requestFocus();
+      } else {
+        myFocusNode2.requestFocus();
+      }
+    }
+    else{
+      isChange = !isChange;
+      if (isChange) {
+        myFocusNode3.requestFocus();
+      } else {
+        myFocusNode4.requestFocus();
+      }
+    }
     notifyListeners();
   }
 
@@ -40,14 +37,5 @@ class LoginProvider extends ChangeNotifier {
     isVisibleButtonSheet = check;
     notifyListeners();
   }
-
-  void setKeyboardType(TextInputType type) {
-    keyboardType = type;
-    notifyListeners();
-  }
-
-  void setType(int type) {
-    this.type = type;
-    notifyListeners();
-  }
 }
+
