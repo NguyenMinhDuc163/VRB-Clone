@@ -30,13 +30,12 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
             children: [
               Expanded(
                 child: TextFormField(
-                
                     style: Theme.of(context).textTheme.bodyText2,
                     controller: controller,
                     focusNode: focusNode,
                     textCapitalization: TextCapitalization.characters,
                     keyboardType: textInputType,
-                    autofocus: true,
+                    // autofocus: true,
                     onChanged: (text) {},
                     onTap: onTap,
                     inputFormatters: [
@@ -71,144 +70,31 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
     return Consumer<LoginProvider>(builder: (context, keyboard, child) {
       return Column(
         children: [
-          // ElevatedButton(
-          //     onPressed: keyboard.switchKeyboard, child: Text("change")),
-          // SizedBox(
-          //   height: 300,
-          //   width: double.infinity,
-          // ),
-          //
-          //an cai duo igium minh
-          // TapRegion(
-          //   onTapOutside: (tap) {
-          //     print("1111111");
-          //     // myFocusNode1.unfocus();
-          //     // myFocusNode2.unfocus();
-          //   },
-          //   child: Stack(
-          //     children: [
-          //       keyboard.isChange
-          //           ? TextFormField(
-          //               style: Theme.of(context).textTheme.bodyText2,
-          //               controller: keyboard.controller,
-          //               focusNode: keyboard.myFocusNode1,
-          //               textCapitalization: TextCapitalization.characters,
-          //               keyboardType: TextInputType.text,
-          //               autofocus: true,
-          //               onChanged: (text) {},
-          //               onTap: () {},
-          //               inputFormatters: [
-          //                 FilteringTextInputFormatter.allow(
-          //                     RegExp('[a-zA-Z0-9]'))
-          //               ],
-          //               decoration: InputDecoration(
-          //                   labelText: LocaleKeys.userName.tr()))
-          //           : const SizedBox(),
-          //       keyboard.isChange
-          //           ? const SizedBox()
-          //           : TextFormField(
-          //               style: Theme.of(context).textTheme.bodyText2,
-          //               controller: keyboard.controller,
-          //               focusNode: keyboard.myFocusNode2,
-          //               textCapitalization: TextCapitalization.characters,
-          //               keyboardType: TextInputType.number,
-          //               autofocus: true,
-          //               onChanged: (text) {},
-          //               onTap: () {
-          //                 setState(() {
-          //                   keyboard.isChange = !keyboard.isChange;
-          //                   if (keyboard.isChange) {
-          //                     keyboard.myFocusNode1.requestFocus();
-          //                   } else {
-          //                     keyboard.myFocusNode2.requestFocus();
-          //                   }
-          //                 });
-          //               },
-          //               inputFormatters: [
-          //                 FilteringTextInputFormatter.allow(
-          //                     RegExp('[a-zA-Z0-9]'))
-          //               ],
-          //               decoration: InputDecoration(
-          //                   labelText: LocaleKeys.userName.tr())),
-          //     ],
-          //   ),
-          // ),
           Stack(
             children: [
               keyboard.isChange
                   ?
-              // TextFormField(
-              //     style: Theme.of(context).textTheme.bodyText2,
-              //     controller: keyboard.controller,
-              //     focusNode: keyboard.myFocusNode1,
-              //     textCapitalization: TextCapitalization.characters,
-              //     keyboardType: TextInputType.text,
-              //     autofocus: true,
-              //     onChanged: (text) {},
-              //     onTap: () {},
-              //     inputFormatters: [
-              //       FilteringTextInputFormatter.allow(
-              //           RegExp('[a-zA-Z0-9]'))
-              //     ],
-              //     decoration: InputDecoration(
-              //         labelText: LocaleKeys.userName.tr()))
               _textFieldWidget(LocaleKeys.userName.tr(), keyboard.controller, keyboard.myFocusNode1, TextInputType.text, () { },
                   FontAwesomeIcons.user
               )
                   : const SizedBox(),
               keyboard.isChange
                   ? const SizedBox()
-                  // : TextFormField(
-                  // style: Theme.of(context).textTheme.bodyText2,
-                  // controller: keyboard.controller,
-                  // focusNode: keyboard.myFocusNode2,
-                  // textCapitalization: TextCapitalization.characters,
-                  // keyboardType: TextInputType.number,
-                  // autofocus: true,
-                  // onChanged: (text) {},
-                  // onTap: () {
-                  //   setState(() {
-                  //     keyboard.isChange = !keyboard.isChange;
-                  //     if (keyboard.isChange) {
-                  //       keyboard.myFocusNode1.requestFocus();
-                  //     } else {
-                  //       keyboard.myFocusNode2.requestFocus();
-                  //     }
-                  //   }
-                  //   );
-                  // },
-                  // inputFormatters: [
-                  //   FilteringTextInputFormatter.allow(
-                  //       RegExp('[a-zA-Z0-9]'))
-                  // ],
-                  // decoration: InputDecoration(
-                  //     labelText: LocaleKeys.userName.tr())),
               :_textFieldWidget(LocaleKeys.userName.tr(), keyboard.controller, keyboard.myFocusNode2, TextInputType.number, () {
-                keyboard.isChange = !keyboard.isChange;
-                if (keyboard.isChange) {
-                  keyboard.myFocusNode1.requestFocus();
-                } else {
-                  keyboard.myFocusNode2.requestFocus();
-                }
+                setState(() {
+                  keyboard.isChange = !keyboard.isChange;
+                  if (keyboard.isChange) {
+                    keyboard.myFocusNode1.requestFocus();
+                  } else {
+                    keyboard.myFocusNode2.requestFocus();
+                  }
+                });
               }, FontAwesomeIcons.user)
             ],
           ),
           Stack(
             children: [
               keyboard.isChange
-                  // ? TextFormField(
-                  //     style: Theme.of(context).textTheme.bodyText2,
-                  //     controller: keyboard.controller1,
-                  //     focusNode: keyboard.myFocusNode3,
-                  //     textCapitalization: TextCapitalization.characters,
-                  //     keyboardType: TextInputType.text,
-                  //     autofocus: true,
-                  //     onChanged: (text) {},
-                  //     inputFormatters: [
-                  //       FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))
-                  //     ],
-                  //     decoration:
-                  //         InputDecoration(labelText: LocaleKeys.passWord.tr()))
               ? _textFieldWidget(LocaleKeys.passWord.tr(), keyboard.controller1, keyboard.myFocusNode3, TextInputType.text, () { },
                   Icons.visibility)
                   : const SizedBox(),

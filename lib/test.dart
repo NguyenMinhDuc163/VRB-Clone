@@ -170,9 +170,9 @@ class _ContentState extends State<Content> {
         //
         //                       setState(() {
         //                         keyboard.isChange = !keyboard.isChange;
-        //                         if (keyboard.isChange) {
-        //                           keyboard.myFocusNode3.requestFocus();
-        //                         } else {
+        //                         de3.requestFocus();
+        //                         } else {if (keyboard.isChange) {
+        //         //                           keyboard.myFocusNo
         //                           keyboard.myFocusNode4.requestFocus();
         //                         }
         //                       });

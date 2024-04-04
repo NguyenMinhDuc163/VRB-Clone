@@ -185,7 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     width:
                                         80, // Đảm bảo kích thước của ảnh bằng nhau
                                     height: 80,
-                                    decoration: BoxDecoration(
+                                    decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color:
                                           Colors.white, // Màu nền của hình tròn
@@ -212,7 +212,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       .watch<UserModel>()
                                       .userName
                                       .toString(),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
@@ -226,21 +226,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         : Container(
                             // padding: EdgeInsets.symmetric(
                             //     horizontal: kDefaultPadding),
-                            child: Column(
+                            child: const Column(
                               children: [
                                 SizedBox(
                                   height: kMediumPadding * 4,
                                 ),
-                                // TextFieldKeyboardWidget(
-                                //   icon: FontAwesomeIcons.user,
-                                //   hintText: LocaleKeys.userName.tr(),
-                                //   controller: userNameController,
-                                // ),
                                 TextFieldKeyBoardWiget(),
-                                // Container(
-                                //   height: 1, // Chiều cao của đường line
-                                //   color: Colors.grey, // Màu của đường line
-                                // ),
                               ],
                             ),
                           ),
@@ -252,15 +243,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           EdgeInsets.symmetric(horizontal: kDefaultPadding),
                       child: Column(
                         children: [
-                          // TextFieldKeyboardWidget(
-                          //   icon: Icons.visibility,
-                          //   hintText: LocaleKeys.passWord.tr(),
-                          //   controller: passwordController,
-                          // ),
-                          // Container(
-                          //   height: 1, // Chiều cao của đường line
-                          //   color: Colors.grey, // Màu của đường line
-                          // ),
                           const SizedBox(
                             height: kMinPadding * 2,
                           ),
@@ -333,7 +315,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: Align(
                                       child: Text(
                                     LocaleKeys.signIn.tr(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
                                   )),
@@ -373,18 +355,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           bottomSheet: Consumer<LoginProvider>(
             builder: (context, keyboard, child) {
-              // return Visibility(
-              //   visible: true,
-              //   replacement: Visibility(
-              //       // visible: keyboard.isVisibleButtonSheet,
-              //       visible: true,
-              //       //255
-              //       child: _buildButton(keyboardHeight + 35) ),
-              //   child: Visibility(
-              //     //355
-              //       visible: true,
-              //       child: _buildButton(keyboardHeight +  35)),
-              // );
               return _buildButton(keyboardHeight + 35) ;
             },
           )
