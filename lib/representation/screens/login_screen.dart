@@ -105,6 +105,8 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context)
   {
+    final TextEditingController controllerName = TextEditingController();
+    final TextEditingController controllerPass = TextEditingController();
     // lay kichh thuoc ca ban phimm
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return GestureDetector(
@@ -220,18 +222,22 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const SizedBox(
                                   height: kMediumPadding,
                                 ),
+                                TextFieldKeyBoardWidget(title: LocaleKeys.userName.tr(), icon: FontAwesomeIcons.user,
+                                  controller: controllerName,),
                               ],
                             ),
                           )
                         : Container(
-                            // padding: EdgeInsets.symmetric(
-                            //     horizontal: kDefaultPadding),
-                            child: const Column(
+                            child:  Column(
                               children: [
                                 SizedBox(
                                   height: kMediumPadding * 4,
                                 ),
-                                TextFieldKeyBoardWidget(),
+                                //TODO Textfield
+                                TextFieldKeyBoardWidget(title: LocaleKeys.userName.tr(), icon: FontAwesomeIcons.user,
+                                  controller: controllerName,),
+                                TextFieldKeyBoardWidget(title: LocaleKeys.passWord.tr(), icon: Icons.visibility,
+                                  controller: controllerPass,),
                               ],
                             ),
                           ),
@@ -257,7 +263,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         fontSize: 12,
                                         color: Colors.blue.shade900),
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    print(controllerName.text);
+                                    print(controllerPass.text);
+                                  },
                                 ),
                               ),
                               InkWell(
@@ -353,69 +362,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ],
           ),
-          // bottomSheet: Consumer<LoginProvider>(
-          //   builder: (context, keyboard, child) {
-          //     return _buildButton(keyboardHeight + 35) ;
-          //   },
-          // )
       ),
     );
-  }
-
-  Widget _buildButton(double height) {
-    return Consumer<LoginProvider>(builder: (context, keyboard, child) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        height: height > 50 ? height : 0,
-        color: Colors.grey.shade200,
-        child: Column(
-          children: [
-            Row(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      keyboard.switchKeyboard();
-                    },
-                    child: Row(
-                      children: [
-                        const Icon(
-                          FontAwesomeIcons.keyboard,
-                          size: 35,
-                        ),
-                        const SizedBox(
-                          width: kDefaultPadding,
-                        ),
-                        SizedBox(
-                          height: 35,
-                          child: Center(
-                            child: Text(
-                              (keyboard.isChange)
-                                  ? 'abc'
-                                  : '123',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    // keyboard.focusNode.unfocus();
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    keyboard.setVisibleButtonSheet(false);
-                  },
-                  child: Icon(FontAwesomeIcons.xmark),
-                )
-              ],
-            ),
-          ],
-        ),
-      );
-    });
   }
 
   Widget _buildIconLanguage(String path, String name) {

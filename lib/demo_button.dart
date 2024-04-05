@@ -1,133 +1,157 @@
-// import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-// import 'package:keyboard_actions/keyboard_actions.dart';
-// import 'package:provider/provider.dart';
-// import 'package:vrb_client/provider/login_provider.dart';
-// import 'package:vrb_client/representation/widgets/textfield_keyboard_widget.dart';
 //
-// class keyboard extends StatefulWidget {
-//   const keyboard({super.key});
-//
-//   @override
-//   State<keyboard> createState() => _keyboardState();
+// void main() {
+//   runApp(const MyApp());
 // }
 //
-// class _keyboardState extends State<keyboard> {
-//   TextInputType keyboardType = TextInputType.text;
-//   FocusNode focusNode = FocusNode();
-//   bool isCheckHeight = true;
-//   bool isVisibleButtonSheet = false;
+// class MyApp extends StatelessWidget {
+//   const MyApp({super.key});
 //
-//   void _changeKeyboardType() {
-//     setState(() {
-//       if (keyboardType == TextInputType.text) {
-//         keyboardType = TextInputType.number;
-//         isCheckHeight = true;
-//       } else {
-//         keyboardType = TextInputType.text;
-//         isCheckHeight = false;
-//       }
-//     });
-//     focusNode.unfocus();
-//     Future.delayed(Duration(milliseconds: 1), () {
-//       FocusScope.of(context).requestFocus(focusNode);
-//     });
-//     print(isCheckHeight);
-//   }
-//
-//   @override
-//   void dispose() {
-//     focusNode.dispose();
-//     super.dispose();
-//   }
 //   @override
 //   Widget build(BuildContext context) {
-//     return GestureDetector(
-//       behavior: HitTestBehavior.translucent, // Cho phép GestureDetector bắt sự kiện trên toàn bộ khu vực widget
-//       onTap: () {
-//         // Khi bên ngoài form được chạm, ẩn bàn phím bằng cách mất trọng tâm
-//         FocusScope.of(context).requestFocus(FocusNode());
-//         setState(() {
-//           isVisibleButtonSheet = false;
-//         });
-//         isCheckHeight = true;
-//         keyboardType = TextInputType.text;
-//       },
-//       child: Scaffold(
-//         resizeToAvoidBottomInset: false,
-//         appBar: AppBar(
-//           title: Text('KeyBoard'),
-//         ),
-//         body: Center(
-//           child: Column(
-//             children: [
-//               TextField(
-//                 keyboardType: keyboardType,
-//                 focusNode: focusNode,
-//                 onTap: () {
-//                   setState(() {
-//                     isVisibleButtonSheet = true;
-//                   });
-//                 },
-//                 onSubmitted: (val){
-//                   setState(() {
-//                     isVisibleButtonSheet = false;
-//                     isCheckHeight = true;
-//                     keyboardType = TextInputType.text;
-//                   }
-//                   );
-//                 },
-//               ),
-//             ],
-//           ),
-//         ),
-//
-//         bottomSheet: Visibility(
-//           visible: isCheckHeight,
-//           replacement: Visibility(visible: isVisibleButtonSheet, child: _buildButton(255)),
-//           child: Visibility(visible: isVisibleButtonSheet, child: _buildButton(355)),
-//         ), // This trailing comma makes auto-formatting nicer for build methods.
-//       ),
+//     return const MaterialApp(
+//       home: Content(),
 //     );
 //   }
-//
-//   Widget _buildButton(double height) {
-//     return Container(
-//       padding: EdgeInsets.symmetric(horizontal: 10),
-//       height: height,
-//       color: Colors.grey.shade200,
-//       child: Column(
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Container(
-//                 child: GestureDetector(
-//                   onTap: (){
-//                     _changeKeyboardType();
-//                   },
-//                   child: const Icon(
-//                     FontAwesomeIcons.keyboard,
-//                     size: 35,
-//                   ),
-//                 ),
-//               ),
-//               InkWell(
-//                 onTap: () {
-//                   focusNode.unfocus();
-//                   isVisibleButtonSheet = false;
-//                   isCheckHeight = false;
-//                   keyboardType = TextInputType.text;
-//                 },
-//                 child: Icon(FontAwesomeIcons.xmark),
-//               )
-//             ],
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
 // }
+//
+// class Content extends StatefulWidget {
+//   const Content({
+//     Key? key,
+//   }) : super(key: key);
+//
+//   @override
+//   ContentState createState() => ContentState();
+// }
+//
+// class _ContentState extends State<Content> {
+//   TextEditingController _controller = TextEditingController();
+//   TextEditingController? _controller1 = TextEditingController();
+//   FocusNode myFocusNode1 = FocusNode();
+//   FocusNode myFocusNode2 = FocusNode();
+//   FocusNode myFocusNode3 = FocusNode();
+//   bool isChange = true;
+//   bool ignore = true;
+//   TextInputType key = TextInputType.number;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     myFocusNode1.addListener(() {
+//       if (myFocusNode1.hasFocus) {
+//         // ignore = true;
+//         // setState(() {
+//         //
+//         // });
+//         // _controller1 = null;
+//       }
+//     });
+//     myFocusNode2.addListener(() {
+//       if (myFocusNode2.hasFocus) {
+//         // ignore = true;
+//         // setState(() {
+//         //
+//         // });
+//         //_controller1 = null;
+//       }
+//     });
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: Colors.white,
+//       body: GestureDetector(
+//         onTap: (){
+//           FocusScope.of(context).requestFocus(FocusNode());
+//         },
+//         child: Center(
+//           child: Padding(
+//             padding: const EdgeInsets.symmetric(horizontal: 20),
+//             child: SingleChildScrollView(
+//               child: Column(
+//                 children: [
+//                   SizedBox(
+//                     height: 300,
+//                     width: double.infinity,
+//                   ),
+//                   //
+//                   //an cai duo igium minh
+//                   TapRegion(
+//                     onTapOutside: (tap) {
+//                       print("1111111");
+//                       // myFocusNode1.unfocus();
+//                       // myFocusNode2.unfocus();
+//                     },
+//
+//                     child: Stack(
+//                       children: [
+//                         isChange
+//                             ? TextFormField(
+//                             style: Theme.of(context).textTheme.bodyText2,
+//                             controller: _controller,
+//                             focusNode: myFocusNode1,
+//                             textCapitalization: TextCapitalization.characters,
+//                             keyboardType: TextInputType.text,
+//                             autofocus: true,
+//                             onChanged: (text) {},
+//                             inputFormatters: [
+//                               FilteringTextInputFormatter.allow(
+//                                   RegExp('[a-zA-Z0-9]'))
+//                             ],
+//                             decoration:
+//                             const InputDecoration(labelText: '11111'))
+//                             : const SizedBox(),
+//                         isChange
+//                             ? const SizedBox()
+//                             : TextFormField(
+//                             style: Theme.of(context).textTheme.bodyText2,
+//                             controller: _controller,
+//                             focusNode: myFocusNode2,
+//                             textCapitalization: TextCapitalization.characters,
+//                             keyboardType: TextInputType.number,
+//                             autofocus: true,
+//                             onChanged: (text) {},
+//                             inputFormatters: [
+//                               FilteringTextInputFormatter.allow(
+//                                   RegExp('[a-zA-Z0-9]'))
+//                             ],
+//                             decoration:
+//                             const InputDecoration(labelText: '4444444')),
+//                       ],
+//                     ),
+//                   ),
+//
+//                   TextFormField(
+//                       focusNode: myFocusNode3,
+//                       autofocus: true,
+//                       controller: _controller1,
+//                       decoration: const InputDecoration(labelText: 'focus 3')),
+//
+//                   SizedBox(
+//                     height: 100,
+//                   ),
+//
+//                   ElevatedButton(
+//                       onPressed: () async {
+//                         setState(() {
+//                           isChange = !isChange;
+//                           if (isChange) {
+//                             myFocusNode1.requestFocus();
+//                           } else {
+//                             myFocusNode2.requestFocus();
+//                           }
+//                         });
+//                       },
+//                       child: Text("change"))
+//                 ],
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//

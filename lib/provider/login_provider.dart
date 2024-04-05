@@ -9,9 +9,6 @@ class LoginProvider extends ChangeNotifier {
   FocusNode myFocusNode4 = FocusNode();
   bool isChange = true;
   bool isVisibleButtonSheet = false;
-  // bool ignore = true;
-  // TextInputType key = TextInputType.number;
-  FocusNode? previousFocusNode;
 
   void switchKeyboard() async {
     if(myFocusNode1.hasFocus || myFocusNode2.hasFocus){
