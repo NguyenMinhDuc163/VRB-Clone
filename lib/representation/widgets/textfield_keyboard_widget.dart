@@ -6,12 +6,11 @@ class TextFieldKeyBoardWidget extends StatefulWidget {
       {super.key,
       required this.title,
       required this.icon,
-      required this.controller,
-      this.customDecoration});
+      this.customDecoration, required this.onSubmitted});
   final String title;
   final IconData icon;
-  final TextEditingController controller;
   final InputDecoration? customDecoration;
+  final ValueChanged<String> onSubmitted;
   @override
   State<TextFieldKeyBoardWidget> createState() =>
       _TextFieldKeyBoardWidgetState();
@@ -23,16 +22,16 @@ class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
   FocusNode myFocusNode2 = FocusNode();
   bool isChange = true;
   bool isVisibleButtonSheet = false;
-
-  // @override
-  // void dispose() {
-  //   myFocusNode1.dispose();
-  //   myFocusNode2.dispose();
-  //   if (_overlayEntry != null) {
-  //     _overlayEntry!.remove();
-  //   }
-  //   super.dispose();
-  // }
+  TextEditingController controller = TextEditingController();
+  @override
+  void dispose() {
+    myFocusNode1.dispose();
+    myFocusNode2.dispose();
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+    }
+    super.dispose();
+  }
 
   void switchKeyboard() async {
     setState(() {
@@ -66,13 +65,16 @@ class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
               Expanded(
                 child: TextFormField(
                     style: Theme.of(context).textTheme.bodyMedium,
-                    controller: widget.controller,
+                    controller: controller,
                     focusNode: focusNode,
                     textCapitalization: TextCapitalization.characters,
                     keyboardType: textInputType,
                     onTap: () {
                       onTap!();
                       showBottomSheet();
+                    },
+                    onChanged: (value){
+                      widget.onSubmitted(controller.text);
                     },
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9]'))
