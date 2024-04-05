@@ -21,7 +21,6 @@ class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
   FocusNode myFocusNode1 = FocusNode();
   FocusNode myFocusNode2 = FocusNode();
   bool isChange = true;
-  bool isVisibleButtonSheet = false;
   TextEditingController controller = TextEditingController();
   @override
   void dispose() {
@@ -32,7 +31,7 @@ class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
     }
     super.dispose();
   }
-
+  @override
   void switchKeyboard() async {
     setState(() {
       isChange = !isChange;
@@ -150,9 +149,6 @@ class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
                       InkWell(
                         onTap: () {
                           FocusScope.of(context).requestFocus(FocusNode());
-                          setState(() {
-                            isVisibleButtonSheet = false;
-                          });
                         },
                         child: const Icon(Icons.cancel_outlined),
                       )
@@ -165,6 +161,7 @@ class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
     });
     overlay.insert(_overlayEntry!);
   }
+
 
   @override
   Widget build(BuildContext context) {
