@@ -231,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 SizedBox(
                                   height: kMediumPadding * 4,
                                 ),
-                                TextFieldKeyBoardWiget(),
+                                TextFieldKeyBoardWidget(),
                               ],
                             ),
                           ),

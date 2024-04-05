@@ -9,15 +9,15 @@ import 'package:vrb_client/generated/locale_keys.g.dart';
 import '../../core/constants/dimension_constants.dart';
 import '../../provider/login_provider.dart';
 
-class TextFieldKeyBoardWiget extends StatefulWidget {
-  const TextFieldKeyBoardWiget({super.key});
+class TextFieldKeyBoardWidget extends StatefulWidget {
+  const TextFieldKeyBoardWidget({super.key});
 
   @override
-  State<TextFieldKeyBoardWiget> createState() => _TextFieldKeyBoardWigetState();
+  State<TextFieldKeyBoardWidget> createState() => _TextFieldKeyBoardWidgetState();
 }
 
 
-class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
+class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
   OverlayEntry?_overlayEntry;
 
   Widget _textFieldWidget(String title, TextEditingController controller, FocusNode focusNode,
@@ -36,9 +36,7 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
                     focusNode: focusNode,
                     textCapitalization: TextCapitalization.characters,
                     keyboardType: textInputType,
-                    // autofocus: true,
                     onChanged: (text) {},
-                    // onTap: onTap,
                     onTap: (){
                       onTap!();
                       showBottomSheet();
@@ -47,8 +45,6 @@ class _TextFieldKeyBoardWigetState extends State<TextFieldKeyBoardWiget> {
                       FilteringTextInputFormatter.allow(
                           RegExp('[a-zA-Z0-9]'))
                     ],
-                    // decoration: InputDecoration(
-                    //     labelText: title));
                 decoration: InputDecoration(
                     hintText: title, border: InputBorder.none)),
               ),

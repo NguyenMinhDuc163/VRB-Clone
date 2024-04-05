@@ -192,7 +192,7 @@ class _ContentState extends State<Content> {
         //     ),
         //   ),
         // ),
-        child: TextFieldKeyBoardWiget(),
+        // child: TextFieldKeyBoardWiget(),
       ),
     );
   }
