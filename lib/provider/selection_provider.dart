@@ -15,6 +15,10 @@ class SelectionProvider extends ChangeNotifier{
     notifyListeners();
   }
 
+  void setType(int newType){
+    type = newType;
+    notifyListeners();
+  }
   void setData(String data){
     typeProduct = data;
     notifyListeners();

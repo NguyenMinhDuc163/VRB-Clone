@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -45,9 +46,10 @@ class _LocationScreenState extends State<LocationScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<LocationProvider>(context, listen: false).fetchData();
-    Provider.of<LocationProvider>(context, listen: false).getLocationUpdate();
-    Provider.of<LocationProvider>(context, listen: false).createCustomMarker();
+    var provider = (Provider.of<LocationProvider>(context, listen: false));
+    provider.fetchData();
+    provider.getLocationUpdate();
+    provider.createCustomMarker();
     _requestPermission();
   }
 
@@ -140,6 +142,39 @@ class _LocationScreenState extends State<LocationScreen> {
     );
 
   }
+
+  Widget _buildGoogleMap(Set<Polyline> polylines,  Set<Marker> markers) {
+    try {
+      return GoogleMap(
+        zoomControlsEnabled: false,
+        mapType: MapType.normal,
+        initialCameraPosition: const CameraPosition(
+          target: LatLng(21.005536, 105.8180681),
+          zoom: 10,
+        ),
+        polylines: polylines,
+        markers: markers,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+          setState(() {
+            mapController = controller;
+          });
+        },
+      );
+    }  catch (e) {
+      // Xử lý khi xảy ra lỗi với Google Play Services
+      print('loi-----------------');
+      return Container(
+        color: Colors.blue,
+        height: 300,
+        child: Center(
+          child: Text('Không thể tải bản đồ vì Google Play Services không khả dụng.'),
+        ),
+      );
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -147,14 +182,16 @@ class _LocationScreenState extends State<LocationScreen> {
     int isCheckChoose = 0;
 
     double distanceBetween(String latitude, String longitude){
+      var provider = (Provider.of<LocationProvider>(context, listen: false));
       return Geolocator.distanceBetween
-        (Provider.of<LocationProvider>(context, listen: false).currentLocation.latitude, Provider.of<LocationProvider>(context, listen: false).currentLocation.longitude, double.parse(latitude), double.parse(longitude));
+        (provider.currentLocation.latitude, provider.currentLocation.longitude, double.parse(latitude), double.parse(longitude));
     }
 
     List<Map<String, BankLocation>> sortMap(List<Map<String, BankLocation>> newAddresses)  {
       for(int i = 0; i < newAddresses.length; i++){
         List<MapEntry<String, BankLocation>> entries = newAddresses[i].entries.toList();
-        entries.sort((a, b) => distanceBetween(a.value.latitude, a.value.longitude).compareTo(distanceBetween(b.value.latitude, b.value.longitude)));
+        entries.sort((a, b) => distanceBetween(a.value.latitude, a.value.longitude)
+            .compareTo(distanceBetween(b.value.latitude, b.value.longitude)));
         Map<String, BankLocation> sortedMap = Map.fromEntries(entries);
         newAddresses[i] = sortedMap;
       }
@@ -177,23 +214,7 @@ class _LocationScreenState extends State<LocationScreen> {
           background: Stack(
             children: [
               Positioned.fill(
-                  child: GoogleMap(
-                    zoomControlsEnabled: false, // tat ban do
-                    mapType: MapType.normal,
-                    initialCameraPosition: const CameraPosition(
-                      // target: LatLng(21.005536, 105.8180681),
-                      target: LatLng(21.005536, 105.8180681),
-                      zoom: 10,
-                    ),
-                    polylines: location.polylines,
-                    markers: location.markers,
-                    onMapCreated: (GoogleMapController controller) {
-                      _controller.complete(controller);
-                      setState(() {
-                        mapController = controller;
-                      });
-                    },
-                  )
+                child: _buildGoogleMap(location.polylines, location.markers),
               ),
 
               Positioned(
@@ -207,7 +228,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   child: _buildButtonLocal(
 
                       provinceName , (){
-                    List<String> data = Provider.of<LocationProvider>(context, listen: false).locations
+                    List<String> data = location.locations
                         .entries.map((e){
                       return e.value.regionName;
                     }).toList();
@@ -216,7 +237,8 @@ class _LocationScreenState extends State<LocationScreen> {
                       print(value);
                       Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
                       List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
-                        (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
+                        (location.currentLocation.longitude.toString(),
+                          location.currentLocation.latitude.toString(),location.locations[value]?.regionCode1 ?? "Hà Nội");
                       location.clearPolylines();
                       //TODO fix provider
                       location.setProvinceChose(value.toString());
@@ -258,7 +280,8 @@ class _LocationScreenState extends State<LocationScreen> {
 
                       List<Map<String, BankLocation>> newAddresses = await DioTest.postBranchATMTypeThree
                         (location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
-                          location.locations[location.provinceChose]?.regionCode1 ?? "101", location.districts[value]?.districtCode ?? "10111");
+                          location.locations[location.provinceChose]?.regionCode1 ?? "101",
+                          location.districts[value]?.districtCode ?? "10111");
                       location.setDistrictChose(value.toString());
                       location.setMarkers(1);
                       location.setAddress(newAddresses);
@@ -322,7 +345,8 @@ class _LocationScreenState extends State<LocationScreen> {
                           //TODO tam thoi fix call
                           try{
                             List<Map<String, BankLocation>> newAddresses = await DioTest.
-                            postBranchATMTypeOne(location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString());
+                            postBranchATMTypeOne(location.currentLocation.longitude.toString(),
+                                location.currentLocation.latitude.toString());
                             location.customMarker;
                             location.setMarkers(0);
                             //TODO sua trong provider
@@ -337,7 +361,8 @@ class _LocationScreenState extends State<LocationScreen> {
                           if(location.provinceChose != null){
                             String regionCode1 = location.locations[location.provinceChose]?.regionCode1 ?? "101";
                             List<Map<String, BankLocation>>  newAddresses = await DioTest.
-                            postBranchATMTypeTwo(location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),regionCode1);
+                            postBranchATMTypeTwo(location.currentLocation.longitude.toString(),
+                                location.currentLocation.latitude.toString(),regionCode1);
                             location.customMarker;
                             location.setMarkers(0);
                             // TODO
@@ -354,7 +379,8 @@ class _LocationScreenState extends State<LocationScreen> {
                             String regionCode1 = location.locations[location.provinceChose]?.regionCode1 ?? "101";
                             String districtCode = location.districts[location.districtChose]?.districtCode ?? '10111';
                             List<Map<String, BankLocation>> newAddresses =
-                            await DioTest.postBranchATMTypeThree(location.currentLocation.longitude.toString(), location.currentLocation.latitude.toString(),
+                            await DioTest.postBranchATMTypeThree(location.currentLocation.longitude.toString(),
+                                location.currentLocation.latitude.toString(),
                                 regionCode1, districtCode) ;
                             location.customMarker;
                             location.setIndex(0);
@@ -381,7 +407,8 @@ class _LocationScreenState extends State<LocationScreen> {
               child: ListView(
                 controller: scrollController,
                 children:  (Provider.of<LocationProvider>(context, listen: false).address[location.index].isNotEmpty) ?
-                Provider.of<LocationProvider>(context, listen: false).address[(location.index != 0 || location.index != 1) ? location.index : 0].entries.map((e) {
+                Provider.of<LocationProvider>(context, listen: false)
+                    .address[(location.index != 0 || location.index != 1) ? location.index : 0].entries.map((e) {
                   return GestureDetector(
                     onTap: () {
                       //TODO dang lay gt default

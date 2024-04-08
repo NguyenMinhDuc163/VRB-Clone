@@ -23,6 +23,7 @@ class ContactHelper extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Center(child: Image.asset(AssetPath.helper)),
+              SizedBox(height: kDefaultPadding,),
               Text(LocaleKeys.slogan.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
               Center(child: Text("(VRB)", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),),
               SizedBox(height: kDefaultPadding,),
@@ -38,8 +39,9 @@ class ContactHelper extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
+        margin: EdgeInsets.all(15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(20)),
           border: Border.all(color: Colors.grey), // Viền màu xanh
         ),
         child: InkWell(
@@ -54,7 +56,7 @@ class ContactHelper extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
-                color: Colors.black,
+                color: Colors.blue.shade800,
               ),
             ),
           ),

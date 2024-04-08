@@ -8,6 +8,7 @@ import 'package:vrb_client/core/constants/dimension_constants.dart';
 import 'package:vrb_client/generated/locale_keys.g.dart';
 
 import '../../provider/dialog_provider.dart';
+import '../../provider/location_provider.dart';
 
 class SearchLocationScreen extends StatefulWidget {
   const SearchLocationScreen({super.key, required this.searchTerms, required this.titleField});
@@ -50,60 +51,69 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
     }
   }
   Future<bool> _onWillPop() async {
-    Navigator.pop(context, widget.titleField);
+    var tmp = Provider.of<LocationProvider>(context, listen: false);
+    (widget.titleField == LocaleKeys.province.tr()) ?
+      Navigator.pop(context,tmp.provinceChose ?? widget.titleField)
+    : Navigator.pop(context,tmp.districtChose ?? widget.titleField);
     return true;
   }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: _onWillPop,
-      child: Scaffold(
-        body: Container(
-          padding: EdgeInsets.all(kDefaultPadding),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      widget.titleField,
-                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                    ),
-                    Container(
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pop(context, widget.titleField);
-                        },
-                        child: const Icon(FontAwesomeIcons.xmark),
+      child: GestureDetector(
+        behavior: HitTestBehavior
+            .translucent, // Cho phép GestureDetector bắt sự kiện trên toàn bộ khu vực widget
+        onTap: () {
+          // Khi bên ngoài form được chạm, ẩn bàn phím bằng cách mất trọng tâm
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Scaffold(
+          body: Container(
+            padding: EdgeInsets.all(kDefaultPadding),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        widget.titleField,
+                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                    )
-                  ],
-                ),
-              ),
-              _buildSearch(),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: (filteredItems.isEmpty || widget.searchTerms.isEmpty)
-                      ?  Center(child: Text(LocaleKeys.notFoundData.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),)
-                      :ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: filteredItems.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(filteredItems[index]),
-                        onTap: () {
-                          _onItemTapped(filteredItems[index]); // Gọi hàm khi một mục được chọn
-                        },
-                      );
-                    },
+                      Container(
+                        child: InkWell(
+                          onTap: _onWillPop,
+                          child: const Icon(FontAwesomeIcons.xmark),
+                        ),
+                      )
+                    ],
                   ),
                 ),
-              ),
-            ],
+                _buildSearch(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: (filteredItems.isEmpty || widget.searchTerms.isEmpty)
+                        ?  Center(child: Text(LocaleKeys.notFoundData.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),)
+                        :ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: filteredItems.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(filteredItems[index]),
+                          onTap: () {
+                            _onItemTapped(filteredItems[index]); // Gọi hàm khi một mục được chọn
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

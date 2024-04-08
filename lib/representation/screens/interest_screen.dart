@@ -142,9 +142,9 @@ class _InterestScreenState extends State<InterestScreen> {
                       //TODO choose 1
                       InkWell(
                         onTap: () async {
-                          // Provider.of<SelectionProvider>(context,
-                          //     listen: false)
-                          //     .changeSize(_size, 0);
+                          Provider.of<SelectionProvider>(context,
+                              listen: false)
+                              .setType(0);
                           _showBottomSheet(context);
                         },
                         child: SizedBox(
@@ -177,9 +177,9 @@ class _InterestScreenState extends State<InterestScreen> {
                       //TODO choose 2
                       InkWell(
                         onTap: () {
-                          // Provider.of<SelectionProvider>(context,
-                          //     listen: false)
-                          //     .changeSize(_size, 1);
+                          Provider.of<SelectionProvider>(context,
+                              listen: false)
+                              .setType(1);
                           _showBottomSheet(context);
                         },
                         child: SizedBox(
@@ -355,7 +355,8 @@ class _InterestScreenState extends State<InterestScreen> {
                 InkWell(
                     onTap: () {
                       // Provider.of<SelectionProvider>(context, listen: false)
-                      //     .changeSize(0, 0);
+                      //     .setType(0);
+                      
                       Navigator.pop(context);
                     },
                     child: Icon(FontAwesomeIcons.xmark))
@@ -377,7 +378,7 @@ class _InterestScreenState extends State<InterestScreen> {
                   Duration(milliseconds: 200)); // Đợi trong 2 giây
               select.changeSelect(value!, select.type);
               // Provider.of<SelectionProvider>(context, listen: false)
-              //     .changeSize(0, 0);
+              //     .setType(0);
               Navigator.pop(context);
               Provider.of<DialogProvider>(context, listen: false)
                   .hideLoadingDialog(context);
@@ -401,7 +402,7 @@ class _InterestScreenState extends State<InterestScreen> {
                   Duration(milliseconds: 200)); // Đợi trong 2 giây
               select.changeSelect(value!, select.type);
               // Provider.of<SelectionProvider>(context, listen: false)
-              //     .changeSize(0, 0);
+              //     .setType(0);
               Navigator.pop(context);
               Provider.of<DialogProvider>(context, listen: false)
                   .hideLoadingDialog(context);
