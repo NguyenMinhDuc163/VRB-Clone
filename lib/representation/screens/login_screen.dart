@@ -128,13 +128,13 @@ class _LoginScreenState extends State<LoginScreen> {
               right: 0,
               child: Image.asset(AssetPath.backgroundBottom),
             ),
-            Positioned(bottom: 0, child: BottomBarWidget()),
+            // Positioned(bottom: 0, child: BottomBarWidget()),
             Positioned.fill( // xu ly co dinh khi scrol
               top: 50, // Đặt giá trị top cho Row
               left: 0, // Đặt giá trị left cho Row
               right: 0, // Đặt giá trị right cho Row
               child: Padding(
-                padding: EdgeInsets.only(bottom: keyboardHeight), // padding động theo bàn phím
+                padding: EdgeInsets.only(bottom: keyboardHeight + 30), // padding động theo bàn phím
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -361,24 +361,50 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             // test scroll keyboard
-                            // TextFieldKeyBoardWidget(
-                            //   title: LocaleKeys.userName.tr(),
-                            //   icon: FontAwesomeIcons.user,
-                            //   onSubmitted: (String value) {
-                            //     print(value);
-                            //   },
-                            // ),
+                            Container(
+                              height: 200,
+                              color: Colors.grey,
+                              child: TextFieldKeyBoardWidget(
+                                title: LocaleKeys.userName.tr(),
+                                icon: FontAwesomeIcons.user,
+                                onSubmitted: (String value) {
+                                  print(value);
+                                },
+                              ),
+                            ),
+                            Container(
+                              height: 200,
+                              color: Colors.blue,
+                              child: TextFieldKeyBoardWidget(
+                                title: LocaleKeys.userName.tr(),
+                                icon: FontAwesomeIcons.user,
+                                onSubmitted: (String value) {
+                                  print(value);
+                                },
+                              ),
+                            ),
+                            Container(
+                              height: 200,
+                              color: Colors.greenAccent,
+                              child: TextFieldKeyBoardWidget(
+                                title: LocaleKeys.userName.tr(),
+                                icon: FontAwesomeIcons.user,
+                                onSubmitted: (String value) {
+                                  print(value);
+                                },
+                              ),
+                            ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
               ),
             ),
+            Positioned(bottom: 0, child: BottomBarWidget()),
           ],
         ),
-        // bottomNavigationBar: BottomBarWidget(),
       ),
     );
   }
