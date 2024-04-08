@@ -361,39 +361,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                             // test scroll keyboard
-                            Container(
-                              height: 200,
-                              color: Colors.grey,
-                              child: TextFieldKeyBoardWidget(
-                                title: LocaleKeys.userName.tr(),
-                                icon: FontAwesomeIcons.user,
-                                onSubmitted: (String value) {
-                                  print(value);
-                                },
-                              ),
-                            ),
-                            Container(
-                              height: 200,
-                              color: Colors.blue,
-                              child: TextFieldKeyBoardWidget(
-                                title: LocaleKeys.userName.tr(),
-                                icon: FontAwesomeIcons.user,
-                                onSubmitted: (String value) {
-                                  print(value);
-                                },
-                              ),
-                            ),
-                            Container(
-                              height: 200,
-                              color: Colors.greenAccent,
-                              child: TextFieldKeyBoardWidget(
-                                title: LocaleKeys.userName.tr(),
-                                icon: FontAwesomeIcons.user,
-                                onSubmitted: (String value) {
-                                  print(value);
-                                },
-                              ),
-                            ),
                           ],
                         ),
                       ),
