@@ -129,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Image.asset(AssetPath.backgroundBottom),
             ),
             Positioned(bottom: 0, child: BottomBarWidget()),
-            Positioned.fill(
+            Positioned.fill( // xu ly co dinh khi scrol
               top: 50, // Đặt giá trị top cho Row
               left: 0, // Đặt giá trị left cho Row
               right: 0, // Đặt giá trị right cho Row
@@ -360,13 +360,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                             ),
-                            TextFieldKeyBoardWidget(
-                              title: LocaleKeys.userName.tr(),
-                              icon: FontAwesomeIcons.user,
-                              onSubmitted: (String value) {
-                                print(value);
-                              },
-                            ),
+                            // test scroll keyboard
+                            // TextFieldKeyBoardWidget(
+                            //   title: LocaleKeys.userName.tr(),
+                            //   icon: FontAwesomeIcons.user,
+                            //   onSubmitted: (String value) {
+                            //     print(value);
+                            //   },
+                            // ),
                           ],
                         ),
                       )
