@@ -2,13 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
+import 'package:vrb_client/representation/screens/home_screen.dart';
 
 import '../../core/constants/assets_path.dart';
 
 class AppBarContainerWidget extends StatelessWidget implements PreferredSizeWidget{
-  const AppBarContainerWidget({super.key, required this.title});
+  const AppBarContainerWidget({super.key, required this.title, this.chooseHome});
 
   final String title;
+  final bool? chooseHome;
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
@@ -28,9 +30,11 @@ class AppBarContainerWidget extends StatelessWidget implements PreferredSizeWidg
               // SizedBox(width: kDefaultPadding * 2,),
               Align(child: Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),),
               // SizedBox(width: kDefaultPadding * 2,),
-              // Container(child: IconButton(onPressed: (){}, icon: Image.asset(AssetPath.icoHome)),),
+              (chooseHome == true) ? Center(child: IconButton(onPressed: (){
+                Navigator.of(context).pushNamed(HomeScreen.routeName);
+              }, icon: Image.asset(AssetPath.icoHome)),)
               // TODO chua toi uu
-              SizedBox(
+              : SizedBox(
                 width: 30,
               )
             ],

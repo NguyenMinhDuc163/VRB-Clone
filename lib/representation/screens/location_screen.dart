@@ -21,12 +21,10 @@ import '../../core/constants/dimension_constants.dart';
 import '../../models/bank_location.dart';
 import '../../models/distance_point.dart';
 import '../../models/district.dart';
-import '../../models/province.dart';
 import '../../network/netword_request.dart';
 import '../../provider/dialog_provider.dart';
 import '../widgets/address_form_widget.dart';
 import '../widgets/app_bar_continer_widget.dart';
-import '../widgets/select_local_widget.dart';
 import 'loading_screen.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -179,7 +177,6 @@ class _LocationScreenState extends State<LocationScreen> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     ScrollController scrollController = ScrollController();
-    int isCheckChoose = 0;
 
     double distanceBetween(String latitude, String longitude){
       var provider = (Provider.of<LocationProvider>(context, listen: false));

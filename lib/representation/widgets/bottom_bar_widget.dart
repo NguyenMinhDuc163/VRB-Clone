@@ -18,8 +18,8 @@ class BottomBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // height: 110,
-      width: 360,
-      constraints: BoxConstraints(// keo dân kichg thuoc
+      // width: 360,
+      constraints: BoxConstraints(// keo dân kich thuoc
         maxWidth: MediaQuery.of(context).size.width,
       ),
       padding: EdgeInsets.only(top: 20),

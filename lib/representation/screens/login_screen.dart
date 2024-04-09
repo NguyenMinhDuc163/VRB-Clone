@@ -7,8 +7,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
+import 'package:vrb_client/core/themes/app_colors.dart';
 import 'package:vrb_client/provider/login_provider.dart';
 import 'package:vrb_client/representation/screens/main_app.dart';
+import 'package:vrb_client/representation/screens/payment_screens/outside_bank_payment_screen.dart';
 
 import '../../generated/locale_keys.g.dart';
 import '../../models/user_model.dart';
@@ -284,7 +286,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     style: TextStyle(
                                         fontSize: 12, color: Colors.blue.shade900),
                                   ),
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(OutsideBankPaymentScreen.routeName);
+                                  },
                                 ),
                               ],
                             ),
@@ -299,15 +303,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   width: 270,
                                   height: 45,
                                   decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.topLeft,
-                                        end: Alignment.bottomRight,
-                                        colors: [
-                                          const Color(0xFF19226D).withOpacity(0.9),
-                                          const Color(0xFFED1C24).withOpacity(0.8),
-                                        ],
-                                        stops: [0.5, 1],
-                                      ),
+                                      gradient: AppColor.gradient,
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(15))),
                                   child: InkWell(
@@ -369,7 +365,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            Positioned(bottom: 0, child: BottomBarWidget()),
+            const Positioned(bottom: 0, child: BottomBarWidget()),
           ],
         ),
       ),

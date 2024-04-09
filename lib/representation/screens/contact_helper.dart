@@ -39,9 +39,9 @@ class ContactHelper extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-        margin: EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
           border: Border.all(color: Colors.grey), // Viền màu xanh
         ),
         child: InkWell(
@@ -65,7 +65,7 @@ class ContactHelper extends StatelessWidget {
     );
   }
   _makePhoneCall() async {
-    final String telUrl = 'tel:18006656';
+    const String telUrl = 'tel:18006656';
     final Uri uri = Uri.parse(telUrl);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
@@ -88,21 +88,21 @@ class ContactHelper extends StatelessWidget {
     return Row(
       children: [
         icon,
-        SizedBox(width: kDefaultPadding * 2,),
+        const SizedBox(width: kDefaultPadding * 2,),
         InkWell(
           onTap:(onTap != null) ? onTap : (){},
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(text1, style: TextStyle(fontSize: 16),),
-              SizedBox(height: kMinPadding,),
-              Text(text2, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              Text(text1, style: const TextStyle(fontSize: 16),),
+              const SizedBox(height: kMinPadding,),
+              Text(text2, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
                   textAlign: TextAlign.start,
               ),
-              SizedBox(height: kDefaultPadding,),
+              const SizedBox(height: kDefaultPadding,),
             ],
           ),
         )

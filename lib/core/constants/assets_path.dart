@@ -37,6 +37,12 @@ class AssetPath{
   static const String icoMap = '$iconPath/ico_map.png';
   static const String icoAmerica = '$iconPath/ico_america.png';
   static const String icoVN = '$iconPath/ico_vn.png';
+  static const String logoBank1 = '$iconPath/logo_bank1.png';
+  static const String logoBank2 = '$iconPath/logo_bank2.png';
+  static const String logoBank3 = '$iconPath/logo_bank3.png';
+  static const String logoBank4 = '$iconPath/logo_bank4.png';
+  static const String logoBank5 = '$iconPath/logo_bank5.png';
+  static const String logoBank6 = '$iconPath/logo_bank6.png';
 
   static const String logoBankVRB = '$imagePath/logo_bank_vrb.png';
   static const String rectangle = '$imagePath/rectangle.png';
@@ -56,4 +62,5 @@ class AssetPath{
   static const String helper = '$imagePath/helper.png';
   static const String notFound = '$imagePath/not_found.png';
   static const String vietQR = '$imagePath/viet_qr.png';
+
 }
