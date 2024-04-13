@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/themes/app_colors.dart';
+import '../../../../core/themes/app_colors.dart';
 
 class ChoosePaymentBarWidget extends StatelessWidget {
   const ChoosePaymentBarWidget({super.key});

@@ -38,8 +38,6 @@ class _LocationScreenState extends State<LocationScreen> {
   GlobalKey<ExpandableBottomSheetCustomState> key = GlobalKey();
   GoogleMapController? mapController;
   Completer<GoogleMapController> _controller = Completer();
-  String provinceName = LocaleKeys.province.tr();
-  String districtName = LocaleKeys.district.tr();
 
   @override
   void initState() {
@@ -86,7 +84,7 @@ class _LocationScreenState extends State<LocationScreen> {
         onPressed();
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300), // Thời gian chuyển đổi
+        duration: const Duration(milliseconds: 300), // Thời gian chuyển đổi
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: index == Provider.of<LocationProvider>(context, listen: false).selectedButtonIndex ? Colors.grey.withOpacity(0.3) : Colors.transparent,
@@ -165,7 +163,7 @@ class _LocationScreenState extends State<LocationScreen> {
       return Container(
         color: Colors.blue,
         height: 300,
-        child: Center(
+        child: const Center(
           child: Text('Không thể tải bản đồ vì Google Play Services không khả dụng.'),
         ),
       );
@@ -224,14 +222,13 @@ class _LocationScreenState extends State<LocationScreen> {
                           kMinPadding), // Sử dụng chiều rộng của màn hình trừ đi khoảng cách mép trái và phải
                   child: _buildButtonLocal(
 
-                      provinceName , (){
+                      location.provinceName , (){
                     List<String> data = location.locations
                         .entries.map((e){
                       return e.value.regionName;
                     }).toList();
                     Navigator.of(context).pushNamed(SearchLocationScreen.routeName,
                       arguments: {'searchTerms': data, 'titleField': LocaleKeys.province.tr()}, ).then((value) async {
-                      print(value);
                       Map<String, District> newDistricts = await DioTest.postDistrict(location.locations[value]?.regionCode1 ?? "Hà Nội");
                       List<Map<String, BankLocation>>  newAddresses = await DioTest.postBranchATMTypeTwo
                         (location.currentLocation.longitude.toString(),
@@ -243,8 +240,8 @@ class _LocationScreenState extends State<LocationScreen> {
                       location.setAddress(newAddresses);
                       location.setMarker(location.setMarkers(0));
                       setState(() {
-                        provinceName = value.toString();
-                        districtName = LocaleKeys.district.tr();
+                        location.setProvinceName(value.toString());
+                        location.setDistrictName(LocaleKeys.district.tr()) ;
                       });
                       Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
                       await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây
@@ -265,7 +262,7 @@ class _LocationScreenState extends State<LocationScreen> {
                   width: size.width -
                       (2 *
                           kMinPadding),
-                  child: _buildButtonLocal(districtName, (){
+                  child: _buildButtonLocal(location.districtName, (){
                     List<String> data = Provider.of<LocationProvider>(context, listen: false).districts
                         .entries.map((e){
                       return e.value.districtName;
@@ -284,7 +281,7 @@ class _LocationScreenState extends State<LocationScreen> {
                       location.setAddress(newAddresses);
                       location.setMarker(location.setMarkers(location.index));
                       setState(() {
-                        districtName = value.toString();
+                        location.setDistrictName(value.toString());
                       });
                       Provider.of<DialogProvider>(context, listen: false).showLoadingDialog(context);
                       await Future.delayed(Duration(milliseconds: 400)); // Đợi trong 2 giây

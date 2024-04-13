@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:remove_diacritic/remove_diacritic.dart';
 
 import '../../../core/constants/assets_path.dart';
 import '../../../core/constants/dimension_constants.dart';
 import '../../../generated/locale_keys.g.dart';
+import '../../../provider/outside_bank_payment_provider.dart';
 
 class SearchBankScreen extends StatefulWidget {
   const SearchBankScreen({super.key, required this.searchTerms, required this.titleField});
@@ -18,51 +20,6 @@ class SearchBankScreen extends StatefulWidget {
 }
 
 class _SearchBankScreenState extends State<SearchBankScreen> {
-  final List<String> imagePaths = [
-    AssetPath.logoBank1,
-    AssetPath.logoBank2,
-    AssetPath.logoBank3,
-    AssetPath.logoBank4,
-    AssetPath.logoBank5,
-    AssetPath.logoBank6,
-    AssetPath.logoBank1,
-    AssetPath.logoBank2,
-    AssetPath.logoBank3,
-    AssetPath.logoBank4,
-    AssetPath.logoBank5,
-    AssetPath.logoBank6,
-  ];
-  final List<String> listNameBank = [
-    'Vietcombank',
-    'Tiên phong bank',
-    'VP bank',
-    'Vietinbank',
-    'Tecombank',
-    'Agribank',
-    'Vietcombank',
-    'Tiên phong bank',
-    'VP bank',
-    'Vietinbank',
-    'Tecombank',
-    'Agribank',
-  ];
-
-  final List<String> bankDescription = [
-    'Ngân hàng  TMCP Ngoại thương Việt Nam',
-    'Ngân hàng Thương mại Cổ phần Tiên Phong',
-    'Ngân Hàng TMCP Việt Nam Thịnh Vượng',
-    'Ngân hàng Thương mại Cổ phần Công thương Việt Nam',
-    'Ngân hàng  TMCP Ngoại thương Việt Nam',
-    'Ngân hàng TMCP Kỹ thương Việt Nam',
-    'Ngân hàng Nông nghiệp và Phát triển nông thôn Việt nam',
-    'Ngân hàng  TMCP Ngoại thương Việt Nam',
-    'Ngân hàng Thương mại Cổ phần Tiên Phong',
-    'Ngân Hàng TMCP Việt Nam Thịnh Vượng',
-    'Ngân hàng Thương mại Cổ phần Công thương Việt Nam',
-    'Ngân hàng  TMCP Ngoại thương Việt Nam',
-    'Ngân hàng TMCP Kỹ thương Việt Nam',
-    'Ngân hàng Nông nghiệp và Phát triển nông thôn Việt nam',
-  ];
 
 
   final TextEditingController _searchController = TextEditingController();
@@ -82,14 +39,16 @@ class _SearchBankScreenState extends State<SearchBankScreen> {
     super.initState();
   }
   void myFilterItems() {
+    OutsideBankPaymentProvider bankDataProvider = Provider.of<OutsideBankPaymentProvider>(context, listen: false);
     if (searchText.isEmpty) {
       //TODO doi co data
       // filteredItems = List.from(widget.searchTerms);
-      filteredItems = List.from(listNameBank);
+      // filteredItems = List.from(listNameBank);
+      filteredItems = bankDataProvider.bankData.keys.toList();
     } else {
       String textChoose = removeDiacritics(searchText);
       // filteredItems = widget.searchTerms
-      filteredItems = listNameBank
+      filteredItems = bankDataProvider.bankData.keys.toList()
           .where(
               (item) => (removeDiacritics(item.toLowerCase()).contains(textChoose.toLowerCase())
               || item.toLowerCase().contains(textChoose.toLowerCase() )))
@@ -133,29 +92,6 @@ class _SearchBankScreenState extends State<SearchBankScreen> {
     Navigator.pop(context, selectedItem); // Trả về giá trị đã chọn khi quay lại màn hình trước
   }
 
-  Widget _buildItemBank(int index) {
-    String bankName = filteredItems[index];
-    int bankIndex = listNameBank.indexOf(bankName);
-    String imagePath = imagePaths[bankIndex];
-    String description = bankDescription[bankIndex];
-
-    return Row(
-      children: [
-        Image.asset(imagePath, width: 50, height: 50), // Chỉnh sửa kích thước ảnh nếu cần
-        SizedBox(width: 10), // Khoảng cách giữa ảnh và chữ
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(bankName, style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(description),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -192,32 +128,35 @@ class _SearchBankScreenState extends State<SearchBankScreen> {
                 ),
                 _buildSearch(),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child:
-                    // (filteredItems.isEmpty || widget.searchTerms.isEmpty)
-                    (filteredItems.isEmpty || listNameBank.isEmpty)
-                        ?  Center(child: Text(LocaleKeys.notFoundData.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),)
-                        :ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: filteredItems.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(filteredItems[index], style: TextStyle(fontWeight: FontWeight.bold),),
-                          subtitle: Text(bankDescription[index]),
-                          leading: SizedBox(
-                              width: 50, height: 50,
-                              child: Image.asset(imagePaths[index])),
-                          // title: _buildItemBank(index),
-                          // leading: _buildItemBank(index),
-                          onTap: () {
-                            _onItemTapped(filteredItems[index]); // Gọi hàm khi một mục được chọn
-                          },
-                        );
-                      },
-                    ),
-                  ),
+                  child: Consumer<OutsideBankPaymentProvider>(builder: (context, bankProvider, _){
+                    return SingleChildScrollView(
+                      child:
+                      // (filteredItems.isEmpty || widget.searchTerms.isEmpty)
+                      (filteredItems.isEmpty || bankProvider.bankData.keys.toList().isEmpty)
+                          ?  Center(child: Text(LocaleKeys.notFoundData.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),)
+                          :ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: filteredItems.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(filteredItems[index], style: TextStyle(fontWeight: FontWeight.bold),),
+                            subtitle: Text( bankProvider.bankData[filteredItems[index]]![1]),
+                            leading: SizedBox(
+                                width: 50, height: 50,
+                                child: Image.asset(bankProvider.bankData[filteredItems[index]]![2])),
+                            // title: _buildItemBank(index),
+                            // leading: _buildItemBank(index),
+                            onTap: () {
+                              bankProvider.setChooseBank(filteredItems[index]);
+                              _onItemTapped(filteredItems[index]); // Gọi hàm khi một mục được chọn
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  },),
                 ),
               ],
             ),

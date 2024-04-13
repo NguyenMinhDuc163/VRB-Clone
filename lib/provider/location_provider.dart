@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 import '../core/constants/assets_path.dart';
+import '../generated/locale_keys.g.dart';
 import '../models/bank_location.dart';
 import '../models/district.dart';
 import '../models/province.dart';
@@ -17,16 +19,30 @@ class LocationProvider extends ChangeNotifier{
   List<Map<String, BankLocation>> address = [];
   String? provinceChose;
   String? districtChose;
+  String provinceName = LocaleKeys.province.tr();
+  String districtName = LocaleKeys.district.tr();
   Set<Marker> markers = {};
   bool isLoading = false;
   final Location locationController = Location();
   LatLng currentLocation = LatLng(21.0014109, 105.8046842);
   int selectedButtonIndex = 0;
   int index = 0;
-  // GoogleMapController? mapController;
-  // Completer<GoogleMapController> controller = Completer();
   Set<Polyline> polylines = {};
   late BitmapDescriptor customMarker;
+
+  bool isSearchClicked = false;
+  String searchText = '';
+  List<String> filteredItems = [];
+
+  void setProvinceName(String provinceName){
+    this.provinceName  = provinceName;
+    notifyListeners();
+  }
+
+  void setDistrictName(String districtName){
+    this.districtName = districtName;
+    notifyListeners();
+  }
 
   void clearPolylines(){
     polylines.clear();

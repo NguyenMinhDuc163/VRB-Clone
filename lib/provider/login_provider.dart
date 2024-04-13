@@ -1,37 +1,28 @@
 import 'package:flutter/cupertino.dart';
+import 'package:local_auth/local_auth.dart';
 
 class LoginProvider extends ChangeNotifier {
-  TextEditingController controller = TextEditingController();
-  TextEditingController controller1 = TextEditingController();
-  FocusNode myFocusNode1 = FocusNode();
-  FocusNode myFocusNode2 = FocusNode();
-  FocusNode myFocusNode3 = FocusNode();
-  FocusNode myFocusNode4 = FocusNode();
-  bool isChange = true;
-  bool isVisibleButtonSheet = false;
+  bool isPressed = false;
+  bool obscureText = true;
+  bool islogin = false;
+  late final LocalAuthentication auth;
+  bool supportState = false;
 
-  void switchKeyboard() async {
-    if(myFocusNode1.hasFocus || myFocusNode2.hasFocus){
-      isChange = !isChange;
-      if (isChange) {
-        myFocusNode1.requestFocus();
-      } else {
-        myFocusNode2.requestFocus();
-      }
-    }
-    else{
-      isChange = !isChange;
-      if (isChange) {
-        myFocusNode3.requestFocus();
-      } else {
-        myFocusNode4.requestFocus();
-      }
-    }
+  void _toggleImage() {
+    setIsPressed(!isPressed);
+  }
+
+  void _toggleVisibility() {
+    obscureText = !obscureText;
+  }
+
+  void setIsPressed(bool isPressed){
+    this.isPressed = isPressed;
     notifyListeners();
   }
 
-  void setVisibleButtonSheet(bool check) {
-    isVisibleButtonSheet = check;
+  void setIslogin(bool islogin){
+    this.islogin = islogin;
     notifyListeners();
   }
 }

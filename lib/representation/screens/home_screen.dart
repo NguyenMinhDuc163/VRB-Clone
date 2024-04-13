@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/assets_path.dart';
 import 'package:vrb_client/generated/locale_keys.g.dart';
 import 'package:vrb_client/models/user_model.dart';
+import 'package:vrb_client/representation/screens/payment/outside_bank_payment_screen.dart';
 import 'package:vrb_client/representation/widgets/block_item_widget.dart';
 
 import '../../core/constants/dimension_constants.dart';
@@ -21,7 +22,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late  bool _showMore = false;
   @override
   Widget build(BuildContext context) {
     List<Widget> items = [
@@ -89,7 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(child: items[0]), Expanded(child: items[1]), Expanded(child: items[2])
+                  Expanded(child: InkWell(
+                      onTap: (){
+                        Navigator.of(context).pushNamed(OutsideBankPaymentScreen.routeName);
+                      },
+                      child: items[0])), Expanded(child: items[1]), Expanded(child: items[2])
                 ],
               ),
               Row(

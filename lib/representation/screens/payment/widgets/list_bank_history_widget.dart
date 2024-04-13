@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:vrb_client/core/constants/dimension_constants.dart';
+import 'package:vrb_client/provider/outside_bank_payment_provider.dart';
 
-import '../../../core/constants/assets_path.dart';
 
 class ListBankHistoryWidget extends StatefulWidget {
   const ListBankHistoryWidget({super.key});
@@ -11,15 +12,6 @@ class ListBankHistoryWidget extends StatefulWidget {
 }
 
 class _ListBankHistoryWidgetState extends State<ListBankHistoryWidget> {
-
-  final List<String> imagePaths = [
-    AssetPath.logoBank1,
-    AssetPath.logoBank2,
-    AssetPath.logoBank3,
-    AssetPath.logoBank4,
-    AssetPath.logoBank5,
-    AssetPath.logoBank6,
-  ];
 
   Widget _buildHistoryExchange(String image, String name, String accountNum, String bankName){
     return Row(
@@ -47,21 +39,28 @@ class _ListBankHistoryWidgetState extends State<ListBankHistoryWidget> {
   Widget build(BuildContext context) {
     return Container(
       height: 200, // Đặt chiều cao cho container
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: imagePaths.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 2), // Giảm kích thước padding để làm cho các icon gần nhau hơn
-            child: Column(
-              children: [
-                _buildHistoryExchange(imagePaths[index], 'Nguyen Van A', '123456789123', 'VRB'),
-                SizedBox(height: kDefaultPadding,),
-              ],
-            ),
-          );
-        },
-      ),
+      child: Consumer<OutsideBankPaymentProvider>(builder: (context, bankProvider, _){
+        List<String> nameBank = bankProvider.bankData.keys.toList();
+        return ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: bankProvider.bankData.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2), // Giảm kích thước padding để làm cho các icon gần nhau hơn
+              child: Column(
+                children: [
+                  InkWell(
+                      onTap: (){
+                        bankProvider.setChooseBank(nameBank[index]);
+                      },
+                      child: _buildHistoryExchange(bankProvider.bankData[nameBank[index]]![2], 'Nguyen Van A', '123456789123', 'VRB')),
+                  SizedBox(height: kDefaultPadding,),
+                ],
+              ),
+            );
+          },
+        );
+      },),
     );
   }
 }

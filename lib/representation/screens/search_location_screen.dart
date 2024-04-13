@@ -21,29 +21,30 @@ class SearchLocationScreen extends StatefulWidget {
 
 class _SearchLocationScreenState extends State<SearchLocationScreen> {
   final TextEditingController _searchController = TextEditingController();
-  bool isSearchClicked = false;
-  String searchText = '';
+  // bool isSearchClicked = false;
+  // String searchText = '';
+  // List<String> filteredItems = [];
 
-  List<String> filteredItems = [];
   @override
   void initState() {
     super.initState();
-    filteredItems = List.from(widget.searchTerms);
+    Provider.of<LocationProvider>(context, listen: false).filteredItems = List.from(widget.searchTerms);
   }
 
   void _onSearchChanged(String value) {
     setState(() {
-      searchText = value;
+      Provider.of<LocationProvider>(context, listen: false).searchText = value;
       myFilterItems();
     });
   }
 
   void myFilterItems() {
-    if (searchText.isEmpty) {
-      filteredItems = List.from(widget.searchTerms);
+    LocationProvider location  = Provider.of<LocationProvider>(context, listen: false);
+    if (location.searchText.isEmpty) {
+      location.filteredItems = List.from(widget.searchTerms);
     } else {
-      String textChoose = removeDiacritics(searchText);
-      filteredItems = widget.searchTerms
+      String textChoose = removeDiacritics(location.searchText);
+      location.filteredItems = widget.searchTerms
           .where(
               (item) => (removeDiacritics(item.toLowerCase()).contains(textChoose.toLowerCase())
                   || item.toLowerCase().contains(textChoose.toLowerCase() )))
@@ -71,49 +72,51 @@ class _SearchLocationScreenState extends State<SearchLocationScreen> {
         child: Scaffold(
           body: Container(
             padding: EdgeInsets.all(kDefaultPadding),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        widget.titleField,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      Container(
-                        child: InkWell(
-                          onTap: _onWillPop,
-                          child: const Icon(FontAwesomeIcons.xmark),
+            child: Consumer<LocationProvider>(builder: (context, location, _){
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          widget.titleField,
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                _buildSearch(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: (filteredItems.isEmpty || widget.searchTerms.isEmpty)
-                        ?  Center(child: Text(LocaleKeys.notFoundData.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),)
-                        :ListView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: filteredItems.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(filteredItems[index]),
-                          onTap: () {
-                            _onItemTapped(filteredItems[index]); // Gọi hàm khi một mục được chọn
-                          },
-                        );
-                      },
+                        Container(
+                          child: InkWell(
+                            onTap: _onWillPop,
+                            child: const Icon(FontAwesomeIcons.xmark),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ),
+                  _buildSearch(),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: (location.filteredItems.isEmpty || widget.searchTerms.isEmpty)
+                          ?  Center(child: Text(LocaleKeys.notFoundData.tr(), style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),)
+                          :ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: location.filteredItems.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(location.filteredItems[index]),
+                            onTap: () {
+                              _onItemTapped(location.filteredItems[index]); // Gọi hàm khi một mục được chọn
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },),
           ),
         ),
       ),

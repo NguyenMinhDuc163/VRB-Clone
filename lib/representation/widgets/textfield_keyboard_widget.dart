@@ -105,7 +105,7 @@ class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
     final overlay = Overlay.of(context);
     _overlayEntry = OverlayEntry(builder: (context) {
       double bottomInset = MediaQuery.of(context).viewInsets.bottom;
-      return Positioned(
+      return Visibility(child: Positioned(
           bottom: bottomInset > 50 ? bottomInset : bottomInset - 35,
           left: 0,
           right: 0,
@@ -157,7 +157,7 @@ class _TextFieldKeyBoardWidgetState extends State<TextFieldKeyBoardWidget> {
                 ],
               ),
             ),
-          ));
+          )));
     });
     overlay.insert(_overlayEntry!);
   }

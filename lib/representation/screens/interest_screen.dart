@@ -22,7 +22,6 @@ class InterestScreen extends StatefulWidget {
 class _InterestScreenState extends State<InterestScreen> {
   GlobalKey<ExpandableBottomSheetState> key = GlobalKey();
   bool _isLoading = false;
-  int _size = 400;
   final FocusNode _focusNode = FocusNode();
 
   @override
